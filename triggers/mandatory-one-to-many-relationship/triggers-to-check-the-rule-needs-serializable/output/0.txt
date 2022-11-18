@@ -1,0 +1,43 @@
+ Both "masters" and "details" are empty.
+
+ Arthur >> compass, dividers, protractor, ruler
+ Bill >> bowl, cup, plate, saucer, tankard
+ Bruce >> needle, scissors, thimble, thread
+ Joan >> chisel, drill, saw, screwdriver
+ Mary >> shampoo, soap, toothbrush, towel
+
+ Arthur >> compass, dividers, protractor, ruler
+ Bill >> tankard
+ Bruce >> needle, scissors, thimble, thread
+ Joan >> chisel, drill, saw, screwdriver
+ Mary >> shampoo, soap, toothbrush, towel
+
+ Algenon >> swab
+ Arthur >> compass, dividers, protractor, ruler
+ Bill >> tankard
+ Bruce >> needle, scissors, thimble, thread
+ Joan >> chisel, drill, saw, screwdriver
+ Mary >> shampoo, soap, toothbrush, towel
+
+ Algenon >> swab
+ Arthur >> compass, dividers, protractor, ruler
+ Bill >> tankard
+ Bruce >> needle, scissors, thimble, thread
+ Joan >> chisel, drill, saw, screwdriver
+ Mary >> shampoo, soap, toothbrush, towel
+
+ Algenon >> swab
+ Bill >> tankard
+ Bruce >> needle, scissors, thimble, thread
+ Joan >> chisel, drill, saw, screwdriver
+
+ Algenon >> swab
+ Bruce >> needle, scissors, thimble, thread
+ Joan >> chisel, drill, saw, screwdriver
+
+ Both "masters" and "details" are empty.
+
+ Both "masters" and "details" are empty.
+
+ Mary >> shampoo, soap, toothbrush, towel
+

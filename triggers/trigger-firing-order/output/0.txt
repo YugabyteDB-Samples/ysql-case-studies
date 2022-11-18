@@ -1,0 +1,105 @@
+ Bill >> cup, saucer
+ Mary >> shampoo
+
+ Bill >> cup, saucer
+ Mary >> <NULL>
+
+ Mary >> <NULL>
+
+ Mary >> flannel, soap, sponge
+
+ Mary >> flannel, sponge, towel
+
+ --------------------------------------------------------------------------------
+ 
+ -- upsert ('Mary', array['shampoo'])
+ 
+ before insert on masters    for each statement  >           
+ before insert on masters    for each row        >  Mary     
+ after  insert on masters    for each row        >  Mary     
+ after  insert on masters    for each statement  >           
+ 
+ before insert on details    for each statement  >           
+ before insert on details    for each row        >  shampoo  
+ after  insert on details    for each row        >  shampoo  
+ after  insert on details    for each statement  >           
+ 
+ --------------------------------------------------------------------------------
+ 
+ -- upsert ('Bill', array['cup', 'saucer'])
+ 
+ before insert on masters    for each statement  >           
+ before insert on masters    for each row        >  Bill     
+ after  insert on masters    for each row        >  Bill     
+ after  insert on masters    for each statement  >           
+ 
+ before insert on details    for each statement  >           
+ before insert on details    for each row        >  cup      
+ before insert on details    for each row        >  saucer   
+ after  insert on details    for each row        >  cup      
+ after  insert on details    for each row        >  saucer   
+ after  insert on details    for each statement  >           
+ 
+ --------------------------------------------------------------------------------
+ 
+ -- delete detail 'shampoo'
+ 
+ before delete on details    for each statement  >           
+ before delete on details    for each row        >  shampoo  
+ after  delete on details    for each row        >  shampoo  
+ after  delete on details    for each statement  >           
+ 
+ --------------------------------------------------------------------------------
+ 
+ -- cascade-delete master 'Bill'
+ 
+ before delete on masters    for each statement  >           
+ before delete on masters    for each row        >  Bill     
+ 
+ before delete on details    for each statement  >           
+ before delete on details    for each row        >  cup      
+ before delete on details    for each row        >  saucer   
+ 
+ after  delete on masters    for each row        >  Bill     
+ after  delete on masters    for each statement  >           
+ 
+ after  delete on details    for each row        >  cup      
+ after  delete on details    for each row        >  saucer   
+ after  delete on details    for each statement  >           
+ 
+ --------------------------------------------------------------------------------
+ 
+ -- upsert ('Mary', array['soap', 'sponge', 'flannel'])
+ 
+ before insert on details    for each statement  >           
+ before insert on details    for each row        >  soap     
+ before insert on details    for each row        >  sponge   
+ before insert on details    for each row        >  flannel  
+ after  insert on details    for each row        >  soap     
+ after  insert on details    for each row        >  sponge   
+ after  insert on details    for each row        >  flannel  
+ after  insert on details    for each statement  >           
+ 
+ --------------------------------------------------------------------------------
+ 
+ -- update 'soap' to 'towel')
+ 
+ before update on details    for each statement  >           
+ before update on details    for each row        >  towel    
+ after  update on details    for each row        >  towel    
+ after  update on details    for each statement  >           
+
+-[ RECORD 1 ]-----------------------------------------------------------
+name     | RI_ConstraintTrigger_a_20322
+tab_name | masters
+def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_20322" A...
+
+-[ RECORD 1 ]--------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER DELETE ON masters FROM details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_cascade_del"()
+-[ RECORD 2 ]--------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER INSERT ON details FROM masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_ins"()
+-[ RECORD 3 ]--------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER UPDATE ON details FROM masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_upd"()
+-[ RECORD 4 ]--------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER UPDATE ON masters FROM details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_noaction_upd"()
+

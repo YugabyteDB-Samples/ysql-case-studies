@@ -1,0 +1,467 @@
+ - - 01-cr-types - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+ - - 02-cr-detect-and-strip-null-keys - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ {                                                                                                                      +
+     "a": 42,                                                                                                           +
+     "b": null,                                                                                                         +
+     "c": {                                                                                                             +
+         "k": 17,                                                                                                       +
+         "v": "How we wrote a regular expression to detect occurrences of « \"some key\": null » in our JSON documents!"+
+     },                                                                                                                 +
+     "d": {                                                                                                             +
+         "k": 29,                                                                                                       +
+         "v": null                                                                                                      +
+     },                                                                                                                 +
+     "e": [                                                                                                             +
+         "x",                                                                                                           +
+         null,                                                                                                          +
+         "How we wrote a regular expression to detect occurrences of « \"some key\": null » in our JSON documents!"     +
+     ]                                                                                                                  +
+ }
+
+ {                                                                                                                      +
+     "a": 42,                                                                                                           +
+     "c": {                                                                                                             +
+         "k": 17,                                                                                                       +
+         "v": "How we wrote a regular expression to detect occurrences of « \"some key\": null » in our JSON documents!"+
+     },                                                                                                                 +
+     "d": {                                                                                                             +
+         "k": 29                                                                                                        +
+     },                                                                                                                 +
+     "e": [                                                                                                             +
+         "x",                                                                                                           +
+         null,                                                                                                          +
+         "How we wrote a regular expression to detect occurrences of « \"some key\": null » in our JSON documents!"     +
+     ]                                                                                                                  +
+ }
+
+ no_null_keys(raw input): false   |   no_null_keys(stripped input): true
+
+ - - 03-cr-j-books-table - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+ - - 04-cr-j-books_keys - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ all keys and their data types 
+-------------------------------
+ isbn         string
+ title        string
+ year         number
+ authors      array
+ given name   string
+ family name  string
+ genre        string
+
+ top-level keys and their data types 
+-------------------------------------
+ isbn         string
+ title        string
+ year         number
+ authors      array
+ genre        string
+
+ author keys and their data types 
+----------------------------------
+ given name   string
+ family name  string
+
+ - - 05-populate-j-books-table - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+ k |                 book_info                 
+---+-------------------------------------------
+ 1 | {                                        +
+   |     "isbn": "978-0-14-303809-2",         +
+   |     "year": 2006,                        +
+   |     "genre": "Novel",                    +
+   |     "title": "Joy Luck Club",            +
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Amy",         +
+   |             "family name": "Tan"         +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 2 | {                                        +
+   |     "isbn": "978-0-14-311908-1",         +
+   |     "year": 2010,                        +
+   |     "genre": "Novel",                    +
+   |     "title": "The Hundred Secret Senses",+
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Amy",         +
+   |             "family name": "Tan"         +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 3 | {                                        +
+   |     "isbn": "978-0-13-110362-7",         +
+   |     "year": 1988,                        +
+   |     "genre": "Programming Languages",    +
+   |     "title": "C Programming Language",   +
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Brian",       +
+   |             "family name": "Kernighan"   +
+   |         },                               +
+   |         {                                +
+   |             "given name": "Dennis",      +
+   |             "family name": "Ritchie"     +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 4 | {                                        +
+   |     "isbn": "978-0-14-303841-2",         +
+   |     "year": 2007,                        +
+   |     "genre": "Novel",                    +
+   |     "title": "Eat, Pray, Love",          +
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Elizabeth",   +
+   |             "family name": "Gilbert"     +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 5 | {                                        +
+   |     "isbn": "978-0-38-533865-3",         +
+   |     "year": 2005,                        +
+   |     "genre": "Autobiography",            +
+   |     "title": "Broken Music",             +
+   |     "authors": [                         +
+   |         {                                +
+   |             "family name": "Sting"       +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 6 | {                                        +
+   |     "isbn": "978-0-38-533987-2",         +
+   |     "year": 2007,                        +
+   |     "genre": "Autobiography",            +
+   |     "title": "Lyrics",                   +
+   |     "authors": [                         +
+   |         {                                +
+   |             "family name": "Sting"       +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 7 | {                                        +
+   |     "isbn": "978-0-06-293004-0",         +
+   |     "year": 2021,                        +
+   |     "genre": "Historical Romance",       +
+   |     "title": "My Contrary Mary",         +
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Brodi",       +
+   |             "family name": "Ashton"      +
+   |         },                               +
+   |         {                                +
+   |             "given name": "Cynthia",     +
+   |             "family name": "Hand"        +
+   |         },                               +
+   |         {                                +
+   |             "given name": "Jodi",        +
+   |             "family name": "Meadows"     +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 8 | {                                        +
+   |     "isbn": "978-0-55-338016-3",         +
+   |     "year": 1988,                        +
+   |     "title": "A Brief History of Time",  +
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Stephen",     +
+   |             "family name": "Hawking"     +
+   |         }                                +
+   |     ]                                    +
+   | }
+
+ - - 06-alter-j-books-add-indexes-and-constraints - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ - - 08-query-the-j-books-table - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ year |      title      
+------+-----------------
+ 2005 | Broken Music
+ 2006 | Joy Luck Club
+ 2007 | Eat, Pray, Love
+ 2007 | Lyrics
+
+                           QUERY PLAN                           
+----------------------------------------------------------------
+ Sort  (cost=1.37..1.38 rows=1 width=36)
+   Sort Key: c.year, c.title
+   CTE c
+     ->  Seq Scan on j_books  (cost=0.00..1.16 rows=8 width=36)
+   ->  CTE Scan on c  (cost=0.00..0.20 rows=1 width=36)
+         Filter: ((year >= 2000) AND (year <= 2010))
+
+          title          
+-------------------------
+ A Brief History of Time
+
+      title       
+------------------
+ My Contrary Mary
+
+                                               QUERY PLAN                                                
+---------------------------------------------------------------------------------------------------------
+ Seq Scan on j_books  (cost=0.00..3.12 rows=1 width=32)
+   Filter: (to_tsvector('english'::regconfig, (book_info ->> 'title'::text)) @@ '''contrari'''::tsquery)
+
+ k |            j             
+---+--------------------------
+ 1 | ["Jane", "Mary", "Fred"]
+
+ k | first_author_family_name 
+---+--------------------------
+ 1 | Tan
+ 2 | Tan
+ 3 | Kernighan
+ 4 | Gilbert
+ 5 | Sting
+ 6 | Sting
+ 7 | Ashton
+ 8 | Hawking
+
+ k |                                                  authors                                                  
+---+-----------------------------------------------------------------------------------------------------------
+ 3 | [{"given name": "Brian", "family name": "Kernighan"}, {"given name": "Dennis", "family name": "Ritchie"}]
+
+ k | authors 
+---+---------
+
+ k |                                                                           book_info                                                                           
+---+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 1 | {"isbn": "978-0-14-303809-2", "year": 2006, "genre": "Novel", "title": "Joy Luck Club", "authors": [{"given name": "Amy", "family name": "Tan"}]}
+ 2 | {"isbn": "978-0-14-311908-1", "year": 2010, "genre": "Novel", "title": "The Hundred Secret Senses", "authors": [{"given name": "Amy", "family name": "Tan"}]}
+
+ k |                                                                        authors                                                                         
+---+--------------------------------------------------------------------------------------------------------------------------------------------------------
+ 7 | [{"given name": "Brodi", "family name": "Ashton"}, {"given name": "Cynthia", "family name": "Hand"}, {"given name": "Jodi", "family name": "Meadows"}]
+
+ k |          authors           
+---+----------------------------
+ 5 | [{"family name": "Sting"}]
+ 6 | [{"family name": "Sting"}]
+
+                                       QUERY PLAN                                        
+-----------------------------------------------------------------------------------------
+ Sort  (cost=1.14..1.14 rows=1 width=36)
+   Sort Key: k
+   ->  Seq Scan on j_books  (cost=0.00..1.13 rows=1 width=36)
+         Filter: ((book_info -> 'authors'::text) @> '[{"family name": "Sting"}]'::jsonb)
+
+ k |           title           | pos | given_name | family_name 
+---+---------------------------+-----+------------+-------------
+ 1 | Joy Luck Club             |   1 | Amy        | Tan
+ 2 | The Hundred Secret Senses |   1 | Amy        | Tan
+ 3 | C Programming Language    |   1 | Brian      | Kernighan
+ 3 | C Programming Language    |   2 | Dennis     | Ritchie
+ 4 | Eat, Pray, Love           |   1 | Elizabeth  | Gilbert
+ 7 | My Contrary Mary          |   1 | Brodi      | Ashton
+ 7 | My Contrary Mary          |   2 | Cynthia    | Hand
+ 7 | My Contrary Mary          |   3 | Jodi       | Meadows
+ 8 | A Brief History of Time   |   1 | Stephen    | Hawking
+
+ k |    title     | pos | given_name | family_name 
+---+--------------+-----+------------+-------------
+ 5 | Broken Music |   1 | <NULL>     | Sting
+ 6 | Lyrics       |   1 | <NULL>     | Sting
+
+                                             QUERY PLAN                                             
+----------------------------------------------------------------------------------------------------
+ Sort  (cost=39.18..39.19 rows=4 width=108)
+   Sort Key: c1.k, c1.pos
+   ->  CTE Scan on c1  (cost=19.08..39.10 rows=4 width=108)
+         Filter: ((obj ->> 'family name'::text) = 'Sting'::text)
+         CTE c1
+           ->  Nested Loop  (cost=0.01..19.08 rows=800 width=76)
+                 ->  Seq Scan on j_books  (cost=0.00..1.08 rows=8 width=36)
+                 ->  Function Scan on jsonb_array_elements arr  (cost=0.01..1.00 rows=100 width=40)
+
+ - - 09-cr-j-books-r-view-and-populate-r-books - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+       isbn        |         title          |                                            authors_jsonb_array                                            
+-------------------+------------------------+-----------------------------------------------------------------------------------------------------------
+ 978-0-13-110362-7 | C Programming Language | [{"given name": "Brian", "family name": "Kernighan"}, {"given name": "Dennis", "family name": "Ritchie"}]
+
+                              QUERY PLAN                              
+----------------------------------------------------------------------
+ Seq Scan on j_books  (cost=0.00..1.13 rows=1 width=96)
+   Filter: ((book_info ->> 'isbn'::text) = '978-0-13-110362-7'::text)
+
+       isbn        |         title          |            authors_sql_array             
+-------------------+------------------------+------------------------------------------
+ 978-0-13-110362-7 | C Programming Language | {"(Brian,Kernighan)","(Dennis,Ritchie)"}
+
+                                 QUERY PLAN                                 
+----------------------------------------------------------------------------
+ Subquery Scan on j_books_r_view  (cost=0.00..1.39 rows=1 width=96)
+   ->  Seq Scan on j_books  (cost=0.00..1.38 rows=1 width=136)
+         Filter: ((book_info ->> 'isbn'::text) = '978-0-13-110362-7'::text)
+
+ k |         genre         
+---+-----------------------
+ 1 | Autobiography
+ 2 | Historical Romance
+ 3 | Novel
+ 4 | Programming Languages
+
+ k | given_name | family_name 
+---+------------+-------------
+ 1 | Amy        | Tan
+ 2 | Brian      | Kernighan
+ 3 | Brodi      | Ashton
+ 4 | Cynthia    | Hand
+ 5 | Dennis     | Ritchie
+ 6 | Elizabeth  | Gilbert
+ 7 | Jodi       | Meadows
+ 8 | Stephen    | Hawking
+ 9 |            | Sting
+
+ k |       isbn        |           title           | year | genre_k 
+---+-------------------+---------------------------+------+---------
+ 1 | 978-0-14-303809-2 | Joy Luck Club             | 2006 |       3
+ 2 | 978-0-14-311908-1 | The Hundred Secret Senses | 2010 |       3
+ 3 | 978-0-13-110362-7 | C Programming Language    | 1988 |       4
+ 4 | 978-0-14-303841-2 | Eat, Pray, Love           | 2007 |       3
+ 5 | 978-0-38-533865-3 | Broken Music              | 2005 |       1
+ 6 | 978-0-38-533987-2 | Lyrics                    | 2007 |       1
+ 7 | 978-0-06-293004-0 | My Contrary Mary          | 2021 |       2
+ 8 | 978-0-55-338016-3 | A Brief History of Time   | 1988 |        
+
+ r_books_k | authors_k | pos 
+-----------+-----------+-----
+         1 |         1 |   1
+         2 |         1 |   1
+         3 |         2 |   1
+         3 |         5 |   2
+         4 |         6 |   1
+         5 |         9 |   1
+         6 |         9 |   1
+         7 |         3 |   1
+         7 |         4 |   2
+         7 |         7 |   3
+         8 |         8 |   1
+
+ k |       isbn        |           title           | year |                       authors                        |         genre         
+---+-------------------+---------------------------+------+------------------------------------------------------+-----------------------
+ 1 | 978-0-14-303809-2 | Joy Luck Club             | 2006 | {"(Amy,Tan)"}                                        | Novel
+ 2 | 978-0-14-311908-1 | The Hundred Secret Senses | 2010 | {"(Amy,Tan)"}                                        | Novel
+ 3 | 978-0-13-110362-7 | C Programming Language    | 1988 | {"(Brian,Kernighan)","(Dennis,Ritchie)"}             | Programming Languages
+ 4 | 978-0-14-303841-2 | Eat, Pray, Love           | 2007 | {"(Elizabeth,Gilbert)"}                              | Novel
+ 5 | 978-0-38-533865-3 | Broken Music              | 2005 | {"(,Sting)"}                                         | Autobiography
+ 6 | 978-0-38-533987-2 | Lyrics                    | 2007 | {"(,Sting)"}                                         | Autobiography
+ 7 | 978-0-06-293004-0 | My Contrary Mary          | 2021 | {"(Brodi,Ashton)","(Cynthia,Hand)","(Jodi,Meadows)"} | Historical Romance
+ 8 | 978-0-55-338016-3 | A Brief History of Time   | 1988 | {"(Stephen,Hawking)"}                                | 
+
+ - - 10-cr-r-books-j-view - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ 1 | {                                        +
+   |     "isbn": "978-0-14-303809-2",         +
+   |     "year": 2006,                        +
+   |     "genre": "Novel",                    +
+   |     "title": "Joy Luck Club",            +
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Amy",         +
+   |             "family name": "Tan"         +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 2 | {                                        +
+   |     "isbn": "978-0-14-311908-1",         +
+   |     "year": 2010,                        +
+   |     "genre": "Novel",                    +
+   |     "title": "The Hundred Secret Senses",+
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Amy",         +
+   |             "family name": "Tan"         +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 3 | {                                        +
+   |     "isbn": "978-0-13-110362-7",         +
+   |     "year": 1988,                        +
+   |     "genre": "Programming Languages",    +
+   |     "title": "C Programming Language",   +
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Brian",       +
+   |             "family name": "Kernighan"   +
+   |         },                               +
+   |         {                                +
+   |             "given name": "Dennis",      +
+   |             "family name": "Ritchie"     +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 4 | {                                        +
+   |     "isbn": "978-0-14-303841-2",         +
+   |     "year": 2007,                        +
+   |     "genre": "Novel",                    +
+   |     "title": "Eat, Pray, Love",          +
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Elizabeth",   +
+   |             "family name": "Gilbert"     +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 5 | {                                        +
+   |     "isbn": "978-0-38-533865-3",         +
+   |     "year": 2005,                        +
+   |     "genre": "Autobiography",            +
+   |     "title": "Broken Music",             +
+   |     "authors": [                         +
+   |         {                                +
+   |             "family name": "Sting"       +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 6 | {                                        +
+   |     "isbn": "978-0-38-533987-2",         +
+   |     "year": 2007,                        +
+   |     "genre": "Autobiography",            +
+   |     "title": "Lyrics",                   +
+   |     "authors": [                         +
+   |         {                                +
+   |             "family name": "Sting"       +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 7 | {                                        +
+   |     "isbn": "978-0-06-293004-0",         +
+   |     "year": 2021,                        +
+   |     "genre": "Historical Romance",       +
+   |     "title": "My Contrary Mary",         +
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Brodi",       +
+   |             "family name": "Ashton"      +
+   |         },                               +
+   |         {                                +
+   |             "given name": "Cynthia",     +
+   |             "family name": "Hand"        +
+   |         },                               +
+   |         {                                +
+   |             "given name": "Jodi",        +
+   |             "family name": "Meadows"     +
+   |         }                                +
+   |     ]                                    +
+   | }
+ 8 | {                                        +
+   |     "isbn": "978-0-55-338016-3",         +
+   |     "year": 1988,                        +
+   |     "title": "A Brief History of Time",  +
+   |     "authors": [                         +
+   |         {                                +
+   |             "given name": "Stephen",     +
+   |             "family name": "Hawking"     +
+   |         }                                +
+   |     ]                                    +
+   | }
+
+ - - 15-assert-j-books-r-books-j-view-identical - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
