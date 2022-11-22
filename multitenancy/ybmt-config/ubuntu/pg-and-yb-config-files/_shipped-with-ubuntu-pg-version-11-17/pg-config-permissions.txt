@@ -1,0 +1,5 @@
+-rw-r--r-- 1 postgres postgres   143 Nov  1 15:48 /etc/postgresql/11/main/pg_ctl.conf
+-rw-r----- 1 postgres postgres  4686 Nov  1 15:48 /etc/postgresql/11/main/pg_hba.conf
+-rw-r----- 1 postgres postgres  1636 Nov  1 15:48 /etc/postgresql/11/main/pg_ident.conf
+-rw-r--r-- 1 postgres postgres 24321 Nov  1 15:48 /etc/postgresql/11/main/postgresql.conf
+-rw-r--r-- 1 postgres postgres   317 Nov  1 15:48 /etc/postgresql/11/main/start.conf

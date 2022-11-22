@@ -1,0 +1,29 @@
+-------------------
+chmod number scheme
+-------------------
+
+  r => 4
+  w => 2
+  x => 1
+  - => 0
+
+Example 1:
+
+    u   g   a
+   --- --- ---
+  -rw- r-- r--
+   420 400 400
+   \_/
+       \_/
+
+Example 2:
+
+  r + w + x = 4+2+1 = 7
+  r + _ + x = 4+0+1 = 5
+  r + _ + _ = 4+0+0 = 4
+
+  => 0754
+
+This is usually written as just:
+
+   chmod 754 < the file (pattern) >

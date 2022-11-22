@@ -1,0 +1,582 @@
+ ==================================================================================================================================
+ POSITIVE TESTS for json_utils.json_object_keys_ok()
+ ==================================================================================================================================
+
+ --- OK -----------------------------------------------------------------------------------------------------------------
+ {"m": "Fred"}
+ ('m', 'string', true)
+ {"outcome_code": "bare success"}
+
+ --- OK -----------------------------------------------------------------------------------------------------------------
+ {"m": "Fred"}
+ ('m', 'string', true), ('m', 'null', true)
+ {"outcome_code": "bare success"}
+
+ --- OK -----------------------------------------------------------------------------------------------------------------
+ {"m": "Fred", "ds": []}
+ ('m', 'string', true), ('ds', 'array', false)
+ {"outcome_code": "bare success"}
+
+ --- OK -----------------------------------------------------------------------------------------------------------------
+ {"m": "Fred"}
+ ('m', 'string', true), ('ds', 'array', false)
+ {"outcome_code": "bare success"}
+
+ --- OK -----------------------------------------------------------------------------------------------------------------
+ {"m": "Fred", "ds": ["x", "y"]}
+ ('m', 'string', true), ('ds', 'array', false)
+ {"outcome_code": "bare success"}
+
+ --- OK -----------------------------------------------------------------------------------------------------------------
+ {"a": "a", "b": 42, "c": true, "d": "d"}
+ ('a', 'string', true), ('b', 'number', true), ('c', 'boolean', true), ('d', 'string', false)
+ {"outcome_code": "bare success"}
+
+ --- OK -----------------------------------------------------------------------------------------------------------------
+ {"a": "a", "c": true, "d": "d"}
+ ('a', 'string', true), ('b', 'number', false), ('c', 'boolean', true), ('d', 'string', false)
+ {"outcome_code": "bare success"}
+
+ ==================================================================================================================================
+ NEGATIVE TESTS for json_utils.json_object_keys_ok()
+ ==================================================================================================================================
+
+ --- Input is SQL NULL --------------------------------------------------------------------------------------------------
+ <NULL>
+ ('m', 'string', true)
+ {"reason": "SQL NULL input for JSON document not allowed.", "outcome_code": "client code error"}
+
+ --- Semicolon following "m" --------------------------------------------------------------------------------------------
+ {"m"; "Fred"}
+ ('m', 'string', true)
+ {"reason": "Malformed input JSON document: {\"m\"; \"Fred\"}", "outcome_code": "client code error"}
+
+ --- Input is JSON null -------------------------------------------------------------------------------------------------
+ null
+ ('m', 'string', true)
+ {"reason": "Input document is not JSON object: null", "outcome_code": "client code error"}
+
+ --- Input JSON is the scalar 42 ----------------------------------------------------------------------------------------
+ 42
+ ('m', 'string', true)
+ {"reason": "Input document is not JSON object: 42", "outcome_code": "client code error"}
+
+ --- Input is empty {} --------------------------------------------------------------------------------------------------
+ {}
+ ('m', 'string', true)
+ {"reason": "Input JSON object is empty: {}", "outcome_code": "client code error"}
+
+ --- Value for "m" is 'number' ------------------------------------------------------------------------------------------
+ {"m": 42, "ds": ["x", "y"]}
+ ('m', 'string', true), ('ds', 'array', false)
+ {"reason": "Bad key-name-data-type pair: \"m\"-\"number\".", "outcome_code": "client code error"}
+
+ --- Value for "ds" is 'string' -----------------------------------------------------------------------------------------
+ {"m": "Joan", "ds": "x"}
+ ('m', 'string', true), ('ds', 'array', false)
+ {"reason": "Bad key-name-data-type pair: \"ds\"-\"string\".", "outcome_code": "client code error"}
+
+ --- Bad key "x" --------------------------------------------------------------------------------------------------------
+ {"a": "a", "b": 42, "x": true, "d": "d"}
+ ('a', 'string', true), ('b', 'number', true), ('c', 'boolean', true), ('d', 'string', false)
+ {"reason": "Bad key-name-data-type pair: \"x\"-\"boolean\".", "outcome_code": "client code error"}
+
+ --- Extra key "e" ------------------------------------------------------------------------------------------------------
+ {"a": "a", "b": 42, "c": true, "d": "d", "e": "e"}
+ ('a', 'string', true), ('b', 'number', true), ('c', 'boolean', true), ('d', 'string', false)
+ {"reason": "Bad key-name-data-type pair: \"e\"-\"string\".", "outcome_code": "client code error"}
+
+ --- "m" is missing -----------------------------------------------------------------------------------------------------
+ {"ds": []}
+ ('m', 'string', true), ('ds', 'array', false)
+ {"reason": "The required key \"m\" is not present.", "outcome_code": "client code error"}
+
+ ==================================================================================================================================
+ UNIT TESTS FOR "code" subprograms. (These aren't exposed via the "client" role.)
+ ==================================================================================================================================
+
+ bare success | 
+
+ user error   | New  master 'Joan' bad duplicate details: 'fork'
+
+ user error   | Existing  master 'Alice' bad duplicate details: 'fork', 'teaspoon'
+
+ (Alice,"{fork,knife,spoon}")
+ (Barry,"{drill,file,pliers,screwdiver,spanner}")
+ (Joan,{NULL})
+
+ (Barry,"{drill,file,pliers,screwdiver,spanner}")
+
+ (Barry,"{drill,file,pliers,screwdiver,spanner}") | bare success | 
+
+ (Alice,"{fork,knife,spoon}") | bare success | 
+
+ (Joan,{NULL}) | bare success | 
+
+ <NULL> | user error   | The master business key, "m", 'Mike' doesn't exist.
+
+ ==================================================================================================================================
+ positive tests for the exposed api.
+ ==================================================================================================================================
+
+ {"outcome_code": "bare success"}
+
+ {"outcome_code": "bare success"}
+
+ {"outcome_code": "bare success"}
+
+ {"outcome_code": "bare success"}
+
+ {"outcome_code": "bare success"}
+
+ {"m_and_ds": {"m": "Fred", "ds": [null]}, "outcome_code": "m-and-ds report success"}
+
+ {"m_and_ds": {"m": "Joan", "ds": ["saw", "screwdriver"]}, "outcome_code": "m-and-ds report success"}
+
+ {"m_and_ds": {"m": "John", "ds": ["kettle", "pitcher", "saucepan"]}, "outcome_code": "m-and-ds report success"}
+
+ {"m_and_ds": {"m": "Mary", "ds": ["shampoo", "soap", "toothbrush", "towel"]}, "outcome_code": "m-and-ds report success"}
+
+ ==================================================================================================================================
+ "user error" tests for the exposed api.
+ ==================================================================================================================================
+
+ --- {"m": "Jo", "ds": []} ----------------------------------------------------------------------------------------------
+
+ {"reason": "The length of the master's \"v\" attribute must be between 3 and 10", "outcome_code": "user error"}
+
+ --- {"m": "Joan", "ds": ["hammer", "file", "saw"]} ---------------------------------------------------------------------
+
+ {"reason": "Existing  master 'Joan' bad duplicate details: 'saw'", "outcome_code": "user error"}
+
+ --- {"m": "Arthur", "ds": ["kitchen scissors", "saucer", "spatula", "spatula", "kitchen scissors"]} --------------------
+
+ {"reason": "New  master 'Arthur' bad duplicate details: 'kitchen scissors', 'spatula'", "outcome_code": "user error"}
+
+ --- {"m": "Bill"} ------------------------------------------------------------------------------------------------------
+
+ {"reason": "The master business key, \"m\", 'Bill' doesn't exist.", "outcome_code": "user error"}
+
+ ==================================================================================================================================
+ "unexpected error" tests for the exposed api.
+ ==================================================================================================================================
+
+ --- {"m": "Chris", "ds": ["drill", "small portable workbench"]} --------------------------------------------------------
+
+ {"ticket": 1, "outcome_code": "unexpected error"}
+
+ ==================================================================================================================================
+ INCIDENTS
+ ==================================================================================================================================
+
+ 
+ TICKET NO. 1
+ 
+ unit:                 procedure api.insert_master_and_details(text, text)
+ returned_sqlstate:    23514
+ message_text:         new row for relation "details" violates check constraint "details_v_chk"
+ pg_exception_detail:  Failing row contains (b08157ec-fdb4-4e47-af6d-58177cc7177c,                                     +
+                         495afa9e-80d9-44b9-8833-42c7d4676abb, small portable workbench).
+ constraint_name:      details_v_chk
+ table_name:           details
+ schema_name:          data
+ 
+ pg_exception_context
+ --------------------
+ SQL statement "with c(v) as (                                                                                         +
+                 select (v_mk, m_and_ds.ds)::code_helpers.mk_and_ds)                                                   +
+               insert into data.details(mk, v)                                                                         +
+               select (c.v).mk, arr.d                                                                                  +
+               from c cross join lateral unnest((c.v).ds) as arr(d)"                                                   +
+ PL/pgSQL function code.insert_master_and_details(code.m_and_ds,json_utils.outcome_codes,text) line 45 at SQL statement+
+ SQL statement "CALL code.insert_master_and_details(m_and_ds, outcome_code, outcome_msg)"                              +
+ PL/pgSQL function json_shim.insert_master_and_details(text,text) line 12 at CALL                                      +
+ SQL statement "CALL json_shim.insert_master_and_details(j, j_outcome)"                                                +
+ PL/pgSQL function api.insert_master_and_details(text,text) line 3 at CALL
+ 
+ _______________
+
+ ==================================================================================================================================
+ positive tests for qa's client-side simulation
+ ==================================================================================================================================
+
+ --- insert('Fred', null) -----------------------------------------------------------------------------------------------
+
+ User input
+ ----------
+ Fred
+   <no details>
+ 
+ j_input
+ -------
+ {"m": "Fred", "ds": null}
+ 
+ j_outcome
+ ---------
+ {"outcome_code": "bare success"}
+ 
+ Outcome display
+ ---------------
+ Success
+
+ --- insert('Dick', array[]::text[]) ------------------------------------------------------------------------------------
+
+ User input
+ ----------
+ Dick
+   <no details>
+ 
+ j_input
+ -------
+ {"m": "Dick", "ds": []}
+ 
+ j_outcome
+ ---------
+ {"outcome_code": "bare success"}
+ 
+ Outcome display
+ ---------------
+ Success
+
+ --- insert('Joan', array['saw']) ---------------------------------------------------------------------------------------
+
+ User input
+ ----------
+ Joan
+   saw
+ 
+ j_input
+ -------
+ {"m": "Joan", "ds": ["saw"]}
+ 
+ j_outcome
+ ---------
+ {"outcome_code": "bare success"}
+ 
+ Outcome display
+ ---------------
+ Success
+
+ --- insert('Joan', array['screwdriver']) -------------------------------------------------------------------------------
+
+ User input
+ ----------
+ Joan
+   screwdriver
+ 
+ j_input
+ -------
+ {"m": "Joan", "ds": ["screwdriver"]}
+ 
+ j_outcome
+ ---------
+ {"outcome_code": "bare success"}
+ 
+ Outcome display
+ ---------------
+ Success
+
+ --- insert('John', array['kettle', 'pitcher', 'saucepan']) -------------------------------------------------------------
+
+ User input
+ ----------
+ John
+   kettle
+   pitcher
+   saucepan
+ 
+ j_input
+ -------
+ {"m": "John", "ds": ["kettle", "pitcher", "saucepan"]}
+ 
+ j_outcome
+ ---------
+ {"outcome_code": "bare success"}
+ 
+ Outcome display
+ ---------------
+ Success
+
+ --- insert('Mary', array['shampoo', 'soap', 'toothbrush', 'towel']) ----------------------------------------------------
+
+ User input
+ ----------
+ Mary
+   shampoo
+   soap
+   toothbrush
+   towel
+ 
+ j_input
+ -------
+ {"m": "Mary", "ds": ["shampoo", "soap", "toothbrush", "towel"]}
+ 
+ j_outcome
+ ---------
+ {"outcome_code": "bare success"}
+ 
+ Outcome display
+ ---------------
+ Success
+
+ --- report ('Fred') ----------------------------------------------------------------------------------------------------
+
+ User input
+ ----------
+ Fred
+ 
+ j_input
+ -------
+ {"m": "Fred"}
+ 
+ j_outcome
+ ---------
+ {"m_and_ds": {"m": "Fred", "ds": [null]}, "outcome_code": "m-and-ds report success"}
+ 
+ Outcome display
+ ---------------
+ Fred
+   <no details>
+
+ --- report ('Dick') ----------------------------------------------------------------------------------------------------
+
+ User input
+ ----------
+ Dick
+ 
+ j_input
+ -------
+ {"m": "Dick"}
+ 
+ j_outcome
+ ---------
+ {"m_and_ds": {"m": "Dick", "ds": [null]}, "outcome_code": "m-and-ds report success"}
+ 
+ Outcome display
+ ---------------
+ Dick
+   <no details>
+
+ --- report ('Joan') ----------------------------------------------------------------------------------------------------
+
+ User input
+ ----------
+ Joan
+ 
+ j_input
+ -------
+ {"m": "Joan"}
+ 
+ j_outcome
+ ---------
+ {"m_and_ds": {"m": "Joan", "ds": ["saw", "screwdriver"]}, "outcome_code": "m-and-ds report success"}
+ 
+ Outcome display
+ ---------------
+ Joan
+   saw
+   screwdriver
+
+ --- report ('John') ----------------------------------------------------------------------------------------------------
+
+ User input
+ ----------
+ John
+ 
+ j_input
+ -------
+ {"m": "John"}
+ 
+ j_outcome
+ ---------
+ {"m_and_ds": {"m": "John", "ds": ["kettle", "pitcher", "saucepan"]}, "outcome_code": "m-and-ds report success"}
+ 
+ Outcome display
+ ---------------
+ John
+   kettle
+   pitcher
+   saucepan
+
+ --- report ('Mary') ----------------------------------------------------------------------------------------------------
+
+ User input
+ ----------
+ Mary
+ 
+ j_input
+ -------
+ {"m": "Mary"}
+ 
+ j_outcome
+ ---------
+ {"m_and_ds": {"m": "Mary", "ds": ["shampoo", "soap", "toothbrush", "towel"]}, "outcome_code": "m-and-ds report success"}
+ 
+ Outcome display
+ ---------------
+ Mary
+   shampoo
+   soap
+   toothbrush
+   towel
+
+ ==================================================================================================================================
+ "user error" tests for qa's client-side simulation
+ ==================================================================================================================================
+
+ --- insert('Jo', array[]::text[]) --------------------------------------------------------------------------------------
+
+ User input
+ ----------
+ Jo
+   <no details>
+ 
+ j_input
+ -------
+ {"m": "Jo", "ds": []}
+ 
+ j_outcome
+ ---------
+ {"reason": "The length of the master's \"v\" attribute must be between 3 and 10", "outcome_code": "user error"}
+ 
+ Outcome display
+ ---------------
+ user error: The length of the master's "v" attribute must be between 3 and 10
+
+ --- insert('Joan', array['hammer', 'file', 'saw']) ---------------------------------------------------------------------
+
+ User input
+ ----------
+ Joan
+   hammer
+   file
+   saw
+ 
+ j_input
+ -------
+ {"m": "Joan", "ds": ["hammer", "file", "saw"]}
+ 
+ j_outcome
+ ---------
+ {"reason": "Existing  master 'Joan' bad duplicate details: 'saw'", "outcome_code": "user error"}
+ 
+ Outcome display
+ ---------------
+ user error: Existing  master 'Joan' bad duplicate details: 'saw'
+
+ --- insert('Arthur', array['kitchen scissors', 'saucer', 'spatula', 'spatula', 'kitchen scissors']) --------------------
+
+ User input
+ ----------
+ Arthur
+   kitchen scissors
+   saucer
+   spatula
+   spatula
+   kitchen scissors
+ 
+ j_input
+ -------
+ {"m": "Arthur", "ds": ["kitchen scissors", "saucer", "spatula", "spatula", "kitchen scissors"]}
+ 
+ j_outcome
+ ---------
+ {"reason": "New  master 'Arthur' bad duplicate details: 'kitchen scissors', 'spatula'", "outcome_code": "user error"}
+ 
+ Outcome display
+ ---------------
+ user error: New  master 'Arthur' bad duplicate details: 'kitchen scissors', 'spatula'
+
+ --- report ('Bill')) ---------------------------------------------------------------------------------------------------
+
+ User input
+ ----------
+ Bill
+ 
+ j_input
+ -------
+ {"m": "Bill"}
+ 
+ j_outcome
+ ---------
+ {"reason": "The master business key, \"m\", 'Bill' doesn't exist.", "outcome_code": "user error"}
+ 
+ Outcome display
+ ---------------
+ user error: The master business key, "m", 'Bill' doesn't exist.
+
+ ==================================================================================================================================
+ "client code error" tests for qa's client-side simulation
+ ==================================================================================================================================
+
+ --- insert('Bert', array[null]::text[]) --------------------------------------------------------------------------------
+
+ User input
+ ----------
+ Bert
+   <no details>
+ 
+ j_input
+ -------
+ {"m": "Bert", "ds": [null]}
+ 
+ j_outcome
+ ---------
+ {"reason": "\"ds\" array has non-string element: [null]", "outcome_code": "client code error"}
+ 
+ Outcome display
+ ---------------
+ client code error: "ds" array has non-string element: [null]
+
+ ==================================================================================================================================
+ "unexpected error" tests for qa's client-side simulation
+ ==================================================================================================================================
+
+ --- insert('Joan', array['drill', 'small portable workbench']) ---------------------------------------------------------
+
+ User input
+ ----------
+ Joan
+   drill
+   small portable workbench
+ 
+ j_input
+ -------
+ {"m": "Joan", "ds": ["drill", "small portable workbench"]}
+ 
+ j_outcome
+ ---------
+ {"ticket": 101, "outcome_code": "unexpected error"}
+ 
+ Outcome display
+ ---------------
+ unexpected error:
+ 
+ TICKET NO. 101
+ 
+ unit:                 procedure api.insert_master_and_details(text, text)
+ returned_sqlstate:    23514
+ message_text:         new row for relation "details" violates check constraint "details_v_chk"
+ pg_exception_detail:  Failing row contains (5400633b-2a1a-46e9-8bb9-f6d78a8e242b,                                     +
+                         a3a72500-c0c7-4a11-b258-34b74b063bdb, small portable workbench).
+ constraint_name:      details_v_chk
+ table_name:           details
+ schema_name:          data
+ 
+ pg_exception_context
+ --------------------
+ SQL statement "with c(v) as (                                                                                         +
+                 select (v_mk, m_and_ds.ds)::code_helpers.mk_and_ds)                                                   +
+               insert into data.details(mk, v)                                                                         +
+               select (c.v).mk, arr.d                                                                                  +
+               from c cross join lateral unnest((c.v).ds) as arr(d)"                                                   +
+ PL/pgSQL function code.insert_master_and_details(code.m_and_ds,json_utils.outcome_codes,text) line 45 at SQL statement+
+ SQL statement "CALL code.insert_master_and_details(m_and_ds, outcome_code, outcome_msg)"                              +
+ PL/pgSQL function json_shim.insert_master_and_details(text,text) line 12 at CALL                                      +
+ SQL statement "CALL json_shim.insert_master_and_details(j, j_outcome)"                                                +
+ PL/pgSQL function api.insert_master_and_details(text,text) line 3 at CALL                                             +
+ SQL statement "CALL api.insert_master_and_details(j_input, j_outcome)"                                                +
+ PL/pgSQL function qa_ui_simulation.ui_simulation_insert(text,text[]) line 33 at CALL
+ 
+ _______________
+
