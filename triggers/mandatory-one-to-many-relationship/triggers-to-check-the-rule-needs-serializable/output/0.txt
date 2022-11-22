@@ -1,0 +1,42 @@
+ Both "masters" and "details" are empty.
+
+ Arthur >> compass, dividers, protractor, ruler
+ Bill >> bowl, cup, plate, saucer, tankard
+ Bruce >> needle, scissors, thimble, thread
+ Joan >> chisel, drill, saw, screwdriver
+ Mary >> shampoo, soap, toothbrush, towel
+
+ Arthur >> compass, dividers, protractor, ruler
+ Bill >> tankard
+ Bruce >> needle, scissors, thimble, thread
+ Joan >> chisel, drill, saw, screwdriver
+ Mary >> shampoo, soap, toothbrush, towel
+
+ Exception: Inserting new master: each master must have at least one detail.
+
+ Deleted 'forceps' OK. Then on attempting to delete 'scalpel', 'swab':  +
+ Exception: Deleting a detail: each master must have at least one detail
+
+ Arthur >> compass, dividers, protractor, ruler
+ Bill >> tankard
+ Bruce >> needle, scissors, thimble, thread
+ Joan >> chisel, drill, saw, screwdriver
+ Mary >> shampoo, soap, toothbrush, towel
+
+ Bill >> tankard
+ Bruce >> needle, scissors, thimble, thread
+ Joan >> chisel, drill, saw, screwdriver
+
+ Bruce >> needle, scissors, thimble, thread
+ Joan >> chisel, drill, saw, screwdriver
+
+ Both "masters" and "details" are empty.
+
+ Both "masters" and "details" are empty.
+
+ Exception: Deleting a detail: each master must have at least one detail
+
+ Exception: permission denied to create temporary tables in database "d5"
+
+ Mary >> shampoo, soap, toothbrush, towel
+
