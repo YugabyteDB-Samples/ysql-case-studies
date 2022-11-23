@@ -1,5 +1,5 @@
 \t on
-select caption('10-populate-j-books-table');
+select rule_off('05-populate-j-books-table');
 \t off
 --------------------------------------------------------------------------------
 truncate table j_books;

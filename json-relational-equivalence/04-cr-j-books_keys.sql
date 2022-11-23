@@ -1,37 +1,19 @@
 \t on
-select caption('08-create-j-books_keys');
+select rule_off('04-cr-j-books_keys');
 \t off
 --------------------------------------------------------------------------------
-
-drop function if exists  j_books_keys()              cascade;
-drop function if exists  top_level_keys()            cascade;
-drop function if exists  author_keys()               cascade;
-
-drop function if exists  isbn()                      cascade;
-drop function if exists  title()                     cascade;
-drop function if exists  year()                      cascade;
-drop function if exists  authors()                   cascade;
-drop function if exists  genre()                     cascade;
-drop function if exists  given_name()                cascade;
-drop function if exists  family_name()               cascade;
-
-drop function if exists  j_books_keys_list()         cascade;
-drop function if exists  top_level_keys_list()       cascade;
-drop function if exists  author_keys_list()          cascade;
-
-------------------------------------------------------------------------------------------
 -- HERE IS THE SINGLE POINT OF DEFINITION FOR THE NAMES AND DATATYPES OF THE BOOKS KEYS.
 -- We need to be able to map a SQL or PL/pgSQL identifer to a name, so we need to
 -- use a composite type.
 
 create function j_books_keys()
-  returns j_books_keys_nn
+  returns j_books_keys
   language plpgsql
 as $body$
 declare
-  number_t constant text_nn := 'number';
-  string_t constant text_nn := 'string';
-  array_t  constant text_nn := 'array';
+  number_t constant text not null := 'number';
+  string_t constant text not null := 'string';
+  array_t  constant text not null := 'array';
 
   ks j_books_keys;
 begin
@@ -53,20 +35,20 @@ $body$;
 ------------------------------------------------------------------------------------------
 
 create function top_level_keys()
-  returns key_facts_arr_nn
+  returns key_facts[]
   language plpgsql
   immutable
 as $body$
 declare
-  ks constant j_books_keys_nn := j_books_keys();
+  ks constant j_books_keys not null := j_books_keys();
 
-  isbn     constant text_nn := (ks.isbn)    .key;
-  title    constant text_nn := (ks.title)   .key;
-  year     constant text_nn := (ks.year)    .key;
-  authors  constant text_nn := (ks.authors) .key;
-  genre    constant text_nn := (ks.genre)   .key;
+  isbn     constant text not null := (ks.isbn)    .key;
+  title    constant text not null := (ks.title)   .key;
+  year     constant text not null := (ks.year)    .key;
+  authors  constant text not null := (ks.authors) .key;
+  genre    constant text not null := (ks.genre)   .key;
 
-  kvs constant key_facts_arr_nn :=
+  kvs constant key_facts[] not null :=
     array[
       (isbn,     'string'),
       (title,    'string'),
@@ -80,17 +62,17 @@ end;
 $body$;
 
 create function author_keys()
-  returns key_facts_arr_nn
+  returns key_facts[]
   language plpgsql
   immutable
 as $body$
 declare
-  ks constant j_books_keys_nn := j_books_keys();
+  ks constant j_books_keys not null := j_books_keys();
 
-  given_name   constant text_nn := (ks.given_name)  .key;
-  family_name  constant text_nn := (ks.family_name) .key;
+  given_name   constant text not null := (ks.given_name)  .key;
+  family_name  constant text not null := (ks.family_name) .key;
 
-  kvs constant key_facts_arr_nn :=
+  kvs constant key_facts[] not null :=
     array[
       (given_name,  'string'),
       (family_name, 'string')
@@ -111,52 +93,52 @@ $body$;
 */;
 
 create function title()
-  returns text_nn
+  returns text
   language sql
 as $body$
-  select (''''||((j_books_keys()).title).key||'''')::text_nn;
+  select (''''||((j_books_keys()).title).key||'''')::text;
 $body$;
 
 create function isbn()
-  returns text_nn
+  returns text
   language sql
 as $body$
-  select (''''||((j_books_keys()).isbn).key||'''')::text_nn;;
+  select (''''||((j_books_keys()).isbn).key||'''')::text;
 $body$;
 
 create function year()
-  returns text_nn
+  returns text
   language sql
 as $body$
-  select (''''||((j_books_keys()).year).key||'''')::text_nn;;
+  select (''''||((j_books_keys()).year).key||'''')::text;
 $body$;
 
 create function authors()
-  returns text_nn
+  returns text
   language sql
 as $body$
-  select (''''||((j_books_keys()).authors).key||'''')::text_nn;;
+  select (''''||((j_books_keys()).authors).key||'''')::text;
 $body$;
 
 create function genre()
-  returns text_nn
+  returns text
   language sql
 as $body$
-  select (''''||((j_books_keys()).genre).key||'''')::text_nn;;
+  select (''''||((j_books_keys()).genre).key||'''')::text;
 $body$;
 
 create function given_name()
-  returns text_nn
+  returns text
   language sql
 as $body$
-  select (''''||((j_books_keys()).given_name).key||'''')::text_nn;;
+  select (''''||((j_books_keys()).given_name).key||'''')::text;
 $body$;
 
 create function family_name()
-  returns text_nn
+  returns text
   language sql
 as $body$
-  select (''''||((j_books_keys()).family_name).key||'''')::text_nn;;
+  select (''''||((j_books_keys()).family_name).key||'''')::text;
 $body$;
 
 ------------------------------------------------------------------------------------------
@@ -166,11 +148,11 @@ $body$;
 -- It isn't used outside of this file.
 
 create function j_books_keys_list()
-  returns table(z text_nn)
+  returns table(z text)
   language plpgsql
 as $body$
 declare
-  ks j_books_keys_nn := j_books_keys();
+  ks j_books_keys not null := j_books_keys();
 begin
   z := rpad((ks.isbn)        .key, 13)||(ks.isbn)        .data_type;          return next;
   z := rpad((ks.title)       .key, 13)||(ks.title)       .data_type;          return next;
@@ -185,18 +167,12 @@ $body$;
 select j_books_keys_list() as "all keys and their data types";
 
 create function top_level_keys_list()
-  returns table(z text_nn)
+  returns table(z text)
   language plpgsql
 as $body$
 declare
-  -- PostgreSQL can't manage to do the typecast
-  -- from key_facts_arr_nn to key_facts_nn[] by itself
-  -- See my email to psql-general.
-
-  kvs0 constant key_facts_arr_nn := top_level_keys();
-  kvs  constant key_facts_nn[] := kvs0;
-
-  kv            key_facts_nn  := ('', '');
+  kvs  constant key_facts[] not null := top_level_keys();
+  kv            key_facts   not null  := ('', '');
 begin
   foreach kv in array kvs loop
     z := rpad(kv.key, 13)||kv.data_type;          return next;
@@ -207,14 +183,12 @@ $body$;
 select top_level_keys_list() as "top-level keys and their data types";
 
 create function author_keys_list()
-  returns table(z text_nn)
+  returns table(z text)
   language plpgsql
 as $body$
 declare
-  kvs0 constant key_facts_arr_nn := author_keys();
-  kvs  constant key_facts_nn[] := kvs0;
-
-  kv            key_facts_nn  := ('', '');
+  kvs  constant key_facts[] not null := author_keys();
+  kv            key_facts   not null  := ('', '');
 begin
   foreach kv in array kvs loop
     z := rpad(kv.key, 13)||kv.data_type;          return next;

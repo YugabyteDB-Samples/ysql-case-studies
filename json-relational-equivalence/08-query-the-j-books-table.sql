@@ -1,5 +1,5 @@
 \t on
-select caption('12-query-the-j-books-table');
+select rule_off('08-query-the-j-books-table');
 \t off
 --------------------------------------------------------------------------------
 -- Set up psql "colon-shortcuts" for the key names used here.
@@ -26,10 +26,10 @@ select family_name()
 
 deallocate all;
 -- Year
-prepare q1(int_nn, int_nn) as
+prepare q1(int, int) as
 with c(year, title) as (
   select
-    (book_info->>:k_year)::int_nn,
+    (book_info->>:k_year)::int,
     book_info->>:k_title
   from j_books)
 select year, title
@@ -41,7 +41,7 @@ execute q1(2000, 2008);
 explain execute q1(2000, 2010);
 
 -- Title
-prepare q2(text_nn) as
+prepare q2(text) as
 select book_info->>:k_title as title
 from j_books
 where to_tsvector('english', book_info->>:k_title) @@ to_tsquery('english', $1);
@@ -57,8 +57,8 @@ explain execute q2('contrary');
 -- This is no good for the "j_books" JSON schema.
 with c(k, j) as (
   values
-    (1, '["Jane", "Mary", "Fred"]'::jsonb_nn),
-    (2, '["John", "Bill", "Suzy"]'::jsonb_nn)
+    (1, '["Jane", "Mary", "Fred"]'::jsonb),
+    (2, '["John", "Bill", "Suzy"]'::jsonb)
   )
 select
  k,
@@ -91,7 +91,7 @@ order by k;
 
   includes this (sub)array value:
 
-    ('[{"family name": "Kernighan"}]')::jsonb_nn
+    ('[{"family name": "Kernighan"}]')::jsonb
 
   In other words:
 
@@ -101,9 +101,9 @@ order by k;
           {"given name": "Brian",  "family name": "Kernighan"},
           {"given name": "Dennis", "family name": "Ritchie"}
         ]
-      '::jsonb_nn
+      '::jsonb
       @>
-      '[{"family name": "Kernighan"}]'::jsonb_nn;
+      '[{"family name": "Kernighan"}]'::jsonb;
 
 --------------------------------------------------------------------------------
 */;
@@ -118,34 +118,34 @@ order by k;
 -- This works!
 select
   k,
-  (book_info->:k_authors)::text_nn as authors
+  (book_info->:k_authors)::text as authors
 from j_books
-where book_info->:k_authors @> '[{"family name": "Kernighan"}]'::jsonb_nn;
+where book_info->:k_authors @> '[{"family name": "Kernighan"}]'::jsonb;
 
 -- Counter-example: searching at the wrong level in the document tree.
 select
   k,
-  (book_info->:k_authors)::text_nn as authors
+  (book_info->:k_authors)::text as authors
 from j_books
-where book_info @> ('{"family name": "Kernighan"}')::jsonb_nn;
+where book_info @> ('{"family name": "Kernighan"}')::jsonb;
 
 -- Counter-counter-example (but you'd never do this):
 select
   k,
   book_info
 from j_books
-where book_info @> ('{"authors": [{"given name": "Amy", "family name": "Tan"}]}')::jsonb_nn;
+where book_info @> ('{"authors": [{"given name": "Amy", "family name": "Tan"}]}')::jsonb;
 
 -- Use "prepare" to focus on the real test-value of interest.
-prepare q3(text_nn) as
+prepare q3(text) as
 select
   k,
-  (book_info->:k_authors)::text_nn as authors
+  (book_info->:k_authors)::text as authors
 from j_books
-where book_info->:k_authors @> ('[{"family name": "'||$1||'"}]')::jsonb_nn
+where book_info->:k_authors @> ('[{"family name": "'||$1||'"}]')::jsonb
 order by k;
 
--- There's a GIN index on book_info->:k_authors i.e. on a jsonb_nn value!
+-- There's a GIN index on book_info->:k_authors i.e. on a jsonb value!
 execute q3('Meadows');
 execute q3('Sting');
 explain execute q3('Sting');
@@ -153,7 +153,6 @@ explain execute q3('Sting');
 --------------------------------------------------------------------------------
 -- Finally, expand the "authors" array using jsonb_array_elements()
 -- with CROSS JOIN LATERAL and WITH ORDINALITY.
-drop view if exists v cascade;
 create view v(k, title, pos, given_name, family_name) as
 with
   c1 (k, title, pos, obj) as (
@@ -184,7 +183,7 @@ from v
 where given_name is not null
 order by k, pos;
 
-prepare q4(text_nn) as
+prepare q4(text) as
 select
   k,
   title,
