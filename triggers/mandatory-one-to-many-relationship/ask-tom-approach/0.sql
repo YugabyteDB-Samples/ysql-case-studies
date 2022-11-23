@@ -11,10 +11,14 @@ call mgr.cr_role('code', comment=>'Owns all the code that accesses the tables th
 call mgr.set_role_path('client', 'code, mgr, pg_catalog, pg_temp');
 
 \ir 10-cr-tables.sql
-\ir 20-cr-trigger.sql
+\ir 20-cr-triggers.sql
 \ir 30-cr-insert-and-delete-subprograms.sql
 \ir 31-cr-reporting-subprograms.sql
 \ir 40-populate-test-data.sql
+/*
+  OR...
+  \ir 41-do-manual-single-session-test-for-set-constraints-all-immediate.sql
+*/;
 \ir 50-do-single-session-tests.sql
 
 /*

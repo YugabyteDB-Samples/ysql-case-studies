@@ -106,10 +106,29 @@ begin
   /*
     Bring the error forward to allow it to be handled in PL/pgSQL. (This is
     race-condition safe for a native constraint like FK.)
+
+   This works reliably only in PG. In YB, it works as long as the deferred FK rule _can_ be satisfied.
+   But when it _cannot_ be satisfied, then "set constraints all immediate" doesn't cause the intended
+   ordinary FK violation error. Rather, it causes a run-time server crash, thus:
+
+    server closed the connection unexpectedly
+    This probably means the server terminated abnormally
+    before or while processing the request.
+    The connection to the server was lost. Attempting reset: Succeeded.
+
+  This error has no code and cannot be caught in PL/pgSQL code. It inevitably leaks to the client
+  where it invites submitting a complaint to Support. The better alternative is not tu use the erroring
+  statement but, rather, let the FK violation error be detected at commit time. This is still unsatisfactory
+  because it, too, cannot be caught in PL/pgSQL code and therefore leaks to the client. But this is better
+  than a report of a server crash.
   */
-  set constraints all immediate;
+
+  if version() not like '%YB%' then
+    set constraints all immediate;
+  end if;
   outcome := 'Success.';
 exception
+  -- This handler won't catch anything in YB.
   when foreign_key_violation then
     
     get stacked diagnostics detail = pg_exception_detail;
