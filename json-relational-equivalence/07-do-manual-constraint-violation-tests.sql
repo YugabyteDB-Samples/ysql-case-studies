@@ -1,5 +1,5 @@
 \t on
-select caption('11-do-manual-constraint-violation-tests');
+select rule_off('07-do-manual-constraint-violation-tests');
 \t off
 
 --------------------------------------------------------------------------------------------------------------------------------------------

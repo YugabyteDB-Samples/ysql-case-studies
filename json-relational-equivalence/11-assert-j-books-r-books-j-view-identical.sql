@@ -1,11 +1,11 @@
 \t on
-select caption('15-assert-j-books-r-books-j-view-identical');
+select rule_off('15-assert-j-books-r-books-j-view-identical');
 \t off
 --------------------------------------------------------------------------------
 
 do $body$
 declare
-  differ constant boolean_nn :=
+  differ constant boolean not null :=
     (
     with
       a as (select * from j_books except select * from r_books_j_view),

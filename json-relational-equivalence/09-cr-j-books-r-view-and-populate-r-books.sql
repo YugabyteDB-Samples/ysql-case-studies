@@ -1,40 +1,37 @@
 \t on
-select caption('13-create-j-books-r-view-and-populate-r-books');
+select rule_off('09-cr-j-books-r-view-and-populate-r-books');
 \t off
 --------------------------------------------------------------------------------
 
 deallocate all;
 
-drop function if exists sql_authors(jsonb_nn) cascade;
-create function sql_authors(j in jsonb_nn)
-  returns a_names_nn
+create function sql_authors(j in jsonb)
+  returns a_name[]
   language plpgsql
 as $body$
 declare
-  name   a_name_nn  := ('', '');
-  names  a_names_nn := array[]::a_names_nn;
+  name   a_name   not null := ('', '');
+  names  a_name[] not null := array[]::a_name[];
 
-  last_idx constant int_nn := (jsonb_array_length(j) - 1);
+  last_idx constant int not null := (jsonb_array_length(j) - 1);
 begin
   -- Self-doc. The function "j_books_book_info_is_conformant()" has already asserted this.
   assert jsonb_typeof(j) = 'array';
 
   for n in 0..last_idx loop
-    -- Cannot use "a_name_nn" in "jsonb_populate_record()".
-    name := jsonb_populate_record(null::t_name, (j->n));
-    names := names|||name;
+    name := jsonb_populate_record(null::a_name, (j->n));
+    names := names||name;
   end loop;
   return names;
 end;
 $body$;
 
-drop view if exists j_books_r_view cascade;
 create view j_books_r_view(k, isbn, title, year, authors, genre) as
 select
   k,
-  (book_info->>'isbn')::text_nn,
-  (book_info->>'title')::text_nn,
-  (book_info->>'year')::int_nn,
+  (book_info->>'isbn')::text,
+  (book_info->>'title')::text,
+  (book_info->>'year')::int,
   (sql_authors(book_info->'authors')),
   book_info->>'genre'
 from j_books;
@@ -42,11 +39,11 @@ from j_books;
 -- WHICH SQL WOULD YOU PREFER TO EMBED IN YOUR APP'S CODE?
 
 -- Alt. 1: Fashionable JSON.
-prepare q5(text_nn) as
+prepare q5(text) as
 select
   book_info->>'isbn'              as isbn,
   book_info->>'title'             as title,
-  book_info-> 'authors'::text_nn  as authors_jsonb_array
+  book_info-> 'authors'::text  as authors_jsonb_array
 from j_books
 where book_info->>'isbn' = $1;
 
@@ -54,11 +51,11 @@ execute q5('978-0-13-110362-7');
 explain execute q5('978-0-13-110362-7');
 
 -- Alt. 2: Good old SQL.
-prepare q6(text_nn) as
+prepare q6(text) as
 select
   isbn,
   title,
-  authors::text_nn as authors_sql_array
+  authors::text as authors_sql_array
 from j_books_r_view
 where isbn = $1;
 
@@ -70,56 +67,52 @@ explain execute q6('978-0-13-110362-7');
   Create tables for the cassic 3NF representation of the information that
   the JSON book records represent, thus:
 
-    genres    (k ... primary key, genre text_nn)
-    authors   (k ... primary key, given_name text_uc, family_name text_nn)
+    genres    (k ... primary key, genre text not null)
+    authors   (k ... primary key, given_name text, family_name text not null)
 
     r_books   (
                 k           ...primary key,
-                isbn        text_nn unique,
-                title       text_nn,
-                year        int_nn,
-                genre_k     int_uc references genres(k)
+                isbn        text not null unique,
+                title       text not null,
+                year        int not null,
+                genre_k     int references genres(k)
               )
 
     bs_and_as (
-                r_books_k   int_nn,
-                authors_k   int_nn,
-                pos         int_nn,
+                r_books_k   int not null,
+                authors_k   int not null,
+                pos         int not null,
                 constraint  PK(r_books_k, authors_k)
               )
 */;
 
-drop table if exists genres cascade;
 create table genres(
   k      integer
            generated always as identity primary key,
-  genre  text_nn);
+  genre  text not null);
 
-drop table if exists authors cascade;
 create table authors(
   k            integer
                  generated always as identity primary key,
-  given_name   text_uc,
-  family_name  text_nn);
+  given_name   text,
+  family_name  text not null);
 
 create unique index authors_full_name_unq on authors(coalesce(given_name, '<null>'), family_name);
 
 -- Want to be able to "set r_books.k" manually when the table is first populated and then let the
 -- sequence determine it for subsequent inserts. But once set, it's not allowed to change it.
--- So use "serial" with a trigger to prevent updating it- — and not "int_nn generated always as identity".
-drop table if exists r_books cascade;
+-- So use "serial" with a trigger to prevent updating it- — and not "int generated always as identity".
 create table r_books(
   k            serial primary key,
-  isbn         text_nn,
-  title        text_nn,
-  year         int_nn,
-  genre_k      int_uc references genres(k)
+  isbn         text not null,
+  title        text not null,
+  year         int not null,
+  genre_k      int references genres(k)
 
   -- Just for illustration. This should use the REGEXP approach that
   -- "j_books_book_info_is_conformant(()" implements
   constraint r_books_isbn_len_ok check(length(isbn) = 17));
 
-drop function if exists trg_enforce_r_books_k_immutable() cascade;
 create function trg_enforce_r_books_k_immutable()
   returns trigger
   language plpgsql
@@ -142,11 +135,10 @@ create index r_books_year       on r_books(year);
 create index r_books_genre_k    on r_books(genre_k);
 
 -- Intersection table between "r_books" and "authors"
-drop table if exists bs_and_as cascade;
 create table bs_and_as(
-  r_books_k int_nn,
-  authors_k int_nn,
-  pos       int_nn, 
+  r_books_k int not null,
+  authors_k int not null,
+  pos       int not null, 
   constraint bs_and_as_pk primary key(r_books_k, authors_k));
 
 ----------------------------------------------------------------------------------------------------
@@ -154,17 +146,16 @@ create table bs_and_as(
 
 -- Copy the relevant data from j_books_r_view to a throw-away table
 -- so that it can be read and updated in successive steps.
-drop table if exists r_books_temp cascade;
 create temp table r_books_temp(
-  k                   int_nn,
-  isbn                text_nn,
-  title               text_nn,
-  year                int_nn,
-  author_given_name   text_uc,
-  author_family_name  text_nn,
-  pos                 int_nn,
-  genre               text_uc,   
-  genre_k             int_uc);
+  k                   int not null,
+  isbn                text not null,
+  title               text not null,
+  year                int not null,
+  author_given_name   text,
+  author_family_name  text,
+  pos                 int not null,
+  genre               text,   
+  genre_k             int);
 
 insert into r_books_temp(k, isbn, title, year, pos,     author_given_name, author_family_name, genre)
 select                   k, isbn, title, year, arr.pos, arr.given_name,    arr.family_name,    genre
@@ -212,11 +203,11 @@ select * from authors order by k;
 -- The point here is to make the logic maximally clear.
 do $body$
 declare
-  b_k            int_nn  := 0;
-  b_pos          int_nn  := 0;
-  b_given_name   text_uc;
-  b_family_name  text_nn := '';
-  a_k            int_nn  := 0;
+  b_k            int not null  := 0;
+  b_pos          int not null  := 0;
+  b_given_name   text;
+  b_family_name  text := '';
+  a_k            int not null  := 0;
 begin
   for      b_k, b_pos, b_given_name,      b_family_name in (
     select k,   pos,   author_given_name, author_family_name
@@ -242,7 +233,6 @@ select * from bs_and_as order by r_books_k, authors_k, pos;
 ----------------------------------------------------------------------------------------------------
 -- Present the 3NF representation as a single relation with "authors" as a SQL array.
 
-drop view if exists r_books_view cascade;
 create view r_books_view(k, isbn, title, year, authors, genre) as
 with
   c1(k, isbn, title, year, genre) as (
@@ -293,7 +283,7 @@ with
       c3.title,
       c3.year,
       c3.pos,
-      (a.given_name, a.family_name)::a_name_nn, 
+      (a.given_name, a.family_name)::a_name, 
       c3.genre
     from
       c3

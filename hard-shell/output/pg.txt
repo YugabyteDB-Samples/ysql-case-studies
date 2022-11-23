@@ -175,8 +175,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (27d47013-9684-4075-8458-ac87283e2b03,                                     +
-                         7caa295b-bce7-44dc-aeb7-fc9006cf6984, small portable workbench).
+ pg_exception_detail:  Failing row contains (47c0131d-300e-4ae7-9cc2-da3a4a2893eb,                                     +
+                         63052adb-154f-4d9f-a12d-67f1585fc311, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
@@ -557,8 +557,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (5263315e-5209-4270-ab15-4a986922fe19,                                     +
-                         2533e02c-d2ed-4bba-8025-0d185185b453, small portable workbench).
+ pg_exception_detail:  Failing row contains (78782b25-530b-4023-8595-badb95925dff,                                     +
+                         14cb5798-dc11-4b6d-9096-c92fe2fb3046, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
