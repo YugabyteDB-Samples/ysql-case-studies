@@ -1,5 +1,5 @@
 \t on
-select rule_off('08-query-the-j-books-table');
+select rule_off('08-query-the-j-books-table', 'level_3');
 \t off
 --------------------------------------------------------------------------------
 -- Set up psql "colon-shortcuts" for the key names used here.

@@ -13,8 +13,8 @@ as $body$
 declare
   mk_ constant int not null := old.mk;
 begin
-  create temporary table if not exists old_details(mk int);
-  insert into old_details(mk) values(mk_);
+  create temporary table if not exists old_details(mk int) on commit delete rows;
+  insert into pg_temp.old_details(mk) values(mk_);
   return old;
 end;
 $body$;
@@ -39,7 +39,7 @@ declare
   v_  text;
 
   affected_mks constant int[] := (
-    with c(mk) as (select distinct mk from old_details)
+    with c(mk) as (select distinct mk from pg_temp.old_details)
     select array_agg(mk) from c);
 
   r                data.mk_mdk_ddks   not null := (0, 0, '{}'::int[]);

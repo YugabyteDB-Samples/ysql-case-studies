@@ -1,0 +1,362 @@
+ actor 
+-------
+ Alfie
+ Chloe
+ Emily
+ Helen
+ James
+ Steve
+
+         movie          
+------------------------
+ As You Like It
+ Coriolanus
+ Hamlet
+ Julius Caesar
+ King Lear
+ Macbeth
+ Measure for Measure
+ Merry Wives of Windsor
+ Othello
+ Romeo and Juliet
+ Taming of the Shrew
+ The Tempest
+ Twelfth Night
+
+ node_1 | node_2 |                       movies                       
+--------+--------+----------------------------------------------------
+ Alfie  | Chloe  | Hamlet
+ Alfie  | Helen  | Hamlet | Measure for Measure | Taming of the Shrew
+ Alfie  | Steve  | Macbeth
+ Chloe  | Emily  | Julius Caesar | Merry Wives of Windsor
+ Chloe  | Helen  | Hamlet | Romeo and Juliet
+ Emily  | James  | As You Like It | Coriolanus | Othello
+ Helen  | James  | King Lear | Twelfth Night
+ Helen  | Steve  | King Lear | The Tempest
+ James  | Steve  | King Lear
+
+ path #   cardinality   path
+ ------   -----------   ----
+      1             2   Emily > Chloe
+      2             2   Emily > James
+      3             3   Emily > Chloe > Alfie
+      4             3   Emily > Chloe > Helen
+      5             3   Emily > James > Helen
+      6             3   Emily > James > Steve
+      7             4   Emily > Chloe > Alfie > Helen
+      8             4   Emily > Chloe > Alfie > Steve
+      9             4   Emily > Chloe > Helen > Alfie
+     10             4   Emily > Chloe > Helen > James
+     11             4   Emily > Chloe > Helen > Steve
+     12             4   Emily > James > Helen > Alfie
+     13             4   Emily > James > Helen > Chloe
+     14             4   Emily > James > Helen > Steve
+     15             4   Emily > James > Steve > Alfie
+     16             4   Emily > James > Steve > Helen
+     17             5   Emily > Chloe > Alfie > Helen > James
+     18             5   Emily > Chloe > Alfie > Helen > Steve
+     19             5   Emily > Chloe > Alfie > Steve > Helen
+     20             5   Emily > Chloe > Alfie > Steve > James
+     21             5   Emily > Chloe > Helen > Alfie > Steve
+     22             5   Emily > Chloe > Helen > James > Steve
+     23             5   Emily > Chloe > Helen > Steve > Alfie
+     24             5   Emily > Chloe > Helen > Steve > James
+     25             5   Emily > James > Helen > Alfie > Chloe
+     26             5   Emily > James > Helen > Alfie > Steve
+     27             5   Emily > James > Helen > Chloe > Alfie
+     28             5   Emily > James > Helen > Steve > Alfie
+     29             5   Emily > James > Steve > Alfie > Chloe
+     30             5   Emily > James > Steve > Alfie > Helen
+     31             5   Emily > James > Steve > Helen > Alfie
+     32             5   Emily > James > Steve > Helen > Chloe
+     33             6   Emily > Chloe > Alfie > Helen > James > Steve
+     34             6   Emily > Chloe > Alfie > Helen > Steve > James
+     35             6   Emily > Chloe > Alfie > Steve > Helen > James
+     36             6   Emily > Chloe > Alfie > Steve > James > Helen
+     37             6   Emily > Chloe > Helen > Alfie > Steve > James
+     38             6   Emily > Chloe > Helen > James > Steve > Alfie
+     39             6   Emily > James > Helen > Chloe > Alfie > Steve
+     40             6   Emily > James > Helen > Steve > Alfie > Chloe
+     41             6   Emily > James > Steve > Alfie > Chloe > Helen
+     42             6   Emily > James > Steve > Alfie > Helen > Chloe
+     43             6   Emily > James > Steve > Helen > Alfie > Chloe
+     44             6   Emily > James > Steve > Helen > Chloe > Alfie
+
+ path #   cardinality   path
+ ------   -----------   ----
+      1             2   Emily > Chloe
+      2             2   Emily > James
+      3             3   Emily > Chloe > Alfie
+      4             3   Emily > Chloe > Helen
+      5             3   Emily > James > Helen
+      6             3   Emily > James > Steve
+      7             4   Emily > Chloe > Alfie > Helen
+      8             4   Emily > Chloe > Alfie > Steve
+      9             4   Emily > Chloe > Helen > Alfie
+     10             4   Emily > Chloe > Helen > James
+     11             4   Emily > Chloe > Helen > Steve
+     12             4   Emily > James > Helen > Alfie
+     13             4   Emily > James > Helen > Chloe
+     14             4   Emily > James > Helen > Steve
+     15             4   Emily > James > Steve > Alfie
+     16             4   Emily > James > Steve > Helen
+     17             5   Emily > Chloe > Alfie > Helen > James
+     18             5   Emily > Chloe > Alfie > Helen > Steve
+     19             5   Emily > Chloe > Alfie > Steve > Helen
+     20             5   Emily > Chloe > Alfie > Steve > James
+     21             5   Emily > Chloe > Helen > Alfie > Steve
+     22             5   Emily > Chloe > Helen > James > Steve
+     23             5   Emily > Chloe > Helen > Steve > Alfie
+     24             5   Emily > Chloe > Helen > Steve > James
+     25             5   Emily > James > Helen > Alfie > Chloe
+     26             5   Emily > James > Helen > Alfie > Steve
+     27             5   Emily > James > Helen > Chloe > Alfie
+     28             5   Emily > James > Helen > Steve > Alfie
+     29             5   Emily > James > Steve > Alfie > Chloe
+     30             5   Emily > James > Steve > Alfie > Helen
+     31             5   Emily > James > Steve > Helen > Alfie
+     32             5   Emily > James > Steve > Helen > Chloe
+     33             6   Emily > Chloe > Alfie > Helen > James > Steve
+     34             6   Emily > Chloe > Alfie > Helen > Steve > James
+     35             6   Emily > Chloe > Alfie > Steve > Helen > James
+     36             6   Emily > Chloe > Alfie > Steve > James > Helen
+     37             6   Emily > Chloe > Helen > Alfie > Steve > James
+     38             6   Emily > Chloe > Helen > James > Steve > Alfie
+     39             6   Emily > James > Helen > Chloe > Alfie > Steve
+     40             6   Emily > James > Helen > Steve > Alfie > Chloe
+     41             6   Emily > James > Steve > Alfie > Chloe > Helen
+     42             6   Emily > James > Steve > Alfie > Helen > Chloe
+     43             6   Emily > James > Steve > Helen > Alfie > Chloe
+     44             6   Emily > James > Steve > Helen > Chloe > Alfie
+
+ repeat_nr | number_of_paths 
+-----------+-----------------
+         0 |               2
+         1 |               4
+         2 |              10
+         3 |              16
+         4 |              12
+
+ path #   cardinality   path
+ ------   -----------   ----
+      1             6   Emily > Chloe > Alfie > Helen > James > Steve
+      2             6   Emily > Chloe > Alfie > Helen > Steve > James
+      3             6   Emily > Chloe > Alfie > Steve > Helen > James
+      4             6   Emily > Chloe > Alfie > Steve > James > Helen
+      5             6   Emily > Chloe > Helen > Alfie > Steve > James
+      6             6   Emily > Chloe > Helen > James > Steve > Alfie
+      7             6   Emily > James > Helen > Chloe > Alfie > Steve
+      8             6   Emily > James > Helen > Steve > Alfie > Chloe
+      9             6   Emily > James > Steve > Alfie > Chloe > Helen
+     10             6   Emily > James > Steve > Alfie > Helen > Chloe
+     11             6   Emily > James > Steve > Helen > Alfie > Chloe
+     12             6   Emily > James > Steve > Helen > Chloe > Alfie
+
+ path #   cardinality   path
+ ------   -----------   ----
+      1             2   Emily > Chloe
+      2             2   Emily > James
+      3             3   Emily > Chloe > Alfie
+      4             3   Emily > Chloe > Helen
+      5             3   Emily > James > Steve
+
+ path #   cardinality   path
+ ------   -----------   ----
+      1             3   Emily > Chloe > Alfie
+      2             3   Emily > Chloe > Helen
+      3             3   Emily > James > Steve
+
+ --------------------------------------------------
+ Emily
+    Julius Caesar
+    Merry Wives of Windsor
+       Chloe
+ --------------------------------------------------
+ Emily
+    As You Like It
+    Coriolanus
+    Othello
+       James
+ --------------------------------------------------
+ Emily
+    Julius Caesar
+    Merry Wives of Windsor
+       Chloe
+          Hamlet
+             Alfie
+ --------------------------------------------------
+ Emily
+    Julius Caesar
+    Merry Wives of Windsor
+       Chloe
+          Hamlet
+          Romeo and Juliet
+             Helen
+ --------------------------------------------------
+ Emily
+    As You Like It
+    Coriolanus
+    Othello
+       James
+          King Lear
+             Steve
+ --------------------------------------------------
+
+ --------------------------------------------------
+ Emily
+    Julius Caesar
+    Merry Wives of Windsor
+       Chloe
+          Hamlet
+          Romeo and Juliet
+             Helen
+ --------------------------------------------------
+
+ count(*) from cast_members...  1,817
+
+ count(*) from actors.........    161
+
+ count(*) from movies.........  1,586
+
+      actor       
+------------------
+ Adam Sandler (I)
+ Al Pacino
+ Alan Rickman
+ Alec Guinness
+ Alireza Shayegan
+ Allen Covert
+ Alyson Hannigan
+ Amir Ashayeri
+ Andy Dick
+ Ann Pala
+
+                       movie                        
+----------------------------------------------------
+ 180: Christopher Nolan Interviews Al Pacino (2002)
+ Actor's Notebook: Christopher Lee (2002)
+ Adam Sandler Goes to Hell (2001)
+ Airport '77 (1977)
+ America's Sweethearts (2001)
+ Austin Powers: International Man of Mystery (1997)
+ Bandits (2001)
+ Batman Begins (2005)
+ Being John Malkovich (1999)
+ Big Parade of Comedy, The (1964)
+
+      node_1      |       node_2       |                                        movies                                         
+------------------+--------------------+---------------------------------------------------------------------------------------
+ Adam Sandler (I) | Allen Covert       | Adam Sandler Goes to Hell (2001)
+ Adam Sandler (I) | Ann Pala           | Adam Sandler Goes to Hell (2001)
+ Adam Sandler (I) | Betsy Asher Hall   | Adam Sandler Goes to Hell (2001)
+ Adam Sandler (I) | Bill Murray (I)    | Saturday Night Live Christmas (1999) | Saturday Night Live: Game Show Parodies (1998)
+ Adam Sandler (I) | Billy Bob Thornton | Going Overboard (1989)
+ Adam Sandler (I) | Billy Crystal      | Saturday Night Live: Game Show Parodies (1998)
+ Adam Sandler (I) | Blake Clark        | Adam Sandler Goes to Hell (2001)
+ Adam Sandler (I) | Craig A. Mumma     | Adam Sandler Goes to Hell (2001)
+ Adam Sandler (I) | Dana Carvey        | Adam Sandler Goes to Hell (2001)
+ Adam Sandler (I) | David Sosalla      | Adam Sandler Goes to Hell (2001)
+
+       node_1       |      node_2      |                                        movies                                         
+--------------------+------------------+---------------------------------------------------------------------------------------
+ Allen Covert       | Adam Sandler (I) | Adam Sandler Goes to Hell (2001)
+ Ann Pala           | Adam Sandler (I) | Adam Sandler Goes to Hell (2001)
+ Betsy Asher Hall   | Adam Sandler (I) | Adam Sandler Goes to Hell (2001)
+ Bill Murray (I)    | Adam Sandler (I) | Saturday Night Live Christmas (1999) | Saturday Night Live: Game Show Parodies (1998)
+ Billy Bob Thornton | Adam Sandler (I) | Going Overboard (1989)
+ Billy Crystal      | Adam Sandler (I) | Saturday Night Live: Game Show Parodies (1998)
+ Blake Clark        | Adam Sandler (I) | Adam Sandler Goes to Hell (2001)
+ Craig A. Mumma     | Adam Sandler (I) | Adam Sandler Goes to Hell (2001)
+ Dana Carvey        | Adam Sandler (I) | Adam Sandler Goes to Hell (2001)
+ David Sosalla      | Adam Sandler (I) | Adam Sandler Goes to Hell (2001)
+
+ ------------------------------------------------------------
+
+ Seed: Kevin Bacon
+
+ total number of pruned paths:            160
+
+ Max path length:                         6
+
+ unreached:                               Kevin Bacon (I)
+
+ Maximum distance match:                  Christopher Nolan
+
+ total number of unique containing paths: 144
+
+ --------------------------------------------------
+ Kevin Bacon (I)
+    She's Having a Baby (1988)
+    Wild Things (1998)
+       Bill Murray (I)
+          Saturday Night Live: Game Show Parodies (1998)
+             Billy Crystal
+                Muhammad Ali: Through the Eyes of the World (2001)
+                   James Earl Jones
+                      Looking for Richard (1996)
+                         Al Pacino
+                            180: Christopher Nolan Interviews Al Pacino (2002)
+                               Christopher Nolan
+ --------------------------------------------------
+
+ ------------------------------------------------------------
+
+ Seed: Christopher Nolan
+
+ total number of pruned paths:            160
+
+ Max path length:                         6
+
+ unreached:                               Christopher Nolan
+
+ --------------------------------------------------
+ Christopher Nolan
+    180: Christopher Nolan Interviews Al Pacino (2002)
+       Al Pacino
+          Looking for Richard (1996)
+             James Earl Jones
+                Conan Unchained: The Making of 'Conan' (2000)
+                Conan the Barbarian (1982)
+                   Arnold Schwarzenegger
+                      Last Party, The (1993)
+                         Christian Slater
+                            Murder in the First (1995)
+                               Kevin Bacon (I)
+ --------------------------------------------------
+
+ --- Pruning demo -------------------------------------------------------------------------------------------------------
+
+ "raw_paths" to date after one rep. of the recursive term.
+
+ {Emily,Chloe,Alfie}
+ {Emily,Chloe,Helen}
+ {Emily,Chloe}
+ {Emily,James,Steve}
+ {Emily,James}
+
+ "temp_paths" produced by the second rep. of the recursive term before pruning.
+
+ {Emily,Chloe,Alfie,Helen}
+ {Emily,Chloe,Alfie,Steve}
+ {Emily,Chloe,Helen,Alfie}
+ {Emily,Chloe,Helen,James}
+ {Emily,Chloe,Helen,Steve}
+ {Emily,James,Helen,Alfie}
+ {Emily,James,Helen,Chloe}
+ {Emily,James,Helen,Steve}
+ {Emily,James,Steve,Alfie}
+ {Emily,James,Steve,Helen}
+
+ "temp_paths" after pruning all but one path to each distinct new terminal.
+
+ {Emily,Chloe,Alfie,Helen}
+ {Emily,Chloe,Alfie,Steve}
+ {Emily,Chloe,Helen,Alfie}
+ {Emily,Chloe,Helen,James}
+ {Emily,James,Helen,Chloe}
+
+ "temp_paths" after pruning newer (and therefore longer) paths to already-found terminals.
+
+
+ Nothing survives. So the (so-called) recursion stops.
+

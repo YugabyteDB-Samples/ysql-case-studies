@@ -115,6 +115,7 @@ begin
     This probably means the server terminated abnormally
     before or while processing the request.
     The connection to the server was lost. Attempting reset: Succeeded.
+    See https://github.com/yugabyte/yugabyte-db/issues/13009.
 
   This error has no code and cannot be caught in PL/pgSQL code. It inevitably leaks to the client
   where it invites submitting a complaint to Support. The better alternative is not tu use the erroring

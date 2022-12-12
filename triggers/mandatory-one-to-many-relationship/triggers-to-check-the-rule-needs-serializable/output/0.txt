@@ -36,7 +36,7 @@
 
  Exception: Deleting a detail: each master must have at least one detail
 
- Exception: permission denied to create temporary tables in database "d5"
+ Exception: permission denied to create temporary tables in database "d6"
 
  Mary >> shampoo, soap, toothbrush, towel
 

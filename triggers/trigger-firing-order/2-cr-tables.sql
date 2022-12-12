@@ -1,8 +1,8 @@
-create table u1.masters(
+create table masters(
   mk  serial primary key,
   v   text not null unique);
 
-create table u1.details(
+create table details(
   mk  int,
   dk  serial,
   v   text not null unique,
@@ -10,5 +10,5 @@ create table u1.details(
   constraint details_pk primary key(mk, dk),
 
   constraint details_fk foreign key(mk)
-    references u1.masters(mk)
+    references masters(mk)
     on delete cascade);

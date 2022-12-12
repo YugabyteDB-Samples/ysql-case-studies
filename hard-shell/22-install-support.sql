@@ -1,7 +1,7 @@
-set role d2$support;
+set role d3$support;
 
-grant usage on schema support to d2$api;
-grant usage on schema support to d2$qa;
+grant usage on schema support to d3$api;
+grant usage on schema support to d3$qa;
 --------------------------------------------------------------------------------
 
 -- "no information" is represented by the empty string.
@@ -20,7 +20,7 @@ create table support.incidents(
   pg_exception_context  text not null);
 
 revoke all    on table support.incidents from public;
-grant  delete on table support.incidents to   d2$qa;
+grant  delete on table support.incidents to   d3$qa;
 
 create type support.stacked_diagnostics as (
   returned_sqlstate     text,
@@ -35,8 +35,8 @@ create type support.stacked_diagnostics as (
   pg_exception_context  text);
 
 revoke all  on type support.stacked_diagnostics from public;
-grant usage on type support.stacked_diagnostics to d2$code;
-grant usage on type support.stacked_diagnostics to d2$json;
+grant usage on type support.stacked_diagnostics to d3$code;
+grant usage on type support.stacked_diagnostics to d3$json;
 
 create procedure support.insert_incident(
   the_unit             in     text,
@@ -77,7 +77,7 @@ end;
 $body$;
 
 revoke all     on procedure support.insert_incident(text, support.stacked_diagnostics, int) from public;
-grant  execute on procedure support.insert_incident(text, support.stacked_diagnostics, int) to   d2$api;
+grant  execute on procedure support.insert_incident(text, support.stacked_diagnostics, int) to   d3$api;
 
 --------------------------------------------------------------------------------
 
@@ -215,4 +215,4 @@ end;
 $body$;
 
 revoke all     on function support.incidents_report(int[]) from public;
-grant  execute on function support.incidents_report(int[]) to   d2$qa;
+grant  execute on function support.incidents_report(int[]) to   d3$qa;

@@ -1,7 +1,6 @@
-create function u1.generic_trg()
+create function generic_trg()
   returns trigger
   security definer
-  set search_path = pg_catalog, pg_temp
   language plpgsql
 as $body$
 declare
@@ -18,7 +17,7 @@ declare
 
     end;
 begin
-  call u1.log_a_firing(tg_when, tg_op, tg_table_name, tg_level, v);
+  call log_a_firing(tg_when, tg_op, tg_table_name, tg_level, v);
   return
     case lower(tg_op)
       when 'insert'  then new

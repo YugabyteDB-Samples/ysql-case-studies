@@ -1,5 +1,5 @@
 \t on
-select rule_off('15-assert-j-books-r-books-j-view-identical');
+select rule_off('15-assert-j-books-r-books-j-view-identical', 'level_3');
 \t off
 --------------------------------------------------------------------------------
 

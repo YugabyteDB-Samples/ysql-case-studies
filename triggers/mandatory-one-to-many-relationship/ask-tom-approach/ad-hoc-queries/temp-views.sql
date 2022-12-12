@@ -17,6 +17,6 @@ from
   data.details d
   using (mk);
 
-select * from masters_left_outer_join_details order by 4, 5;
+select * from pg_temp.masters_left_outer_join_details order by 4, 5;
 
-select * from masters_full_outer_join_details order by 4, 5;
+select * from pg_temp.masters_full_outer_join_details order by 4, 5;

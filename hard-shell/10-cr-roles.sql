@@ -1,7 +1,3 @@
-\c d2 d2$mgr
-call mgr.drop_all_regular_tenant_roles();
-call mgr.comment_on_current_db('"Hard Shell" case study.');
-
 /*
   procedure mgr.cr_role(
     nickname                   in text,

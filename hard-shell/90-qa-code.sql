@@ -1,9 +1,9 @@
-set role d2$qa;
+set role d3$qa;
 
 delete from support.incidents;
 delete from data.masters;
 \t on
-select  mgr.rule_off('UNIT TESTS FOR "code" subprograms. (These aren''t exposed via the "client" role.)');
+select  mgr.rule_off('UNIT TESTS FOR "code" subprograms. (These aren''t exposed via the "client" role.)', 'level_2');
 
 \pset null '<NULL>'
 \set empty '\'\'::json_utils.outcome_codes'

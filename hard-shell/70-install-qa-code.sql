@@ -1,6 +1,6 @@
-set role d2$qa;
+set role d3$qa;
 
-create schema qa_code authorization d2$qa;
+create schema qa_code authorization d3$qa;
 
 --------------------------------------------------------------------------------
 

@@ -1,4 +1,4 @@
-create table u1.trigger_firings(
+create table trigger_firings(
   k              serial primary key,
   tg_when        text   not null,
   tg_op          text   not null default '',
@@ -8,7 +8,7 @@ create table u1.trigger_firings(
   tg_name        text   not null default '');
 --------------------------------------------------------------------------------
 
-create procedure u1.log_a_firing(
+create procedure log_a_firing(
   tg_when        in text,
   tg_op          in text = '',
   tg_table_name  in text = '',
@@ -17,18 +17,17 @@ create procedure u1.log_a_firing(
   tg_name        in text = '')
 
   security definer
-  set search_path = pg_catalog, pg_temp
   language plpgsql
 as $body$
 begin
   if (tg_when = '') then
     -- Blank line for readility.
-    insert into u1.trigger_firings
+    insert into trigger_firings
       (tg_when, tg_op, tg_table_name, tg_level, v, tg_name)
     values
       ('', '', '', '', '', '', '');
   else
-    insert into u1.trigger_firings
+    insert into trigger_firings
       (tg_when, tg_op, tg_table_name, tg_level, v, tg_name)
     values
       (tg_when, tg_op, tg_table_name, tg_level, v, tg_name);
@@ -37,13 +36,12 @@ end;
 $body$;
 --------------------------------------------------------------------------------
 
-create procedure u1.log_a_constraint_check(v in text, constraint_fn in text)
+create procedure log_a_constraint_check(v in text, constraint_fn in text)
   security definer
-  set search_path = pg_catalog, pg_temp
   language plpgsql
 as $body$
 begin
-  insert into u1.trigger_firings
+  insert into trigger_firings
     (tg_when, tg_op, tg_table_name, tg_level, v, tg_name)
   values
     ('check', '', '', '', v, constraint_fn);
@@ -51,23 +49,21 @@ end;
 $body$;
 --------------------------------------------------------------------------------
 
-create procedure u1.log_a_comment(t in text = '')
+create procedure log_a_comment(t in text = '')
   security definer
-  set search_path = pg_catalog, pg_temp
   language plpgsql
 as $body$
 begin
-  insert into u1.trigger_firings(tg_when) values ('-'), (''), ('-- '||t);
+  insert into trigger_firings(tg_when) values ('-'), (''), ('-- '||t);
 end;
 $body$;
 --------------------------------------------------------------------------------
 
 -- Produce a nicely readable report from the raw contents of "trigger_firings".
-create function u1.trigger_firings()
+create function trigger_firings()
   returns table(z text)
   stable
   security definer
-  set search_path = pg_catalog, pg_temp
   language plpgsql
 as $body$
 declare
@@ -100,7 +96,7 @@ begin
         lower(tg_level),
         v,
         tg_name
-      from u1.trigger_firings
+      from trigger_firings
       order by k
     )
   loop

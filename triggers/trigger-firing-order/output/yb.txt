@@ -1,23 +1,13 @@
- master_and_details_report 
----------------------------
  Bill >> cup, saucer
  Mary >> shampoo
 
- master_and_details_report 
----------------------------
  Bill >> cup, saucer
  Mary >> <NULL>
 
- master_and_details_report 
----------------------------
  Mary >> <NULL>
 
-   master_and_details_report   
--------------------------------
  Mary >> flannel, soap, sponge
 
-   master_and_details_report    
---------------------------------
  Mary >> flannel, sponge, towel
 
  --------------------------------------------------------------------------------
@@ -100,9 +90,9 @@
  after  update on details    for each statement  >           
 
 -[ RECORD 1 ]-----------------------------------------------------------
-name     | RI_ConstraintTrigger_a_16704
+name     | RI_ConstraintTrigger_a_18720
 tab_name | masters
-def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_16704" A...
+def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_18720" A...
 
 -[ RECORD 1 ]--------------------------------------------------------------------------------------------------------------------------------------
 definition |  AFTER DELETE ON u1.masters FROM u1.details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_cascade_del"()

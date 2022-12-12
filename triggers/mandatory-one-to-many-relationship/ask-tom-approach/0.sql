@@ -1,11 +1,10 @@
 \c d4 d4$mgr
 call mgr.drop_all_regular_tenant_roles();
 call mgr.comment_on_current_db(
-  'Case study:'||e'\n'||
-  '"Enforcing the mandatory 1:M rule with a mutual FK between'||e'\n'||
-  'the "masters" and "details" tables.');
+  '"Enforcing the mandatory 1:M rule with a mutual FK between '||e'\n'||
+  'the "masters" and "details" tables. ');
 
-call mgr.cr_role('data', comment=>'Owns all the tables and associated objects that implement this case study');
+call mgr.cr_role('data', with_temp_on_db=>true, comment=>'Owns all the tables and associated objects that implement this case study');
 call mgr.cr_role('code', comment=>'Owns all the code that accesses the tables that "data" owns');
 
 call mgr.set_role_path('client', 'code, mgr, pg_catalog, pg_temp');

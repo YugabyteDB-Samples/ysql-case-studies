@@ -3,19 +3,18 @@
   It is designed to be installed in its own database.
   If you use a dedicated cluster with just one "non-system" database
   then you can use ordinary menonic names for the roles. (These are the only global
-  phenomena.) The name of the database isn't significant exacpr that the scripts
+  phenomena.) The name of the database isn't significant except that the scripts
   need to mention it when the connect.
 
   Otherwise, you'll need a self-imposed naming convention. I recomend that you simply
   use a cluster that you've set up as a "YBMT" cluster using the scripts under the
   "multitenancy" dirrectory. (It's a peer to the present "hard-shell" directory in
   the present repo. Doind this will hugely simplify things for you.
-
-  These scripts use the "d2" tenant database. These means that all the roles have names that start
-  with "d2$". If you want to use a different database, like "d42", then simply do a global seach-and-replace
-  to change "d2" to "d42". There aren't many occurrences. So you can inspect and confirm each replacement
-  manually.
 */;
+
+\c d3 d3$mgr
+call mgr.drop_all_regular_tenant_roles();
+call mgr.comment_on_current_db('"Hard Shell" case study. ');
 
 -- Install and QA the application-agnostic infrastructure
 \ir 10-cr-roles.sql
@@ -39,4 +38,4 @@
 \ir 91-qa-client-role-functionality.sql
 \ir 92-qa-ui-simulation.sql
 
-\c d2 d2$client
+\c d3 d3$client

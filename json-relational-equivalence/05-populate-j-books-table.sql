@@ -1,5 +1,5 @@
 \t on
-select rule_off('05-populate-j-books-table');
+select rule_off('05-populate-j-books-table', 'level_3');
 \t off
 --------------------------------------------------------------------------------
 truncate table j_books;

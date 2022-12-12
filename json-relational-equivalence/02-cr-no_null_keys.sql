@@ -1,5 +1,5 @@
 \t on
-select rule_off('02-cr-detect-and-strip-null-keys');
+select rule_off('02-cr-detect-and-strip-null-keys', 'level_3');
 \t off
 
 /*

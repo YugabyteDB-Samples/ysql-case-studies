@@ -1,11 +1,11 @@
-set role d2$json;
+set role d3$json;
 
 -- Add an application-specific outcome code.
 alter type json_utils.outcome_codes add value if not exists 'm-and-ds report success';
 
 
-create schema json_helpers authorization d2$json;
-grant usage on schema json_helpers to d2$qa;
+create schema json_helpers authorization d3$json;
+grant usage on schema json_helpers to d3$qa;
 
 -- INPUT PARAMETERIZATION ------------------------------------------------------
 
@@ -105,8 +105,8 @@ $body$;
 
 -- THE API ---------------------------------------------------------------------
 
-create schema json_shim authorization d2$json;
-grant usage on schema json_shim to d2$api;
+create schema json_shim authorization d3$json;
+grant usage on schema json_shim to d3$api;
 
 create procedure json_shim.insert_master_and_details(
   j in text,
@@ -139,7 +139,7 @@ end;
 $body$;
 
 revoke all     on procedure json_shim.insert_master_and_details(text, text) from public;
-grant  execute on procedure json_shim.insert_master_and_details(text, text) to   d2$api;
+grant  execute on procedure json_shim.insert_master_and_details(text, text) to   d3$api;
 
 --------------------------------------------------------------------------------
 
@@ -186,4 +186,4 @@ end;
 $body$;
 
 revoke all     on procedure json_shim.do_master_and_details_report(text, text) from public;
-grant  execute on procedure json_shim.do_master_and_details_report(text, text) to   d2$api;
+grant  execute on procedure json_shim.do_master_and_details_report(text, text) to   d3$api;

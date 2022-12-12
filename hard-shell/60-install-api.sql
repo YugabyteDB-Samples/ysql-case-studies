@@ -18,10 +18,10 @@
   of the subprograms, here, that are the final expression of the "hard shell" API.
 */;
 
-set role d2$api;
+set role d3$api;
 
-grant usage on schema api to d2$client;
-grant usage on schema api to d2$qa;
+grant usage on schema api to d3$client;
+grant usage on schema api to d3$qa;
 --------------------------------------------------------------------------------
 
 create procedure api.insert_master_and_details(j in text, j_outcome inout text)
@@ -59,8 +59,8 @@ end;
 $body$;
 
 revoke all     on procedure api.insert_master_and_details(text, text) from public;
-grant  execute on procedure api.insert_master_and_details(text, text) to   d2$client;
-grant  execute on procedure api.insert_master_and_details(text, text) to   d2$qa;
+grant  execute on procedure api.insert_master_and_details(text, text) to   d3$client;
+grant  execute on procedure api.insert_master_and_details(text, text) to   d3$qa;
 --------------------------------------------------------------------------------
 
 create procedure api.do_master_and_details_report(mv_in in text, j_outcome inout text)
@@ -98,5 +98,5 @@ end;
 $body$;
 
 revoke all    on procedure api.do_master_and_details_report(text, text) from public;
-grant execute on procedure api.do_master_and_details_report(text, text) to   d2$client;
-grant execute on procedure api.do_master_and_details_report(text, text) to   d2$qa;
+grant execute on procedure api.do_master_and_details_report(text, text) to   d3$client;
+grant execute on procedure api.do_master_and_details_report(text, text) to   d3$qa;

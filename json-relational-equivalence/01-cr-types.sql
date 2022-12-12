@@ -1,5 +1,5 @@
 \t on
-select rule_off('01-cr-types');
+select rule_off('01-cr-types', 'level_3');
 \t off
 
 /*

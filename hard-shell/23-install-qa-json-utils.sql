@@ -1,6 +1,6 @@
-set role d2$qa;
+set role d3$qa;
 
-create schema qa_json_utils authorization d2$qa;
+create schema qa_json_utils authorization d3$qa;
 --------------------------------------------------------------------------------
 
 create function qa_json_utils.json_object_keys_ok_outcome(
@@ -22,7 +22,7 @@ begin
   declare
     j_outcome text not null := json_utils.json_object_keys_ok(j, key_facts);
   begin
-    z := rpad('--- '||caption||' -', 120, '-');           return next;
+    z := rpad(('- - '||caption||' '), 120, '- ');         return next;
     z := j;                                               return next;
     z := key_facts_txt;                                   return next;
     z := j_outcome;                                       return next;

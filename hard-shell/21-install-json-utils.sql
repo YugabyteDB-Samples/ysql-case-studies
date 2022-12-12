@@ -1,10 +1,10 @@
-set role d2$json;
+set role d3$json;
 
-create schema json_utils authorization d2$json;
+create schema json_utils authorization d3$json;
 
-grant usage on schema json_utils to d2$code;
-grant usage on schema json_utils to d2$api;
-grant usage on schema json_utils to d2$qa;
+grant usage on schema json_utils to d3$code;
+grant usage on schema json_utils to d3$api;
+grant usage on schema json_utils to d3$qa;
 --------------------------------------------------------------------------------
 /*
   The empty-string value is included in the enumeration so that it can be used as
@@ -21,7 +21,7 @@ create type json_utils.outcome_codes as enum (
   'client code error',
   'unexpected error');
 
-grant usage on type json_utils.outcome_codes to d2$code;
+grant usage on type json_utils.outcome_codes to d3$code;
 
 -- OUTPUT PARAMETERIZATION
 
@@ -41,7 +41,7 @@ as $body$
 $body$;
 
 revoke execute on function json_utils.bare_success() from public;
-grant  execute on function json_utils.bare_success() to   d2$qa;
+grant  execute on function json_utils.bare_success() to   d3$qa;
 
 create function json_utils.expected_error(
   outcome_code in json_utils.outcome_codes,
@@ -57,7 +57,7 @@ as $body$
 $body$;
 
 revoke execute on function json_utils.expected_error(json_utils.outcome_codes, text) from public;
-grant  execute on function json_utils.expected_error(json_utils.outcome_codes, text) to   d2$qa;
+grant  execute on function json_utils.expected_error(json_utils.outcome_codes, text) to   d3$qa;
 
 create function json_utils.unexpected_error(
   ticket in int)
@@ -75,13 +75,13 @@ as $body$
 $body$;
 
 revoke execute on function json_utils.unexpected_error(int) from public;
-grant  execute on function json_utils.unexpected_error(int) to   d2$api;
+grant  execute on function json_utils.unexpected_error(int) to   d3$api;
 
 --------------------------------------------------------------------------------
 -- Function json_object_keys_ok() 
 
 create type json_utils.key_facts as (name text, data_type text, required boolean);
-grant usage on type json_utils.key_facts to d2$qa;
+grant usage on type json_utils.key_facts to d3$qa;
 
 create type json_utils.n_and_d as (name text, data_type text);
 
@@ -218,7 +218,7 @@ end;
 $body$;
 
 revoke execute on function json_utils.json_object_keys_ok(text, json_utils.key_facts[]) from public;
-grant  execute on function json_utils.json_object_keys_ok(text, json_utils.key_facts[]) to   d2$qa;
+grant  execute on function json_utils.json_object_keys_ok(text, json_utils.key_facts[]) to   d3$qa;
 
 --------------------------------------------------------------------------------
 -- Function array_elements_all_same_type() 
@@ -266,4 +266,4 @@ end;
 $body$;
 
 revoke execute on function json_utils.array_elements_all_same_type(jsonb, text, text) from public;
-grant  execute on function json_utils.array_elements_all_same_type(jsonb, text, text) to   d2$qa;
+grant  execute on function json_utils.array_elements_all_same_type(jsonb, text, text) to   d3$qa;

@@ -1,6 +1,6 @@
-set role d2$qa;
+set role d3$qa;
 
-create schema qa_ui_simulation authorization d2$qa;
+create schema qa_ui_simulation authorization d3$qa;
 --------------------------------------------------------------------------------
 
 create function qa_ui_simulation.pretty_api_outcome(j in text)
@@ -80,7 +80,7 @@ end;
 $body$;
 
 revoke execute on function qa_ui_simulation.pretty_api_outcome(text) from public;
-grant  execute on function qa_ui_simulation.pretty_api_outcome(text) to   d2$client;
+grant  execute on function qa_ui_simulation.pretty_api_outcome(text) to   d3$client;
 
 --------------------------------------------------------------------------------
 
@@ -142,7 +142,7 @@ end;
 $body$;
 
 revoke execute on function qa_ui_simulation.ui_simulation_insert(text, text[]) from public;
-grant  execute on function qa_ui_simulation.ui_simulation_insert(text, text[]) to   d2$client;
+grant  execute on function qa_ui_simulation.ui_simulation_insert(text, text[]) to   d3$client;
 
 --------------------------------------------------------------------------------
 
@@ -189,4 +189,4 @@ end;
 $body$;
 
 revoke execute on function qa_ui_simulation.ui_simulation_report(text) from public;
-grant  execute on function qa_ui_simulation.ui_simulation_report(text) to   d2$client;
+grant  execute on function qa_ui_simulation.ui_simulation_report(text) to   d3$client;

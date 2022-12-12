@@ -1,0 +1,94 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2580
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Arial-BoldMT;\f1\froman\fcharset0 Garamond;\f2\froman\fcharset0 Garamond-Italic;
+\f3\fmodern\fcharset0 CourierNewPS-BoldMT;\f4\froman\fcharset0 Garamond-Bold;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c1680\c19835\c100000;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+{\info
+{\author Bryn Llewellyn}}\margl1440\margr1440\vieww19000\viewh19980\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs40 \cf0 \'93date-and-time-utilities\'94 code-kit\
+
+\f1\b0 \
+
+\fs48 Because you\'92re reading this, you will already have unzipped 
+\f2\i date-and-time-utilities.zip
+\f1\i0  on any convenient directory and changed into its top directory.\
+\
+Confirm that \'93ls -1\'94  now shows this:\
+\
+
+\f3\b\fs32   0.sql\
+  README.pdf\
+  extended-timezone-names\
+  internal-interval-representation-model\
+  interval-domains\
+  interval-utilities\
+  set-timezone-and-at-timezone-encapsulations\
+  ways-to-spec-utc-offset\
+
+\f1\b0\fs48 \
+The directories correspond, in order, to these sections within the overall {\field{\*\fldinst{HYPERLINK "https://docs.yugabyte.com/latest/api/ysql/datatypes/type_datetime/"}}{\fldrslt 
+\f2\i \cf2 Date and time data types}} section in the YSQL documentation:\
+\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0
+\f2\i \cf2 {\listtext	\uc0\u8226 	}{\field{\*\fldinst{HYPERLINK "https://docs.yugabyte.com/latest/api/ysql/datatypes/type_datetime/date-time-data-types-semantics/type-interval/interval-utilities/"}}{\fldrslt User-defined interval utility functions}}\
+{\listtext	\uc0\u8226 	}{\field{\*\fldinst{HYPERLINK "http://docs.yugabyte.com/latest/api/ysql/datatypes/type_datetime/date-time-data-types-semantics/type-interval/interval-representation/internal-representation-model/"}}{\fldrslt Modeling the internal representation and comparing the model with the actual implementation}}\
+{\listtext	\uc0\u8226 	}{\field{\*\fldinst{HYPERLINK "https://docs.yugabyte.com/latest/api/ysql/datatypes/type_datetime/date-time-data-types-semantics/type-interval/custom-interval-domains/"}}{\fldrslt Custom domain types for specializing the native interval functionality}}\
+{\listtext	\uc0\u8226 	}{\field{\*\fldinst{HYPERLINK "https://docs.yugabyte.com/latest/api/ysql/datatypes/type_datetime/timezones/extended-timezone-names/"}}{\fldrslt The extended_timezone_names view}}\
+{\listtext	\uc0\u8226 	}{\field{\*\fldinst{HYPERLINK "https://docs.yugabyte.com/latest/api/ysql/datatypes/type_datetime/timezones/recommendation/"}}{\fldrslt Recommended practise for specifying the UTC offset}}\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0
+\f1\i0 \cf2 {\listtext	\uc0\u8226 	}{\field{\*\fldinst{HYPERLINK "https://docs.yugabyte.com/latest/api/ysql/datatypes/type_datetime/timezones/ways-to-spec-offset/name-res-rules/helper-functions/"}}{\fldrslt 
+\f2\i Rules for resolving a string that\'92s intended to identify a UTC offset > Helper functions}}\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Simply start 
+\f2\i ysqlsh
+\f1\i0 , connecting as an ordinary non-Superuser, say 
+\f2\i u1
+\f1\i0 , and (ideally) create a schema, say 
+\f2\i s1
+\f1\i0 , in which this user can create and drop objects at will without interfering with any other projects that the database you\'92re connected to might be hosting. Ensure that 
+\f2\i \'93show search_path;\'94
+\f1\i0  returns 
+\f2\i s1
+\f1\i0  as first in the path.\
+\
+Then invoke the script 
+\f2\i 0.sql
+\f1\i0 . You can do this time and again, from a cold start or after having already run it. It will always finish silently in a few seconds.\
+\
+A lot of the code examples within the overall 
+\f2\i Date and time data types
+\f1\i0  section depend on some of the objects that you just installed.\
+\
+You will now be able to run all of the code examples in order, on any randomly selected page. without error.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f4\b \cf0 NOTE:
+\f1\b0  The installation spools several files with names like this:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f3\b\fs32 \cf0   canonical-real-country-with-dst.txt\
+
+\f1\b0\fs48 \
+They\'92re easy to find. Every such file has a partner reference copy whose name has 
+\f2\i \'93-0\'94
+\f1\i0  appended, like this:\
+
+\fs40 \
+
+\f3\b\fs32   canonical-real-country-with-dst-0.txt\
+
+\f1\b0\fs40 \
+
+\fs48 Check with your favorite GUI 
+\f2\i diff
+\f1\i0  application that each of your spool files is pairwise identical with its reference copy.\
+}

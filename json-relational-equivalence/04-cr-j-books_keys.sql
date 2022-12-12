@@ -1,5 +1,5 @@
 \t on
-select rule_off('04-cr-j-books_keys');
+select rule_off('04-cr-j-books_keys', 'level_3');
 \t off
 --------------------------------------------------------------------------------
 -- HERE IS THE SINGLE POINT OF DEFINITION FOR THE NAMES AND DATATYPES OF THE BOOKS KEYS.

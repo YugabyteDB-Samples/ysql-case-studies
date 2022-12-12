@@ -1,5 +1,5 @@
 \t on
-select rule_off('03-cr-j-books-table');
+select rule_off('03-cr-j-books-table', 'level_3');
 \t off
 --------------------------------------------------------------------------------
 

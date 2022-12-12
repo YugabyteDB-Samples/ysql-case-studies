@@ -1,5 +1,5 @@
 \t on
-select rule_off('06-alter-j-books-add-indexes-and-constraints');
+select rule_off('06-alter-j-books-add-indexes-and-constraints', 'level_3');
 \t off
 --------------------------------------------------------------------------------
 

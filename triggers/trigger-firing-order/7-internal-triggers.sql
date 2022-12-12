@@ -1,7 +1,4 @@
-\c d3 d3$mgr
-set role d3$u1;
-
-create temporary view internal_triggers(tab_name, name, def) as
+create view internal_triggers(tab_name, name, def) as
 select
   c.relname,
   t.tgname,
@@ -11,7 +8,11 @@ from
   inner join
   pg_class c
   on c.oid = t.tgrelid
-where tgisinternal;
+  inner join
+  pg_roles r
+  on c.relowner = r.oid
+where r.rolname = 'd1$trg_firing_order'
+and   t.tgisinternal;
 
 \x on
 select name, tab_name, rpad(def, 58)||'...' as def from internal_triggers limit 1;

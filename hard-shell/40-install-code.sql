@@ -3,15 +3,15 @@
   This is provided in the dynamically enclosing outermost procedure.
   "api.do_master_and_details_report()".
 */
-set role d2$code;
+set role d3$code;
 
 --------------------------------------------------------------------------------
 -- FOR THE code_helpers SCHEMA.
 
-create schema code_helpers authorization d2$code;
+create schema code_helpers authorization d3$code;
 
 -- For unit testing code and ad hoc demo code.
-grant usage on schema code_helpers to d2$qa;
+grant usage on schema code_helpers to d3$qa;
 
 /*
   The "unique_violation" error reports only the first among possible several
@@ -93,19 +93,19 @@ $body$;
 revoke all on function code_helpers.details_dups(boolean, uuid, text[]) from public;
 
 create type code_helpers.mk_and_ds as (mk uuid, ds text[]);
-grant usage on type code_helpers.mk_and_ds to d2$qa;
+grant usage on type code_helpers.mk_and_ds to d3$qa;
 
 --------------------------------------------------------------------------------
 -- FOR THE code SCHEMA.
 
-grant usage on schema code to d2$json;
+grant usage on schema code to d3$json;
 
 create type code.m_and_ds as (m text,  ds text[]);
-grant usage on type code.m_and_ds to d2$json;
+grant usage on type code.m_and_ds to d3$json;
 
 -- For unit testing code and ad hoc demo code.
-grant usage on schema code to d2$qa;
-grant usage on type code.m_and_ds to d2$qa;
+grant usage on schema code to d3$qa;
+grant usage on type code.m_and_ds to d3$qa;
 
 create procedure code.insert_master_and_details(
   m_and_ds      in    code.m_and_ds,
@@ -183,8 +183,8 @@ end;
 $body$;
 
 revoke all     on procedure code.insert_master_and_details(code.m_and_ds, json_utils.outcome_codes, text) from public;
-grant  execute on procedure code.insert_master_and_details(code.m_and_ds, json_utils.outcome_codes, text) to   d2$json;
-grant  execute on procedure code.insert_master_and_details(code.m_and_ds, json_utils.outcome_codes, text) to   d2$qa;
+grant  execute on procedure code.insert_master_and_details(code.m_and_ds, json_utils.outcome_codes, text) to   d3$json;
+grant  execute on procedure code.insert_master_and_details(code.m_and_ds, json_utils.outcome_codes, text) to   d3$qa;
 
 --------------------------------------------------------------------------------
 -- CREATE REPORT OF A SINGLE MASTER AND ITS DETAILS (IF ANY)
@@ -238,5 +238,5 @@ end;
 $body$;
 
 revoke all     on procedure code.do_master_and_details_report(text, code.m_and_ds, json_utils.outcome_codes, text) from public;
-grant  execute on procedure code.do_master_and_details_report(text, code.m_and_ds, json_utils.outcome_codes, text) to   d2$json;
-grant  execute on procedure code.do_master_and_details_report(text, code.m_and_ds, json_utils.outcome_codes, text) to   d2$qa;
+grant  execute on procedure code.do_master_and_details_report(text, code.m_and_ds, json_utils.outcome_codes, text) to   d3$json;
+grant  execute on procedure code.do_master_and_details_report(text, code.m_and_ds, json_utils.outcome_codes, text) to   d3$qa;
