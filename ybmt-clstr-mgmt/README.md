@@ -125,7 +125,7 @@ This section revises the key concepts that you must understand in order to appre
 - The space in which _roles_ and _databases_ exist is the entire cluster. And the names of these artifacts must be unique within the entire cluster. For this reason, roles and databases are referred to as *global* artifacts. _Tablespaces_ are also global artifacts—and these three (roles, databases, and tablespaces) are the _only_ kinds of global artifact. Notice that, as far as the specific YBMT scheme is concerned, tablespaces are never mentioned. However, the conventions that YBMT defines and supports with code could be extended, in a natural way, to include tablespaces.
 - The space in which _schemas_ exist is a particular database. The name of a schema must be unique within a database. While databases _d1_ and _d2_ can each contain a schema called _s_, you cannot refer to both in the same SQL statement. There is therefore no qualified notation like _d1.s_. In short, you cannot create a session without specifying a database to which to connect. The session is then bound to that database for the rest of its lifetime—and it can see only _objects that exist inside that database_ together with other databases (as opaque objects), roles, and tablespaces.
 - The ability for a cluster to contain two or more databases does not bring any semantics. Rather, it's purely a practical scheme to support multitenancy—where the granule of provisioning is the database.
-- The space in which so-called _schema objects_ (like tables, user-defined functions and procedures, user-defined types, and so on) exist is a particular schema within a particular database. The name of a schema object must be unique within a particular schema for a particular set of kinds of object. You _can_ refer to schema objects in difference schemas (in the same database) within a single SQL statement—so, here, schema-qualified names are legal and meaningful. Suppose that you create a session by connecting to database _d1_, authorizing as role _r1_ (for example, using the _"\c d1 r1"_ meta-command in _ysqlsh_ or _psql_). You can then do this:
+- The space in which so-called _schema-objects_ (like tables, user-defined functions and procedures, user-defined types, and so on) exist is a particular schema within a particular database. The name of a schema-object must be unique within a particular schema for a particular set of kinds of object. You _can_ refer to schema-objects in difference schemas (in the same database) within a single SQL statement—so, here, schema-qualified names are legal and meaningful. Suppose that you create a session by connecting to database _d1_, authorizing as role _r1_ (for example, using the _"\c d1 r1"_ meta-command in _ysqlsh_ or _psql_). You can then do this:
 
   ```
   create schema s1;
@@ -141,25 +141,25 @@ This section revises the key concepts that you must understand in order to appre
   from s1.t as a1 inner join s2.t as a2 using(k);
   ```
   
-  Notice that neither the role name nor the database name appears in the SQL statements—and nor can they. Different objects in the same database (both schemas and schema objects) can have different owners. An object is (initially at least) owned by the role that creates it. Object ownership is a key component of the privilege model. If schema _s1_ is owned by role _r1_, a session whose _current_role_ is _r2_ cannot use any schema object in schema _s1_ unless _r2_ is first granted the _usage_ privilege on schema _s1_. This necessary condition isn't sufficient. For example, _r2_ cannot select rows from table _s1.t_ unless it additionally has been granted the _select_ privilege on this table. And this alone does not allow _r2_ to change the content of _s1.t_. 
+  Notice that neither the role name nor the database name appears in the SQL statements—and nor can they. Different objects in the same database (both schemas and schema-objects) can have different owners. An object is (initially at least) owned by the role that creates it. Object ownership is a key component of the privilege model. If schema _s1_ is owned by role _r1_, a session whose _current_role_ is _r2_ cannot use any schema-object in schema _s1_ unless _r2_ is first granted the _usage_ privilege on schema _s1_. This necessary condition isn't sufficient. For example, _r2_ cannot select rows from table _s1.t_ unless it additionally has been granted the _select_ privilege on this table. And this alone does not allow _r2_ to change the content of _s1.t_. 
 
   Further, you can define both a function and a table with the same name in the same schema. But you cannot define both a view and a table, or both a function and a procedure, with the same name in the same schema. The sub-space within a schema within which names must be unique is called a _catalog_—and a catalog has a name. For example, tables and views are in the _pg_class_ catalog; functions and procedures are in the _pg_proc_ catalog; and types are in the _pg_type_ catalog.
 
-- Schemas and schema objects are referred to as _local_ objects—local, that is, to a particular database and visible only to sessions that are connected to that database.
+- Schemas and schema-objects are referred to as _local_ objects—local, that is, to a particular database and visible only to sessions that are connected to that database.
 
-- Artifacts like a trigger or a constraint are _secondary objects_. A secondary object cannot exist autonomously like a schema or an object can. Rather, a secondary object must "hang off" a schema object. For example, a trigger must hang off a table. Secondary objects are transitively local objects. The name of  a secondary object must be unique within the schema object off which it hangs. In other words, two tables, _s1.t_ and _s2.t_ can each have a constraint called _c_.
+- Artifacts like a trigger or a constraint are _secondary-objects_. A secondary-object cannot exist autonomously like a schema or an object can. Rather, a secondary-object must "hang off" a schema-object. For example, a trigger must hang off a table. Secondary-objects are transitively local objects. The name of  a secondary-object must be unique within the schema-object off which it hangs. In other words, two tables, _s1.t_ and _s2.t_ can each have a constraint called _c_.
 
 ### Artifacts, roles, and objects
 
-A role is the principal that owns things. Tautologically, a role has no owner and it is not an object. (This is why the term "artifact" was used as the umbrella for roles and objects.) Any artifact that is not a role is, tautologically, some kind of object—either global or local. And every object has an owner. (Strictly speaking, a secondary object does not have a direct owner. Rather, it inherits its ownership from the owner of the schema object off which it hangs. This subtle distinction has no consequence for the YBMT scheme.)
+A role is the principal that owns things. Tautologically, a role has no owner and it is not an object. (This is why the term "artifact" was used as the umbrella for roles and objects.) Any artifact that is not a role is, tautologically, some kind of object—either global or local. And every object has an owner. (Strictly speaking, a secondary-object does not have a direct owner. Rather, it inherits its ownership from the owner of the schema-object off which it hangs. This subtle distinction has no consequence for the YBMT scheme.)
 
 ### The native PG features allow too much freedom
 
 PG's mechanisms allow you to configure a role so that it can connect to zero, to just one, or to several, databases. A role that has _"...with superuser..."_ can connect to _any_ database, including ones that are still to be created without itself needing explicit privileges to allow this. But a role that does not have _"...with superuser..."_ cannot connect to a database unless it has the explicitly granted _connect_ privilege that allows this. Notice that, the _connect_ privilege on a database (just like _any_ object privilege) can be granted to _public_. However, the conventions of the YBMT scheme disallow this. Two other privileges govern what a role can do within a database.
 
-- The _create_ privilege governs object creation. When role _r1_ has _create_ on database _d1_, it can create schemas within database _d1_. And then _r1_ can create schema objects within any schema that it owns. (Any object is owned, initially, by the role that creates it. But the ownership of an existing object can be changed.)
+- The _create_ privilege governs object creation. When role _r1_ has _create_ on database _d1_, it can create schemas within database _d1_. And then _r1_ can create schema-objects within any schema that it owns. (Any object is owned, initially, by the role that creates it. But the ownership of an existing object can be changed.)
 - The _temporary_ privilege governs the creation of objects within a database's temporary schema. This schema is referred to using the alias _pg_temp_. But it might have a different actual name, like _pg_temp_3_.
-- Just as a role that has _"...with superuser..."_ can connect to _any_ database without needing the explicit _connect_ privilege, so can such a role create schemas, regular schema objects, and temporary objects without needing the explicit _create_ and _temporary_ privileges.
+- Just as a role that has _"...with superuser..."_ can connect to _any_ database without needing the explicit _connect_ privilege, so can such a role create schemas, regular schema-objects, and temporary objects without needing the explicit _create_ and _temporary_ privileges.
 
 Notice, though, that a database has attributes that are set at _create_ or _alter_ time by _"...with allow_connections... connection limit..."_. The argument of the _allow_connections_ keyword is _true_ or _false_; and the argument of the _connection limit_ keyword pair is _-1_, _0_, or a positive integer. Zero means what it says. And _1_ is short hand for "unlimited". These notions have the obvious meaning for a role that does not have _"...with superuser..."_. But _connection limit_ has no effect for a role that has _"...with superuser..."_.
 
@@ -239,7 +239,7 @@ end;
 
 ### Introducing the "local role" convention
 
-It is possible for a particular role to own objects in two or several databases. The most  familiar example of this is the so-called bootstrap superuser. It owns, _inter alia_, the _pg_catalog_ schema, and all of the schema objects within it, in every database. The YBMT scheme creates a special role called _clstr$mgr_ set up thus:
+It is possible for a particular role to own objects in two or several databases. The most  familiar example of this is the so-called bootstrap superuser. It owns, _inter alia_, the _pg_catalog_ schema, and all of the schema-objects within it, in every database. The YBMT scheme creates a special role called _clstr$mgr_ set up thus:
 
 ```
 ... with nosuperuser createrole createdb ...
@@ -316,7 +316,7 @@ The YBMT scheme is implemented by three major cluster-level operations, each orc
 
 Then, at the tenant database level, each is provided with a set of role provisioning procedures, brought by the _template1_ database, to create, configure, and drop local roles for that database.
 
-The _template1_ database also brings some views and generic utilities that proved to be useful while developing the YBMT scheme and while installing and running the case studies. Most notable among these are views that encapsulate frequently-used joins among the catalog tables (for example, to show the name of the owner and the name of the schema for a schema object). Some of these join views are further encapsulated by table functions that make the output easier to read than the output of a simple SQL query against the join view.
+The _template1_ database also brings some views and generic utilities that proved to be useful while developing the YBMT scheme and while installing and running the case studies. Most notable among these are views that encapsulate frequently-used joins among the catalog tables (for example, to show the name of the owner and the name of the schema for a schema-object). Some of these join views are further encapsulated by table functions that make the output easier to read than the output of a simple SQL query against the join view.
 
 All of these operations, both at cluster-level and at tenant-database-level, are described in the following subsections. It is recommended that you try these operations as soon as you have understood enough from what follows to know what to type. Then you can study the code further to learn how it all works.
 
@@ -354,7 +354,7 @@ As long as the _template0_ and _template1_ databases, the bootstrap superuser wi
 
 The script _"00-post-creation-bootstrap.sql"_ ensures that these conditions are met, both for a freshly-created PG cluster and for a freshly-created YB cluster. (Of course, a newly-created PG cluster has no _yugabyte_ role or _yugabyte_ database.) If you incorporate this into a Linux shell script that drops and re-creates the cluster, and that configures password authentication, then you'll be able to run  _01-re-initialize-ybmt-clstr_ immediately after re-creating a cluster from scratch. It isn't necessary to configure your cluster to use password authentication. But you'll get the most realistic experience if you do this. This is why the _"00-post-creation-bootstrap.sql"_ script sets a known password for the _yugabyte_ superuser.
 
-The _"01-re-initialize-ybmt-clstr.sql"_ script drops everything that it needs to in order to define a standard starting state and then does the required configuration. The configuration creates the _clstr$mgr_ and _clstr_developer_ roles and creates views, procedures, and other schema objects in dedicated schemas in the _yugabyte_ database and in the _template1_ database.
+The _"01-re-initialize-ybmt-clstr.sql"_ script drops everything that it needs to in order to define a standard starting state and then does the required configuration. The configuration creates the _clstr$mgr_ and _clstr_developer_ roles and creates views, procedures, and other schema-objects in dedicated schemas in the _yugabyte_ database and in the _template1_ database.
 
 - The _mgr_ schema in the _yugabyte_ database is configured with procedures that support the provisioning of tenant databases.
 - The _template1_ database is provisioned with: procedures, in the _mgr_ schema, that support a standard way to provision local roles in any tenant database; some domains, in the _dt_utils_ schema and associated procedures that rationalize interval arithmetic; and the _pgcrypto_ and _tablefunc_ extensions in the _extensions_ schema. The _mgr_ schema also has some views that encapsulate typically useful join queries between the _"pg_catalog"_ tables and some table functions to render the output of queries against these views (using whitespace, and similar, to improve readability). In addition, the configuration creates a small few functions and procedures in the _client_safe_ schema. These are considered to be safe for use by sessions that authorize as the _dN$client_ role (see below) to allow client-side application developers to test, and time, the application's API procedures that are exposed for this role using _psql_ or _ysqlsh_.
@@ -549,9 +549,65 @@ procedure mgr.prepend_to_current_search_path(p in text)
 
 The procedure executes _"set search_path..."_ to _"p||current_setting('search_path')"_.
 
-### The join views for the _pg_catalog_ tables and the table functions that query these
+### The join views for the _pg_catalog_ tables and the table functions wrappers for these
 
-All of these items are installed in the _mgr_ schema. Here are the views:
+All of these items are installed in the _mgr_ schema.
+
+#### Join views for the _pg_catalog_ tables
+
+The system-supplied _pg_catlog_ schema house a table (or view) for each kind of artifact—for example, _pg_roles_, _pg_database_, _pg_class_, _pg_type_, _pg_proc_, and so on. The generic term for such a table or view is _catalog_. Each of these catalogs has a column for the _oid_. And column design for each catalog follows a standard pattern. For example, for the catalogs that hold facts about schema-objects, there's  always a column for the object name, the schema that houses it, and its owner. (Of course there are columns that are specific to the object kind too.) However (and following the principles of relational design) the schema and owner are identified by the _oid_ of these artifacts in their dedicated catalogs. This means that a typical _ad hoc_ query needs some joins in order to be ordinarily useful.
+
+Consdider the _"hard-shell"_ use case. The schema-objects that implement this are distributed across several schemas and are owned by several roles. All of these schema-objects will have owners whose names follow the pattern for local roles—that is, they start with _dN$_ (where _N_ is specific to the tenant database that houses the case-study). Suppose that to want to get an _ad hoc_ overview of, say, the user-defined finctiopns and procedures. This view gets the answer:
+
+```
+create temporary view procedures(name, kind, schema, owner) as
+select
+  p.proname,
+  case p.prokind::text
+    when 'f' then 'function'
+    when 'p' then 'procedure'
+  end,
+  n.nspname,
+  r.rolname
+from
+  pg_proc p
+  inner join pg_namespace n on p.pronamespace = n.oid
+  inner join pg_roles r on p.proowner = r.oid
+where p.prokind::text in ('f', 'p')
+and r.rolname::text like 'd3$%';
+```
+
+It's easy enough to type up this query once you get used to the design of the catalogs and remember their names. But even so, typing it up takes more time than is consistent with the notion of _"ad hoc query"_. It would help enormously if PG (and therefore YB) shipped with a view like this (with object-kind specif colums, too) for every available kind of schema-object. As it happens, many such shipped views _are_ available. But their names, the shema that houses them, and their colum designs don't follow a consisten pattern. And some that you want are not present. Try this:
+
+```
+create temporary view catalogs(schema, name) as
+select n.nspname, c.relname
+from pg_class c inner join pg_namespace n on c.relnamespace = n.oid
+where c.relkind::text in ('r', 'v')
+and n.nspname::text in ('pg_catalog', 'information_schema')
+and c.relname ~ any(array['tab', 'view', 'seq', 'type', 'dom', 'func', 'proc']);
+```
+Qqqq manual inpection and restriction.
+
+```
+       schema       |            name             
+--------------------+-----------------------------
+ pg_catalog         | pg_sequences
+ pg_catalog         | pg_tables
+ pg_catalog         | pg_views
+ information_schema | domains
+ information_schema | sequences
+ information_schema | tables
+ information_schema | user_defined_types
+ information_schema | views
+```
+Seems to be nothing for user-defined functions and procedures.
+
+Esp, there's no ovwerview of _all_ schema-objects.
+
+#### Table function wrappers for the join views for the _pg_catalog_ tables
+
+qq
 
 #### Useful _psqlrc_ shortcuts
 
@@ -575,17 +631,19 @@ You might find it useful to define these shortcuts in your _psqlrc_ file:
 \set co  '\\t on \\\\ select \'\'; select z from mgr.schema_objects(false); \\t off'
 \set lo  '\\t on \\\\ select \'\'; select z from mgr.schema_objects(true);  \\t off'
 
--- Information about the secondary objects in the current database.
-\set lt  '\\t on \\\\ select \'\'; select z from mgr.triggers(); \\t off'
-\set lc  '\\t on \\\\ select \'\'; select z from mgr.constraints(); \\t off'
+-- Information about the secondary-objects in the current database.
 \set cc  '\\t on \\\\ select \'\'; select z from mgr.constraints(false); \\t off'
+\set lc  '\\t on \\\\ select \'\'; select z from mgr.constraints(); \\t off'
+\set lt  '\\t on \\\\ select \'\'; select z from mgr.triggers(); \\t off'
 ```
 
-These allow you to get useful overviews with just a couple of keystrokes. (If you can remember Linux commands and _psql_ meta-commands for catalog queries, then you'll be able to remember these, too.)
+These allow you to get useful overviews of global artifacts and local artifacts in the current database with just a couple of keystrokes. (If you can remember Linux commands and _psql_ meta-commands for catalog queries, then you'll be able to remember these, too.)
 
 * For databases, you can use: _either_ _":ld"_ to list all databases with their owners, including the bootstrap database and the template databases; _or_ _":ldx"_ to list just the tenant databases with their owners. In each case, the comments are listed too. Compare the output of these shortcuts with that of the _"\lx+"_ meta-command. These shortcuts present a useful restriction in a more readable format than the native meta-command.
-* For roles, you can use: _either_ _":lr"_ to list all non-system global roles and all tenant roles for the current database; _or_ _":lrx"_ to list just those tenant roles that have been created after the database was created by using the _cr_role()_ procedure. (In other words, _":lrx"_ excludes the _"mgr"_ and _"client"_ tenant roles that are brought by the _"02-drop-and-re-create-tenant-databases.sql"_ script and that have the same purpose in every tenant database.
-* For schemas, _"ls"_ lists the user-created schemas in the current database grouped by ower. The entry for each owner also lists the roles that have been granted to it. (You might thing that the granted roles should be listed by the _roles_with_comments()_ table function rather than by the _roles_and_schemas()_ table function. The choice is arbitrary.)
+* For roles, you can use: _either_ _":lr"_ to list all non-system global roles together with all tenant roles for the current database; _or_ _":lrx"_ to list just those tenant roles that have been created after the database was created by using the _cr_role()_ procedure. (In other words, _":lrx"_ excludes global roles and the _"mgr"_ and _"client"_ tenant roles that are brought by the _"02-drop-and-re-create-tenant-databases.sql"_ script and that have the same purpose in every tenant database.)
+* For schemas, _"ls"_ lists the user-created schemas in the current database grouped by owner. The entry for each owner also lists the roles that have been granted to it. (You might thing that the granted roles should be listed by the _roles_with_comments()_ table function rather than by the _roles_and_schemas()_ table function. The choice is arbitrary.)
+* For schema-objects, _":co"_ lists the _common_ schema-objects—that is the schema-objects in the _client_safe_, _dt_utils_. and _mgr_ schemas that are brought by the _template1_ database. These, by construction, are the same in every existing (and yet-to-be-created) tenant database. And _":lo"_ lists the _common_ schema-objects—that is the schema-objects in schemas other than _client_safe_, _dt_utils_. and _mgr_ that are owned by local roles in the current database.
+* For secondary_objects, _":cc"_ lists the constraints that hang off _common_ schema-objects; and _":lc"_ lists the constraints that hang off _local_ schema-objects. As it happens, there are no _common_ tables and therefore there are no nominally common triggers. The _triggers()_ table function makes no distintion between _common_ and _local_ triggers and would list both kinds if instances of each of these kinds existed. The effect, though, is to list only _local_ triggers. This is why its shortcut is called _":lt"_.
 
 ### Implementing the principle of least privileges for _"client"_ roles
 
@@ -601,7 +659,7 @@ The principle of least privileges says that you should grant exactly and only th
 
 This section shows that, in the default regime, when a PG or YB client session authorizes to use the designed application functionality that a particular database implements, it also enjoys about three-and-a-half thousand privileges that are not needed. It's hard to defend using this default regime when, as this section explains, it's straightforward to revoke these superfluous privileges.
 
-The _template1_ database, in a freshly-created cluster, has schemas called _"pg_catalog"_ and _"information_schema_". Together, they house about 3.3K "schema objects of interest" — i.e. objects upon each of which the appropriate privilege to allow its use has been granted to _public_, and where their consequent availability can reasonably be considered to violate the principle of least privileges.
+The _template1_ database, in a freshly-created cluster, has schemas called _"pg_catalog"_ and _"information_schema_". Together, they house about 3.3K "schema-objects of interest" — i.e. objects upon each of which the appropriate privilege to allow its use has been granted to _public_, and where their consequent availability can reasonably be considered to violate the principle of least privileges.
 
 Try this exercise in any newly-created tenant database, like _d0_, in a YBMT cluster.
 
@@ -689,7 +747,7 @@ This is the result:
 
 As it happens, creating a table or a view inevitably creates a composite type with the same name. This explains the arithmetic outcome _"(69 + 119) = 118"_ in the list above. Further, creating a composite type inevitably creates a companion row in _pg_class_ with _relkind::text = 'c'_. Notice, though, that the categorization of catalog table rows above has no entry for _"type-companion"_. This shows that, as it happens, there are no explicitly created composite types in _pg_catalog_ or _information_schema_.
 
-Finally, notice that the schema objects that the _"07-customize-template1.sql"_ script creates are useful to the tenant roles other than the _"client"_ role but might bring a potential security risk if they were accessible to sessions that authorize as the _"client"_ role. So _"06-xfer-schema-grants-from-public-to-clstr-developer.sql"_ script handles these too.
+Finally, notice that the schema-objects that the _"07-customize-template1.sql"_ script creates are useful to the tenant roles other than the _"client"_ role but might bring a potential security risk if they were accessible to sessions that authorize as the _"client"_ role. So _"06-xfer-schema-grants-from-public-to-clstr-developer.sql"_ script handles these too.
 
 #### What does the "06-xfer-schema-grants-from-public-to-clstr-developer.sql" script do?
 
@@ -797,7 +855,7 @@ Each of the eleven case-studies has its own _"README.md"_. And the code that imp
 
 The top directory for each of the case studies has a script called _"0.sql"_ and a file called _"x.sql"_.
 
-The _"0.sql"_ script creates the artifacts that implement the case-study. (It hard-codes the name of the database that it will use.) Sometimes, all of these artifacts are have the same owner and live in the same schema. But, in general, the schema-objects are owned, jointly, by several roles where several of these own more than one schema to house its schema objects. In every case, the _0.sql_ script calls the _cr_role()_ procedure as required and creates the required schemas. It then conducts some tests. Sometimes, these use the PL/pgSQL's _assert_ feature—and so "test succeeded" results in silent completion. Otherwise, the scripts execute _select_ statements and the results are seen in the terminal window.
+The _"0.sql"_ script creates the artifacts that implement the case-study. (It hard-codes the name of the database that it will use.) Sometimes, all of these artifacts are have the same owner and live in the same schema. But, in general, the schema-objects are owned, jointly, by several roles where several of these own more than one schema to house its schema-objects. In every case, the _0.sql_ script calls the _cr_role()_ procedure as required and creates the required schemas. It then conducts some tests. Sometimes, these use the PL/pgSQL's _assert_ feature—and so "test succeeded" results in silent completion. Otherwise, the scripts execute _select_ statements and the results are seen in the terminal window.
 
 For each case-study, the _"0.sql"_ script is idempotent: you can run it in a freshly created tenant database. And you can run it time and again thereafter. Apart from the inessential run-to-run differences described below, the result is always the same.
 
