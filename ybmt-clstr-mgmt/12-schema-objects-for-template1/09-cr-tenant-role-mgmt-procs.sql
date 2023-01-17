@@ -37,8 +37,9 @@ declare
     (
       select array_agg(pid)
       from pg_stat_activity
-      where backend_type = 'client backend'
-      and usename        = r_name
+      where pid          != pg_backend_pid()
+      and   backend_type =  'client backend'
+      and usename        =  r_name
     );
 begin
   if (pids is not null and cardinality(pids) > 0) then

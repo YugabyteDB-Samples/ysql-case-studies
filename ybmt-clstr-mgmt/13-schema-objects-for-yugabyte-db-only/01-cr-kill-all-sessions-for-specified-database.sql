@@ -36,15 +36,16 @@ declare
         (
           select array_agg(pid)
           from pg_stat_activity
-          where backend_type = 'client backend'
-          and   pid <> pg_backend_pid()
+          where pid          != pg_backend_pid()
+          and   backend_type =  'client backend'
         )
       else
         (
           select array_agg(pid)
           from pg_stat_activity
-          where backend_type = 'client backend'
-          and datname        = db_name
+          where pid          != pg_backend_pid()
+          and   backend_type =  'client backend'
+          and   datname      =  db_name
         )
     end;
 begin

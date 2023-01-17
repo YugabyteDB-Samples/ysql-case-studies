@@ -114,67 +114,79 @@ $body$;
   and https://www.postgresql.org/docs/11/datatype-oid.html
 */
 
-do $body$
-declare
-  kind text;
-  proc text;
-  candidates constant "char"[] := array['f'::"char", 'a'::"char", 'w'::"char", 'p'::"char"];
-  allowlist constant text[] not null := array[
-    'current_database',
-    'version',
-    'pg_typeof',
-    'int8',         -- needed for "select 'dog' limit 50"
-    'int4out',      -- implements ::int
-    'int4pl',       -- implements the + operator between int values
-    'int4mi',       -- implements the - operator between int values
-    'int4eq',       -- implements the = operator between int values
-    'numeric_out',  -- implements ::numeric
-    'numeric',      -- needed for "select ('3'::int + 5)::numeric + 7.6"
-    'numeric_add',  -- implements the + operator between numeric values
-    'numeric_eq',   -- implements the = operator between numeric values
-    'float8',       -- implements ::double precision
-    'floatpl',      -- implements implements the + operator between double precision values
-    'text',         -- implements ::text
-    'textin',       -- needed for "select (1.3::text)"
-    'textcat',      -- implements the || operator
-    'texteq',       -- implements the = operator between text values
-    'textlike',     -- implements the "like" operator between text values
-    'lpad', 'rpad'
-    ];
-begin
-  -- Ensure known starting state.
-  for kind, proc in (
-    select
-      case p.prokind
-        when 'f' then 'function'
-        when 'a' then 'function'
-        when 'w' then 'function'
-        when 'p' then 'procedure'
-      end,
-      p.oid::regprocedure::text
-    from pg_proc p inner join pg_namespace n on p.pronamespace = n.oid
-    where n.nspname = 'pg_catalog'
-    and p.prokind = any(candidates))
-  loop
-    execute format('grant execute on %s pg_catalog.%s to public',  kind, proc);
-  end loop;
+/*
+  Experiment by commenting this block out.
+   Will need to re-create the cluster after commenting IN or OUT.
 
-  for kind, proc in (
-    select
-      case p.prokind
-        when 'f' then 'function'
-        when 'a' then 'function'
-        when 'w' then 'function'
-        when 'p' then 'procedure'
-      end,
-      p.oid::regprocedure::text
-    from pg_proc p inner join pg_namespace n on p.pronamespace = n.oid
-    where n.nspname = 'pg_catalog'
-    and ((p.proname)::text != all (allowlist))
-    and p.prokind = any(candidates))
-  loop
-    execute format('revoke execute on %s pg_catalog.%s from public',           kind, proc);
-    execute format('grant  execute on %s pg_catalog.%s to   clstr$developer',  kind, proc);
-  end loop;
-end;
-$body$;
+  When commented out, move "pg.txt" to:
+    "xfer-schema-grants-from-public-to-clstr-developer-choices/pg-entire-schemas-and-catalog-views-revoked-from-public.txt"
+
+  Else, move "pg.txt" to:
+    "xfer-schema-grants-from-public-to-clstr-developer-choices/pg-everything-except-a-few-innocent-catalog-functions-revoked-from-public"
+*/;
+--/*
+  do $body$
+  declare
+    kind text;
+    proc text;
+    candidates constant "char"[] := array['f'::"char", 'a'::"char", 'w'::"char", 'p'::"char"];
+    allowlist constant text[] not null := array[
+      'current_database',
+      'version',
+      'pg_typeof',
+      'int8',         -- needed for "select 'dog' limit 50"
+      'int4out',      -- implements ::int
+      'int4pl',       -- implements the + operator between int values
+      'int4mi',       -- implements the - operator between int values
+      'int4eq',       -- implements the = operator between int values
+      'numeric_out',  -- implements ::numeric
+      'numeric',      -- needed for "select ('3'::int + 5)::numeric + 7.6"
+      'numeric_add',  -- implements the + operator between numeric values
+      'numeric_eq',   -- implements the = operator between numeric values
+      'float8',       -- implements ::double precision
+      'floatpl',      -- implements implements the + operator between double precision values
+      'text',         -- implements ::text
+      'textin',       -- needed for "select (1.3::text)"
+      'textcat',      -- implements the || operator
+      'texteq',       -- implements the = operator between text values
+      'textlike',     -- implements the "like" operator between text values
+      'lpad', 'rpad'
+      ];
+  begin
+    -- Ensure known starting state.
+    for kind, proc in (
+      select
+        case p.prokind
+          when 'f' then 'function'
+          when 'a' then 'function'
+          when 'w' then 'function'
+          when 'p' then 'procedure'
+        end,
+        p.oid::regprocedure::text
+      from pg_proc p inner join pg_namespace n on p.pronamespace = n.oid
+      where n.nspname = 'pg_catalog'
+      and p.prokind = any(candidates))
+    loop
+      execute format('grant execute on %s pg_catalog.%s to public',  kind, proc);
+    end loop;
+
+    for kind, proc in (
+      select
+        case p.prokind
+          when 'f' then 'function'
+          when 'a' then 'function'
+          when 'w' then 'function'
+          when 'p' then 'procedure'
+        end,
+        p.oid::regprocedure::text
+      from pg_proc p inner join pg_namespace n on p.pronamespace = n.oid
+      where n.nspname = 'pg_catalog'
+      and ((p.proname)::text != all (allowlist))
+      and p.prokind = any(candidates))
+    loop
+      execute format('revoke execute on %s pg_catalog.%s from public',           kind, proc);
+      execute format('grant  execute on %s pg_catalog.%s to   clstr$developer',  kind, proc);
+    end loop;
+  end;
+  $body$;
+--*/;

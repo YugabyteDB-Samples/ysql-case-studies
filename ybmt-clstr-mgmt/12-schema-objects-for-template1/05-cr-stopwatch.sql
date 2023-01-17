@@ -2,6 +2,9 @@
   See this section in the YSQL documentation:
   Case study: implementing a stopwatch with SQL
   https://docs.yugabyte.com/preview/api/ysql/datatypes/type_datetime/stopwatch/
+
+  and this blog post:
+  https://www.yugabyte.com/blog/a-sql-stopwatch-utility-for-yugabytedb-or-postgresql-as-an-alternative-for-timing-on/
 */;
 create function client_safe.fmt(n in numeric, template in text)
   returns text

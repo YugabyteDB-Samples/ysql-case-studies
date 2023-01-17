@@ -44,6 +44,16 @@ grant usage on schema extensions to public;
 \ir ../12-schema-objects-for-template1/08-cr-set-tenant-database-setting.sql
 grant execute on procedure mgr.set_tenant_database_setting(text, text, text) to clstr$mgr;
 
+/*
+  Experiment by commenting this out.
+  Will need to re-create the cluster after commenting IN or OUT.
+
+  When commented out, move "pg.txt" to
+    "xfer-schema-grants-from-public-to-clstr-developer-choices/pg-everything-public.txt
+
+  Else see the comment "Experiment by commenting this block out."
+  in "06-xfer-schema-grants-from-public-to-clstr-developer.sql".
+*/;
 \ir 06-xfer-schema-grants-from-public-to-clstr-developer.sql
 
 set role clstr$mgr;

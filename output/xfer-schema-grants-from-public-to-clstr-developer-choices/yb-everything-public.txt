@@ -2,13 +2,13 @@
  Create 6 tenant databases
  ==================================================================================================================================
 
- 25.7 ss
+ 21.1 ss
 
  ==================================================================================================================================
  Drop and re-create those 6 tenant databases
  ==================================================================================================================================
 
- 28.4 ss
+ 30.4 ss
 
  ==================================================================================================================================
  analyzing-covid-data-with-aggregate-functions
@@ -250,7 +250,7 @@
  95,12
  96,12
 
- analyzing-covid-data-with-aggregate-functions: 10.8 ss
+ analyzing-covid-data-with-aggregate-functions: 10.7 ss
 
  ==================================================================================================================================
  recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm
@@ -292,7 +292,7 @@
   4 | 42
   4 | 43
 
- recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm: 938 ms
+ recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm: 1022 ms
 
  ==================================================================================================================================
  recursive-cte/basics/fibonacci
@@ -346,7 +346,7 @@
  11 |     89
  12 |    144
 
- recursive-cte/basics/fibonacci: 534 ms
+ recursive-cte/basics/fibonacci: 825 ms
 
  ==================================================================================================================================
  recursive-cte/employee-hierarchy
@@ -457,7 +457,7 @@
 
  doris > fred > mary
 
- recursive-cte/employee-hierarchy: 3553 ms
+ recursive-cte/employee-hierarchy: 3613 ms
 
  ==================================================================================================================================
  recursive-cte/bacon-numbers
@@ -825,7 +825,7 @@
 
  Nothing survives. So the (so-called) recursion stops.
 
- recursive-cte/bacon-numbers: 27.6 ss
+ recursive-cte/bacon-numbers: 27.3 ss
 
  ==================================================================================================================================
  date-time-utilities
@@ -1764,6 +1764,7 @@
  Asia/Kamchatka                   | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | RU           | +5301+15839     | MSK+09 - Kamchatka                                                        | Canonical
  Etc/GMT-12                       | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  |              |                 |                                                                           | Canonical
  Kwajalein                        | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | MH           | +0905+16720     |                                                                           | Deprecated
+ Pacific/Fiji                     | +12    | +12        | +13        |  12:00     |  12:00     |  13:00     | false  | FJ           | -1808+17825     |                                                                           | Canonical
  Pacific/Funafuti                 | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | TV           | -0831+17913     |                                                                           | Canonical
  Pacific/Kwajalein                | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | MH           | +0905+16720     | Kwajalein                                                                 | Canonical
  Pacific/Majuro                   | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | MH           | +0709+17112     | Marshall Islands (most areas)                                             | Canonical
@@ -1778,7 +1779,6 @@
  Pacific/Auckland                 | NZDT   | NZST       | NZDT       |  13:00     |  12:00     |  13:00     | true   | NZ           | -3652+17446     | New Zealand time                                                          | Canonical
  Pacific/Enderbury                | +13    | +13        | +13        |  13:00     |  13:00     |  13:00     | false  | KI           | -0308-17105     | Phoenix Islands                                                           | Canonical
  Pacific/Fakaofo                  | +13    | +13        | +13        |  13:00     |  13:00     |  13:00     | false  | TK           | -0922-17114     |                                                                           | Canonical
- Pacific/Fiji                     | +13    | +12        | +13        |  13:00     |  12:00     |  13:00     | true   | FJ           | -1808+17825     |                                                                           | Canonical
  Pacific/Tongatapu                | +13    | +13        | +13        |  13:00     |  13:00     |  13:00     | false  | TO           | -2110-17510     |                                                                           | Canonical
  NZ-CHAT                          | +1345  | +1245      | +1345      |  13:45     |  12:45     |  13:45     | true   | NZ           |                 |                                                                           | Deprecated
  Pacific/Chatham                  | +1345  | +1245      | +1345      |  13:45     |  12:45     |  13:45     | true   | NZ           | -4357-17633     | Chatham Islands                                                           | Canonical
@@ -1894,7 +1894,7 @@
  select timezone('MST', '2021-06-07 12:00:00');               > OK
  select '2021-06-07 12:00:00 MST'::timestamptz;               > OK
 
- date-time-utilities: 5.67 ss
+ date-time-utilities: 5.13 ss
 
  ==================================================================================================================================
  json-relational-equivalence
@@ -2367,7 +2367,7 @@
 
  - - 15-assert-j-books-r-books-j-view-identical - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- json-relational-equivalence: 25.8 ss
+ json-relational-equivalence: 25.9 ss
 
  ==================================================================================================================================
  hard-shell
@@ -2550,8 +2550,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (a04432ba-8b1a-4895-b358-e8c61ee8628e,                                     +
-                         cf3d635e-0565-413b-b828-48fc4b0d95d5, small portable workbench).
+ pg_exception_detail:  Failing row contains (70ab53b7-d1c1-4e45-9ee2-4c9d3c94f985,                                     +
+                         67810116-6a6a-4769-bf12-d97f9a54c793, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
@@ -2932,8 +2932,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (6f099830-8442-4541-9cd8-043c80fd6d37,                                     +
-                         0cde0b8f-567a-4611-8a5b-7958d7b148bf, small portable workbench).
+ pg_exception_detail:  Failing row contains (c5b3f94e-7f3c-4d08-984e-2d59c9ef7a17,                                     +
+                         7d5957ba-0830-4229-a450-15b684d41601, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
@@ -2955,7 +2955,7 @@
  
  _______________
 
- hard-shell: 6.02 ss
+ hard-shell: 4942 ms
 
  ==================================================================================================================================
  triggers/trigger-firing-order
@@ -3066,100 +3066,7 @@ definition |  AFTER UPDATE ON details FROM masters NOT DEFERRABLE INITIALLY IMME
 -[ RECORD 4 ]--------------------------------------------------------------------------------------------------------------------------------
 definition |  AFTER UPDATE ON masters FROM details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_noaction_upd"()
 
- triggers/trigger-firing-order: 2200 ms
-
- ==================================================================================================================================
- triggers/mandatory-one-to-many-relationship/ask-tom-approach
- ==================================================================================================================================
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl, cup, plate, saucer, tankard          200,  5, {5,6,7,8,9}   >> true
- Bruce  >> needle, scissors, thimble, thread          300, 10, {10,11,12,13} >> true
- Joan   >> chisel, drill, saw, screwdriver            400, 14, {14,15,16,17} >> true
- Mary   >> shampoo, soap, toothbrush, towel           500, 18, {18,19,20,21} >> true
-
- Success.
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl, cup, plate, saucer, tankard          200,  5, {5,6,7,8,9}   >> true
- Bruce  >> needle, scissors, thimble, thread          300, 10, {10,11,12,13} >> true
- Joan   >> chisel, drill, saw, screwdriver            400, 14, {14,15,16,17} >> true
- Mary   >> shampoo, toothbrush, towel                 500, 18, {18,20,21}    >> true
-
- Success.
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl, cup, plate, saucer, tankard          200,  5, {5,6,7,8,9}   >> true
- Bruce  >> needle, scissors, thimble, thread          300, 10, {10,11,12,13} >> true
- Joan   >> chisel, drill, saw, screwdriver            400, 14, {14,15,16,17} >> true
- Mary   >> toothbrush, towel                          500, 20, {20,21}       >> true
-
- Success.
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl                                       200,  5, {5}           >> true
- Bruce  >> needle, scissors, thimble, thread          300, 10, {10,11,12,13} >> true
- Joan   >> chisel, drill, saw, screwdriver            400, 14, {14,15,16,17} >> true
- Mary   >> toothbrush, towel                          500, 20, {20,21}       >> true
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl                                       200,  5, {5}           >> true
- Mary   >> toothbrush, towel                          500, 20, {20,21}       >> true
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl                                       200,  5, {5}           >> true
- Mary   >> toothbrush, towel                          500, 20, {20,21}       >> true
-
- triggers/mandatory-one-to-many-relationship/ask-tom-approach:: 3647 ms
-
- ==================================================================================================================================
- triggers/mandatory-one-to-many-relationship/triggers-to-check-the-rule-needs-serializable
- ==================================================================================================================================
-
- Both "masters" and "details" are empty.
-
- Arthur >> compass, dividers, protractor, ruler
- Bill >> bowl, cup, plate, saucer, tankard
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
- Mary >> shampoo, soap, toothbrush, towel
-
- Arthur >> compass, dividers, protractor, ruler
- Bill >> tankard
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
- Mary >> shampoo, soap, toothbrush, towel
-
- Algenon >> swab
- Arthur >> compass, dividers, protractor, ruler
- Bill >> tankard
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
- Mary >> shampoo, soap, toothbrush, towel
-
- Algenon >> swab
- Arthur >> compass, dividers, protractor, ruler
- Bill >> tankard
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
- Mary >> shampoo, soap, toothbrush, towel
-
- Algenon >> swab
- Bill >> tankard
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
-
- Algenon >> swab
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
-
- Both "masters" and "details" are empty.
-
- Both "masters" and "details" are empty.
-
- Mary >> shampoo, soap, toothbrush, towel
-
- triggers/mandatory-one-to-many-relationship/triggers-to-check-the-rule-needs-serializable: 5.44 ss
+ triggers/trigger-firing-order: 1880 ms
 
  ==================================================================================================================================
  Tenant databases and tenant roles in tenant database "d1"
@@ -3175,11 +3082,9 @@ definition |  AFTER UPDATE ON masters FROM details NOT DEFERRABLE INITIALLY IMME
                 
  d3  clstr$mgr  "Hard Shell" case study. 
                 
- d4  clstr$mgr  "Enforcing the mandatory 1:M rule with a mutual FK between 
-                the "masters" and "details" tables. 
+ d4  clstr$mgr  "tenant" database for ad hoc, throw-away tests, i.e. for play. 
                 
- d5  clstr$mgr  "Enforcing the mandatory 1:M rule with a trigger that counts the number 
-                of children and that relies on using the "serializable" isolation level. 
+ d5  clstr$mgr  "tenant" database for ad hoc, throw-away tests, i.e. for play. 
                 
 
  - - Tenant roles in tenant database "d1" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3206,5 +3111,5 @@ definition |  AFTER UPDATE ON masters FROM details NOT DEFERRABLE INITIALLY IMME
  End-to-end time
  ==================================================================================================================================
 
- 02:30 mi:ss
+ 02:16 mi:ss
 

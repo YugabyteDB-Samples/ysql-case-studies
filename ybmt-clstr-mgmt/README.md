@@ -39,7 +39,7 @@ The account is structured as follows:
   - Convenience partner scripts
   - Using a _.sql_ script to write and execute another _.sql_ script
   - The role-provisioning procedures
-  - The join views for the _pg_catalog_ tables and the table functions that query these.
+  - The join views for the _pg_catalog_ tables and the table functions wrappers for these
   - Implementing the principle of least privileges for _"client"_ roles
     - _Background_
     - _What does the "06-xfer-schema-grants-from-public-to-clstr-developer.sql" script do?_
@@ -551,13 +551,37 @@ The procedure executes _"set search_path..."_ to _"p||current_setting('search_pa
 
 ### The join views for the _pg_catalog_ tables and the table functions wrappers for these
 
-All of these items are installed in the _mgr_ schema.
+All of these items are installed in the _mgr_ schema. You can read their definitions in the _"07-cr-catalog-views-and-table-functions.sql"_ script. A dedicated view, defined using an explicit list, shows the most useful ones. Try this:
+
+```
+select name from mgr.catalog_views_and_tfs order by kind, rank;
+```
+
+This is the result:
+
+```
+         name          
+-----------------------
+ dbs_with_comments()
+ roles_with_comments()
+ roles_and_schemas()
+ schema_objects()
+ constraints()
+ triggers()
+ tenant_roles
+ roles_and_schemas
+ schema_objects
+ constraints
+ triggers
+```
+
+The query adds trailing parentheses to the name to denote that the result is a function. Usually, the table functions will be sufficient for your needs. Most have a single formal argument that lets you choose between a couple of fixed options for how to restrict the output. (See the section _"Useful psqlrc shortcuts"_ below.) If you want to write your own specific restriction criteria, then use the views instead. However, using the view means that you'll lose the nice formatting.
 
 #### Join views for the _pg_catalog_ tables
 
-The system-supplied _pg_catlog_ schema house a table (or view) for each kind of artifact—for example, _pg_roles_, _pg_database_, _pg_class_, _pg_type_, _pg_proc_, and so on. The generic term for such a table or view is _catalog_. Each of these catalogs has a column for the _oid_. And column design for each catalog follows a standard pattern. For example, for the catalogs that hold facts about schema-objects, there's  always a column for the object name, the schema that houses it, and its owner. (Of course there are columns that are specific to the object kind too.) However (and following the principles of relational design) the schema and owner are identified by the _oid_ of these artifacts in their dedicated catalogs. This means that a typical _ad hoc_ query needs some joins in order to be ordinarily useful.
+The system-supplied _pg_catalog_ schema houses a table (or view) for each kind of artifact—for example, _pg_roles_, _pg_database_, _pg_class_, _pg_type_, _pg_proc_, and so on. The generic term for such a table or view is _catalog_. Each of these catalogs has a column for the _oid_. And the column design for each catalog follows a standard pattern. For example, for the catalogs that hold facts about schema-objects, there's  always a column for the object name, the schema that houses it, and its owner. (Of course there are columns that are specific to the object kind too.) However (and following the principles of relational design) the schema and owner are identified by the _oid_ of these artifacts in their dedicated catalogs. This means that a typical _ad hoc_ query needs some joins in order to be ordinarily useful.
 
-Consdider the _"hard-shell"_ use case. The schema-objects that implement this are distributed across several schemas and are owned by several roles. All of these schema-objects will have owners whose names follow the pattern for local roles—that is, they start with _dN$_ (where _N_ is specific to the tenant database that houses the case-study). Suppose that to want to get an _ad hoc_ overview of, say, the user-defined finctiopns and procedures. This view gets the answer:
+Consider the _"hard-shell"_ case-study. The schema-objects that implement this are distributed across several schemas and are owned by several roles. All of these schema-objects will have owners whose names follow the pattern for local roles—that is, they start with _dN$_ (where the integer _N_ denotes the tenant database that houses the case-study). Suppose that you want to get an _ad hoc_ overview of, say, the user-defined functions and procedures. This view (in the database in question) gets the answer:
 
 ```
 create temporary view procedures(name, kind, schema, owner) as
@@ -574,10 +598,10 @@ from
   inner join pg_namespace n on p.pronamespace = n.oid
   inner join pg_roles r on p.proowner = r.oid
 where p.prokind::text in ('f', 'p')
-and r.rolname::text like 'd3$%';
+and r.rolname::text like 'd%$%';
 ```
 
-It's easy enough to type up this query once you get used to the design of the catalogs and remember their names. But even so, typing it up takes more time than is consistent with the notion of _"ad hoc query"_. It would help enormously if PG (and therefore YB) shipped with a view like this (with object-kind specif colums, too) for every available kind of schema-object. As it happens, many such shipped views _are_ available. But their names, the shema that houses them, and their colum designs don't follow a consisten pattern. And some that you want are not present. Try this:
+It's easy enough to type this query once you get used to the design of the catalogs and remember their names and the naming conventions for the column names. But even so, typing it takes more time than is consistent with the notion of _"ad hoc query"_. It would help enormously if PG (and therefore YB) shipped with a view like this (with object-kind specific columns, too) for every available kind of schema-object. As it happens, many such shipped views _are_ available. But their names, the schema that houses them, and their column designs don't follow a consistent pattern. And some that you want are not present. Try this. Notice that the restriction on the schema name must include _information_schema_.
 
 ```
 create temporary view catalogs(schema, name) as
@@ -585,9 +609,9 @@ select n.nspname, c.relname
 from pg_class c inner join pg_namespace n on c.relnamespace = n.oid
 where c.relkind::text in ('r', 'v')
 and n.nspname::text in ('pg_catalog', 'information_schema')
-and c.relname ~ any(array['tab', 'view', 'seq', 'type', 'dom', 'func', 'proc']);
+and c.relname ~ any(array['tab', 'view', 'seq', 'type', 'dom', 'func', 'proc', 'trig', 'cons']);
 ```
-Qqqq manual inpection and restriction.
+Here is the result, after manual pruning:
 
 ```
        schema       |            name             
@@ -595,19 +619,77 @@ Qqqq manual inpection and restriction.
  pg_catalog         | pg_sequences
  pg_catalog         | pg_tables
  pg_catalog         | pg_views
+ information_schema | check_constraints
  information_schema | domains
+ information_schema | referential_constraints
  information_schema | sequences
+ information_schema | table_constraints
  information_schema | tables
+ information_schema | triggers
  information_schema | user_defined_types
  information_schema | views
 ```
-Seems to be nothing for user-defined functions and procedures.
+This looks promising. But there's nothing at all for user-defined functions or procedures. Notice that none of these has an _oid_ column. And the _domains_ and the _user_defined_types_ views (in the _information_schema_ schema) have no _owner_ column. This means that, if you wanted to list triggers of interest by, say, _trigger_name_, _table_name, _table_schema_, and _table_owner_, then you'd have to type the explicit four-way join between _pg_trigger_, _pg_class_, _pg_namespace_, and _pg_roles_. It's even more complicated for constraints if you want to list constraints of _all_ kinds by name and the name, kind, schema, and owner, of the object off which each hangs. (Notice that the _mgr.constraints_ view does this.)
 
-Esp, there's no ovwerview of _all_ schema-objects.
+Notice especially that there's no shipped view that lists schema-objects of _all_ kinds. However, writing the SQL to define one is straightforward—albeit pretty lengthy. This is provided as the _mgr.schema_objects_ view.
 
 #### Table function wrappers for the join views for the _pg_catalog_ tables
 
-qq
+Some of the columns in the views for the _pg_catalog_ tables are arrays—for example, the schemas that a role owns or the roles that are granted to a particular role. Try this:
+
+```
+select schemas from mgr.roles_and_schemas where name = 'clstr$mgr';
+```
+
+This is the result:
+
+```
+                schemas                
+---------------------------------------
+ {client_safe,dt_utils,extensions,mgr}
+```
+
+When you select all the roles from the _roles_and_schemas_ view, when, for example, the current database houses the _"hard-shell"_ case-study, the result is quite hard to read. The _roles_and_schemas()_ table function formats the results like this:
+
+```
+ super?  owner       schemas           granted roles
+ ------  ----------  ----------------  ---------------
+ super   yugabyte                      
+ ------  ----------  ----------------  ---------------
+         clstr$mgr   client_safe       clstr$developer
+                     dt_utils          
+                     extensions        
+                     mgr               
+ ------  ----------  ----------------  ---------------
+         d3$api      api               clstr$developer
+ ------  ----------  ----------------  ---------------
+         d3$client                     
+ ------  ----------  ----------------  ---------------
+         d3$code     code              clstr$developer
+                     code_helpers      
+ ------  ----------  ----------------  ---------------
+         d3$data     data              clstr$developer
+ ------  ----------  ----------------  ---------------
+         d3$json     json_helpers      clstr$developer
+                     json_shim         
+                     json_utils        
+ ------  ----------  ----------------  ---------------
+         d3$mgr                        clstr$developer
+                                       d3$api
+                                       d3$code
+                                       d3$data
+                                       d3$json
+                                       d3$qa
+                                       d3$support
+ ------  ----------  ----------------  ---------------
+         d3$qa       qa_code           clstr$developer
+                     qa_json_utils     
+                     qa_ui_simulation  
+ ------  ----------  ----------------  ---------------
+         d3$support  support           clstr$developer
+```
+
+Each of the table function wrappers for the join views for the _pg_catalog_ tables does something along these lines to improve the readability with respect to the results that an ordinary SQL query to list the same information would produce.
 
 #### Useful _psqlrc_ shortcuts
 
@@ -641,9 +723,9 @@ These allow you to get useful overviews of global artifacts and local artifacts 
 
 * For databases, you can use: _either_ _":ld"_ to list all databases with their owners, including the bootstrap database and the template databases; _or_ _":ldx"_ to list just the tenant databases with their owners. In each case, the comments are listed too. Compare the output of these shortcuts with that of the _"\lx+"_ meta-command. These shortcuts present a useful restriction in a more readable format than the native meta-command.
 * For roles, you can use: _either_ _":lr"_ to list all non-system global roles together with all tenant roles for the current database; _or_ _":lrx"_ to list just those tenant roles that have been created after the database was created by using the _cr_role()_ procedure. (In other words, _":lrx"_ excludes global roles and the _"mgr"_ and _"client"_ tenant roles that are brought by the _"02-drop-and-re-create-tenant-databases.sql"_ script and that have the same purpose in every tenant database.)
-* For schemas, _"ls"_ lists the user-created schemas in the current database grouped by owner. The entry for each owner also lists the roles that have been granted to it. (You might thing that the granted roles should be listed by the _roles_with_comments()_ table function rather than by the _roles_and_schemas()_ table function. The choice is arbitrary.)
-* For schema-objects, _":co"_ lists the _common_ schema-objects—that is the schema-objects in the _client_safe_, _dt_utils_. and _mgr_ schemas that are brought by the _template1_ database. These, by construction, are the same in every existing (and yet-to-be-created) tenant database. And _":lo"_ lists the _common_ schema-objects—that is the schema-objects in schemas other than _client_safe_, _dt_utils_. and _mgr_ that are owned by local roles in the current database.
-* For secondary_objects, _":cc"_ lists the constraints that hang off _common_ schema-objects; and _":lc"_ lists the constraints that hang off _local_ schema-objects. As it happens, there are no _common_ tables and therefore there are no nominally common triggers. The _triggers()_ table function makes no distintion between _common_ and _local_ triggers and would list both kinds if instances of each of these kinds existed. The effect, though, is to list only _local_ triggers. This is why its shortcut is called _":lt"_.
+* For schemas, _"ls"_ lists the user-created schemas in the current database grouped by owner. The entry for each owner also lists the roles that have been granted to it. (You might think that the granted roles should be listed by the _roles_with_comments()_ table function rather than by the _roles_and_schemas()_ table function. The choice is arbitrary.)
+* For schema-objects, _":co"_ lists the _common_ schema-objects—that is the schema-objects in the _client_safe_, _dt_utils_. and _mgr_ schemas that are brought by the _template1_ database. These, by construction, are the same in every existing (and yet-to-be-created) tenant database. And _":lo"_ lists the _local_ schema-objects—that is the schema-objects in schemas other than _client_safe_, _dt_utils_. and _mgr_ that are owned by local roles in the current database.
+* For secondary-objects, _":cc"_ lists the constraints that hang off _common_ schema-objects; and _":lc"_ lists the constraints that hang off _local_ schema-objects. As it happens, there are no _common_ tables and therefore there are no nominally common triggers. The _triggers()_ table function makes no distinction between _common_ and _local_ triggers and would list both kinds if instances of each of these kinds existed. The effect, though, is to list only _local_ triggers. This is why its shortcut is called _":lt"_.
 
 ### Implementing the principle of least privileges for _"client"_ roles
 
