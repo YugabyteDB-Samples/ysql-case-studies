@@ -1,4 +1,12 @@
-### Background
+# "json-relational-equivalence"
+
+**NOTE:** Make sure that you read the section _"Working with just a single case study"_ in the _"README.md"_ on the _"ybmt-clstr-mgmt"_ directory before running this case-study.
+
+The account of this case-study is not yet included in the YSQL documentation. It was written to complement this presentation in Yugabyte Inc's Friday Tech Talks series (a.k.a. YFTT) delivered by Bryn Llewellyn on 3-Jun-2022. The recording is here:
+
+- **[Spotlight on YSQL JSON](https://www.youtube.com/watch?v=sfFCOlm3v2M)**
+
+The premise of the talk is that an arbitrary SQL compound value can be represented as a JSON document—and that such a JSON representation can be _non-lossily_ transformed back to the SQL compound value that gave rise to the JSON representation.
 
 The code simulates part of a complete app that will
 
@@ -27,6 +35,7 @@ This conforms to a JSON Schema that can be expressed informally in prose, thus:
 > - **"isbn"** — **string**
 >   _values must be unique across the entire set of documents (in other words, it defines the unique business key); values must have this pattern:_
 >   `« ^[0-9]{3}-[0-9]{1}-[0-9]{2}-[0-9]{6}-[0-9]{1}$ »`
+>   Notice that this is not the real ISBN format. But it's sufficient for this demo code.
 >
 > - **"title" — string**
 >
@@ -60,9 +69,9 @@ The code here loads the incoming documents into a _source(k, book_info)_ table. 
 
 It then shreds the data into the four-table relational representation.
 
-Then it converts each row from the _books_ relational table, together with its associated _genre_ and _authors_ details, back to a single _jsonb_ value in the table _target(k, book_info)_.
+Then it converts each row from the _books_ relational table, together with its associated _genre_ and _authors_ details, back to a single _jsonb_ value in the view _r_books_j_view(k, book_info)_.
 
-Then it proves that the round trip, JSON text to classic Codd-and-Date to JSON text, is non-lossy by proving that the set of _target_ rows is identical to the set of _source_ rows.
+Then it proves that the round trip, JSON text to classic Codd-and-Date to JSON text, is non-lossy by proving that the set of _target_ rows (produced by _r_books_j_view_) is identical to the set of _source_ rows (in the _j_books_ table).
 
 The code uses whatever PostgreSQL features are optimally appropriate to the task at hand. Moreover, because all sorts of JSON and SQL features are used, the exercise provides an excellent illustration of YB's fidelity to PG's syntax and semantics.
 
@@ -71,14 +80,12 @@ The transformations are done:
 - from _jsonb_ to SQL, using the `->>` and`->` operators, and the _jsonb_populate_record()_ built-in function
 - from SQL to _jsonb_ using the _to_jsonb()_ built-in function.
 
-These facts interfere with the _source-target_ identity test.
+These facts could interfere with the _source-target_ identity test.
 
 - When the `->>` operator extracts from an absent key, it brings a _SQL null_ value to the target SQL variable. (Other JSON features do this too.)
 - The transformation from a composite type occurrence to a JSON _object_ brings an explicit « _"some key": null_ » to the value of the JSON key that maps the composite type's attribute that is a _SQL null_.
 
-And so special application code is needed to accommodate it.
-
-However, the problem is solved trivially by implementing two complementary functions:
+And so special application code is needed to accommodate this. The problem is solved trivially by implementing two complementary functions:
 
 - _no_null_keys()_ checks that a _jsonb_ value has no occurrences of « _"some key": null_ »
 
@@ -86,7 +93,7 @@ However, the problem is solved trivially by implementing two complementary funct
 
 The code checks with _no_null_keys()_ that, as expected, no ingested JSON document has an occurrence of « _"some key": null_ ».
 
-And it uses _strip_null_keys()_ on the output of _to_jsonb()_ — and, as appropriate, any other built-in JSON function that produces a _jsonb_ value.
+And it uses the guilt-in _jsonb_strip_nulls()_ on the output of _to_jsonb()_ — and, as appropriate, any other built-in JSON function that produces a _jsonb_ value.
 
 The check on the incoming documents is included in the _j_books_book_info_is_conformant(jsonb)_ function that is the basis of a constraint that's created on the _source_ table's _book_info_ column.
 
@@ -94,16 +101,15 @@ More code is needed to implement other constraints like, for example, the value 
 
 Critically, one test uses _jsonb_object_keys()_ to scan the top-level object to ensure that all the required keys are present, that every key has the specified JSON data type, and that no keys that the JSON Schema doesn't mention are present. A similar test does the same for the _"authors"_ array. This is why I can be sure that the native `->>` and `->` operators are sufficient for my purpose.
 
-These tests, too, (and other tests) are included in the
-_j_books_book_info_is_conformant(jsonb)_ function.
+These tests, too, (and other tests) are included in the _j_books_book_info_is_conformant(jsonb)_ function.
 
-After transforming the facts from the relaltional reprentation back to one _jsonb_ value for each book with its aggregated facts, each document must adhere to the same JSON Schema as do the incoming documents. This requirement can be expressed thus: This transformation:
+After transforming the facts from the relational representation back to one _jsonb_ value for each book with its aggregated facts, each document must adhere to the same JSON Schema as do the incoming documents. This requirement can be expressed thus: This transformation:
 
 ```
 JSON → relational → JSON
 ```
 
-must be idempotent. The test is implemeted simply with this:
+must be idempotent. The test is implemented simply with this:
 
 ```
 do $body$

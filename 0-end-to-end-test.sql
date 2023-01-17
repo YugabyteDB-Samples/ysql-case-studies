@@ -135,22 +135,6 @@ select extract(epoch from clock_timestamp())::text as s0
 \t on \\ select 'triggers/trigger-firing-order: '||stopwatch_reading(:stopwatch_s0);
 
 --------------------------------------------------------------------------------
-\c d4 d4$mgr
-\t on \\ select rule_off('triggers/mandatory-one-to-many-relationship/ask-tom-approach');
-select extract(epoch from clock_timestamp())::text as s0
-\gset stopwatch_
-\ir triggers/mandatory-one-to-many-relationship/ask-tom-approach/0.sql
-\t on \\ select 'triggers/mandatory-one-to-many-relationship/ask-tom-approach:: '||stopwatch_reading(:stopwatch_s0);
-
---------------------------------------------------------------------------------
-\c d5 d5$mgr
-\t on \\ select rule_off('triggers/mandatory-one-to-many-relationship/triggers-to-check-the-rule-needs-serializable');
-select extract(epoch from clock_timestamp())::text as s0
-\gset stopwatch_
-\ir triggers/mandatory-one-to-many-relationship/triggers-to-check-the-rule-needs-serializable/0.sql
-\t on \\ select 'triggers/mandatory-one-to-many-relationship/triggers-to-check-the-rule-needs-serializable: '||stopwatch_reading(:stopwatch_s0);
-
---------------------------------------------------------------------------------
 \c d1 d1$mgr
 \t on
 select rule_off('Tenant databases and tenant roles in tenant database "d1"');

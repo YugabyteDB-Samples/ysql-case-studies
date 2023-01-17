@@ -85,9 +85,14 @@ create function mgr.roles_and_schemas()
   language plpgsql
 as $body$
 declare
-  rol_pad constant int not null := greatest(length('granted roles'), (select max(length(name)) from mgr.roles));
-  sch_pad constant int not null := greatest(length('schemas'),       (select max(length(name)) from mgr.schemas));
+  rol_pad   constant int not null := greatest(length('owner'), (select max(length(name)) from mgr.roles));
+  sch_pad   constant int not null := greatest(length('schemas'),       (select max(length(name)) from mgr.schemas));
 
+  grol_pad  constant int not null := greatest(length('granted roles'),
+                                              (select max(length(a.r))
+                                               from mgr.roles
+                                                    cross join lateral
+                                                    unnest(mgr.granted_roles(name)) as a(r)));
   v_super    text;
   v_name     text   not null := '';
   v_schemas  text[] not null := '{}';
@@ -99,10 +104,10 @@ begin
          'granted roles';                                                               return next;
 
   z :=
-    rpad('-',       6, '-')||'  '||
-    rpad('-', rol_pad, '-')||'  '||
-    rpad('-', sch_pad, '-')||'  '||
-    rpad('-', rol_pad, '-');                                                            return next;
+    rpad('-',       6,  '-')||'  '||
+    rpad('-', rol_pad,  '-')||'  '||
+    rpad('-', sch_pad,  '-')||'  '||
+    rpad('-', grol_pad, '-');                                                           return next;
 
   for v_super, v_name, v_schemas in (
     select
@@ -154,10 +159,10 @@ begin
       end loop;
     end;
     z :=
-      rpad('-',       6, '-')||'  '||
-      rpad('-', rol_pad, '-')||'  '||
-      rpad('-', sch_pad, '-')||'  '||
-      rpad('-', rol_pad, '-');                                                          return next;
+      rpad('-',       6,  '-')||'  '||
+      rpad('-', rol_pad,  '-')||'  '||
+      rpad('-', sch_pad,  '-')||'  '||
+      rpad('-', grol_pad, '-');                                                         return next;
     end loop;
 end;
 $body$;
@@ -1008,30 +1013,26 @@ $body$;
 grant execute on function mgr.roles_with_comments(boolean) to public;
 ----------------------------------------------------------------------------------------------------
 
-create view mgr.catalog_views_and_tfs(name, kind) as
+create view mgr.catalog_views_and_tfs(name, kind, rank) as
+with candidates(name, rank) as (
+  values
+    ('dbs_with_comments',   1),
+    ('tenant_roles',        2),
+    ('roles_with_comments', 3),
+    ('roles_and_schemas',   4),
+    ('schema_objects',      5),
+    ('constraints',         6),
+    ('triggers',            7))
 select
-  case
-    when kind = 'function' then name::text||'()'
-    else                        name::text
-  end,
-  kind
-from mgr.schema_objects
-where schema = 'mgr'
-and   (kind = 'view'     and name not in ('catalog_views_and_tfs',
-                                          'reserved_roles',
-                                          'non_reserved_roles',
-                                          'proper_ybmt_roles',
-                                          'improper_ybmt_roles',
-                                          'roles',
-                                          'tenant_roles',
-                                          'roles_and_schemas',
-                                          'schemas'))
-or    (kind = 'function' and name     in ('subprogram_source',
-                                          'dbs_with_comments',
-                                          'roles_with_comments',
-                                          'roles_and_schemas',
-                                          'schema_objects',
-                                          'constraints',
-                                          'triggers'));
+  case o.kind
+    when 'view'     then name
+    when 'function' then name||'()'
+  end, 
+  o.kind, 
+  c.rank
+from mgr.schema_objects o
+inner join candidates c using(name)
+where o.schema = 'mgr'
+and o.kind in ('view', 'function');
 
 grant select on table mgr.catalog_views_and_tfs to public;

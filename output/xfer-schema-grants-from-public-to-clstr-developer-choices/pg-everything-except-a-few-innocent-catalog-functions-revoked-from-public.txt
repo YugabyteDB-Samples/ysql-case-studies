@@ -2,13 +2,13 @@
  Create 6 tenant databases
  ==================================================================================================================================
 
- 1937 ms
+ 1965 ms
 
  ==================================================================================================================================
  Drop and re-create those 6 tenant databases
  ==================================================================================================================================
 
- 2701 ms
+ 2694 ms
 
  ==================================================================================================================================
  analyzing-covid-data-with-aggregate-functions
@@ -250,7 +250,7 @@
  95,12
  96,12
 
- analyzing-covid-data-with-aggregate-functions: 186 ms
+ analyzing-covid-data-with-aggregate-functions: 189 ms
 
  ==================================================================================================================================
  recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm
@@ -292,7 +292,7 @@
   4 | 42
   4 | 43
 
- recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm: 32 ms
+ recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm: 31 ms
 
  ==================================================================================================================================
  recursive-cte/basics/fibonacci
@@ -346,7 +346,7 @@
  11 |     89
  12 |    144
 
- recursive-cte/basics/fibonacci: 30 ms
+ recursive-cte/basics/fibonacci: 32 ms
 
  ==================================================================================================================================
  recursive-cte/employee-hierarchy
@@ -457,7 +457,7 @@
 
  doris > fred > mary
 
- recursive-cte/employee-hierarchy: 39 ms
+ recursive-cte/employee-hierarchy: 42 ms
 
  ==================================================================================================================================
  recursive-cte/bacon-numbers
@@ -825,7 +825,7 @@
 
  Nothing survives. So the (so-called) recursion stops.
 
- recursive-cte/bacon-numbers: 438 ms
+ recursive-cte/bacon-numbers: 445 ms
 
  ==================================================================================================================================
  date-time-utilities
@@ -1917,7 +1917,7 @@
  select timezone('MST', '2021-06-07 12:00:00');               > OK
  select '2021-06-07 12:00:00 MST'::timestamptz;               > OK
 
- date-time-utilities: 3177 ms
+ date-time-utilities: 3214 ms
 
  ==================================================================================================================================
  json-relational-equivalence
@@ -2390,7 +2390,7 @@
 
  - - 15-assert-j-books-r-books-j-view-identical - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- json-relational-equivalence: 104 ms
+ json-relational-equivalence: 114 ms
 
  ==================================================================================================================================
  hard-shell
@@ -2573,8 +2573,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (d2475fb8-8f0d-49cc-a856-5b97656a4257,                                     +
-                         3c0517f8-d192-4839-9c53-7727054cf18e, small portable workbench).
+ pg_exception_detail:  Failing row contains (82b5cdce-6b2e-4a67-8c5c-239d9b765f06,                                     +
+                         e292146f-434b-47f4-a44b-eb33553d290d, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
@@ -2955,8 +2955,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (375137b3-611f-4bcc-a1c1-c24a23df77ca,                                     +
-                         a6f4f039-6b75-4c2a-a0f0-36537ca69a81, small portable workbench).
+ pg_exception_detail:  Failing row contains (43914fdb-a15f-4078-95cb-98234c7cd958,                                     +
+                         80135418-d2ee-4b95-9367-b36935ce548d, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
@@ -2978,7 +2978,7 @@
  
  _______________
 
- hard-shell: 249 ms
+ hard-shell: 269 ms
 
  ==================================================================================================================================
  triggers/trigger-firing-order
@@ -3076,9 +3076,9 @@
  after  update on details    for each statement  >           
 
 -[ RECORD 1 ]-----------------------------------------------------------
-name     | RI_ConstraintTrigger_a_17429
+name     | RI_ConstraintTrigger_a_17617
 tab_name | masters
-def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_17429" A...
+def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_17617" A...
 
 -[ RECORD 1 ]--------------------------------------------------------------------------------------------------------------------------------
 definition |  AFTER DELETE ON masters FROM details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_cascade_del"()
@@ -3089,103 +3089,7 @@ definition |  AFTER UPDATE ON details FROM masters NOT DEFERRABLE INITIALLY IMME
 -[ RECORD 4 ]--------------------------------------------------------------------------------------------------------------------------------
 definition |  AFTER UPDATE ON masters FROM details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_noaction_upd"()
 
- triggers/trigger-firing-order: 63 ms
-
- ==================================================================================================================================
- triggers/mandatory-one-to-many-relationship/ask-tom-approach
- ==================================================================================================================================
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl, cup, plate, saucer, tankard          200,  5, {5,6,7,8,9}   >> true
- Bruce  >> needle, scissors, thimble, thread          300, 10, {10,11,12,13} >> true
- Joan   >> chisel, drill, saw, screwdriver            400, 14, {14,15,16,17} >> true
- Mary   >> shampoo, soap, toothbrush, towel           500, 18, {18,19,20,21} >> true
-
- Success.
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl, cup, plate, saucer, tankard          200,  5, {5,6,7,8,9}   >> true
- Bruce  >> needle, scissors, thimble, thread          300, 10, {10,11,12,13} >> true
- Joan   >> chisel, drill, saw, screwdriver            400, 14, {14,15,16,17} >> true
- Mary   >> shampoo, toothbrush, towel                 500, 18, {18,20,21}    >> true
-
- Success.
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl, cup, plate, saucer, tankard          200,  5, {5,6,7,8,9}   >> true
- Bruce  >> needle, scissors, thimble, thread          300, 10, {10,11,12,13} >> true
- Joan   >> chisel, drill, saw, screwdriver            400, 14, {14,15,16,17} >> true
- Mary   >> toothbrush, towel                          500, 20, {20,21}       >> true
-
- Success.
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl                                       200,  5, {5}           >> true
- Bruce  >> needle, scissors, thimble, thread          300, 10, {10,11,12,13} >> true
- Joan   >> chisel, drill, saw, screwdriver            400, 14, {14,15,16,17} >> true
- Mary   >> toothbrush, towel                          500, 20, {20,21}       >> true
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl                                       200,  5, {5}           >> true
- Mary   >> toothbrush, towel                          500, 20, {20,21}       >> true
-
- User error: cannot delete a master's last surviving detail.       +
-             Key (dk)=(5) is still referenced from table "masters".
-
- Arthur >> compass, dividers, protractor, ruler       100,  1, {1,2,3,4}     >> true
- Bill   >> bowl                                       200,  5, {5}           >> true
- Mary   >> toothbrush, towel                          500, 20, {20,21}       >> true
-
- triggers/mandatory-one-to-many-relationship/ask-tom-approach:: 98 ms
-
- ==================================================================================================================================
- triggers/mandatory-one-to-many-relationship/triggers-to-check-the-rule-needs-serializable
- ==================================================================================================================================
-
- Both "masters" and "details" are empty.
-
- Arthur >> compass, dividers, protractor, ruler
- Bill >> bowl, cup, plate, saucer, tankard
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
- Mary >> shampoo, soap, toothbrush, towel
-
- Arthur >> compass, dividers, protractor, ruler
- Bill >> tankard
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
- Mary >> shampoo, soap, toothbrush, towel
-
- Algenon >> swab
- Arthur >> compass, dividers, protractor, ruler
- Bill >> tankard
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
- Mary >> shampoo, soap, toothbrush, towel
-
- Algenon >> swab
- Arthur >> compass, dividers, protractor, ruler
- Bill >> tankard
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
- Mary >> shampoo, soap, toothbrush, towel
-
- Algenon >> swab
- Bill >> tankard
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
-
- Algenon >> swab
- Bruce >> needle, scissors, thimble, thread
- Joan >> chisel, drill, saw, screwdriver
-
- Both "masters" and "details" are empty.
-
- Both "masters" and "details" are empty.
-
- Mary >> shampoo, soap, toothbrush, towel
-
- triggers/mandatory-one-to-many-relationship/triggers-to-check-the-rule-needs-serializable: 152 ms
+ triggers/trigger-firing-order: 68 ms
 
  ==================================================================================================================================
  Tenant databases and tenant roles in tenant database "d1"
@@ -3201,11 +3105,9 @@ definition |  AFTER UPDATE ON masters FROM details NOT DEFERRABLE INITIALLY IMME
                 
  d3  clstr$mgr  "Hard Shell" case study. 
                 
- d4  clstr$mgr  "Enforcing the mandatory 1:M rule with a mutual FK between 
-                the "masters" and "details" tables. 
+ d4  clstr$mgr  "tenant" database for ad hoc, throw-away tests, i.e. for play. 
                 
- d5  clstr$mgr  "Enforcing the mandatory 1:M rule with a trigger that counts the number 
-                of children and that relies on using the "serializable" isolation level. 
+ d5  clstr$mgr  "tenant" database for ad hoc, throw-away tests, i.e. for play. 
                 
 
  - - Tenant roles in tenant database "d1" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3232,5 +3134,5 @@ definition |  AFTER UPDATE ON masters FROM details NOT DEFERRABLE INITIALLY IMME
  End-to-end time
  ==================================================================================================================================
 
- 9.35 ss
+ 9.19 ss
 
