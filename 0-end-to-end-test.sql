@@ -9,7 +9,7 @@ select extract(epoch from clock_timestamp())::text as overall_start \gset stopwa
   write the script that it will then run.
 */;
 \set lower_db_no 0
-\set upper_db_no 5
+\set upper_db_no 3
 select extract(epoch from clock_timestamp())::text as s0
 \gset stopwatch_
 \ir ybmt-clstr-mgmt/02-drop-and-re-create-tenant-databases.sql
