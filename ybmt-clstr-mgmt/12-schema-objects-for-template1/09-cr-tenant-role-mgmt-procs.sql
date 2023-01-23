@@ -9,8 +9,9 @@
   will be installed in the "mgr" schema in the "template1" database and will
   be owned by "clstr$mgr".
 
-  One exception. This "security definer" procedure must be owner by a superuser:
-    "mgr.set_tenant_database_setting(db in text, setting in text, val in text)".
+  Two exceptions. These "security definer" procedures must be owner by a superuser:
+    mgr.set_tenant_database_setting(db in text, setting in text, val in text)
+    mgr.drop_all_temp_schemas()
 */;
 do $body$
 begin
@@ -522,6 +523,9 @@ declare
       and   name <> this_database_client
     );
 begin
+  -- Routine hygiene.
+  call mgr.drop_all_temp_schemas();
+
   if (roles_to_be_dropped is not null and cardinality(roles_to_be_dropped) > 0) then
     foreach r in array roles_to_be_dropped loop
       /*

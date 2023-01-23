@@ -44,6 +44,9 @@ grant usage on schema extensions to public;
 \ir ../12-schema-objects-for-template1/08-cr-set-tenant-database-setting.sql
 grant execute on procedure mgr.set_tenant_database_setting(text, text, text) to clstr$mgr;
 
+\ir ../12-schema-objects-for-template1/14-cr-drop-all-temp-schemas.sql
+grant execute on procedure mgr.drop_all_temp_schemas() to clstr$mgr with grant option;
+
 /*
   Experiment by commenting this out.
   Will need to re-create the cluster after commenting IN or OUT.
@@ -75,7 +78,6 @@ set role clstr$mgr;
 \ir ../12-schema-objects-for-template1/date-time-utilities/2-interval-domains/0.sql
 --------------------------------------------------------------------------------
 
-reset role;
 \c yugabyte yugabyte
 set client_min_messages = 'warning';
 

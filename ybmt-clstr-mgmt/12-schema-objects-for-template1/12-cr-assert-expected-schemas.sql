@@ -39,10 +39,27 @@ begin
     end case;
   end loop;
 
-  select distinct owner into r from mgr.schema_objects where name::text != 'set_tenant_database_setting';
-  assert r = 'clstr$mgr', 'Unexpected: all objects "mgr" in "'||current_database()||
-                          ' except for "set_tenant_database_setting()" if it exists should be'||
-                          ' owned by "clstr$mgr" and not: "'||r||'"';
+  for r in (
+    select distinct owner
+    from mgr.schema_objects
+    where name::text != all(array['set_tenant_database_setting', 'drop_all_temp_schemas']))
+  loop
+    assert r = 'clstr$mgr', 'Unexpected: all objects in schema "mgr" in "'||current_database()||
+                            ' except for "set_tenant_database_setting()" if it exists'||
+                            ' and "drop_all_temp_schemas()"'||
+                            ' should be owned by "clstr$mgr" and not: "'||r||'"';
+  end loop;
+
+  for r in (
+    select distinct owner
+    from mgr.schema_objects
+    where name::text = any(array['set_tenant_database_setting', 'drop_all_temp_schemas']))
+  loop
+    assert r = 'yugabyte', 'The objects "set_tenant_database_setting()" if it exists'||
+                            ' and "drop_all_temp_schemas()"'||
+                            ' in the "mgr" schema in "'||current_database()||
+                            ' should be owned by "yugabyte" and not: "'||r||'"';
+  end loop;
 
   case current_database()
     when 'yugabyte' then
@@ -52,24 +69,6 @@ begin
       assert mgr_found and extensions_found and dt_utils_found,
         'Unexpected: database "yugabyte" should have'||
         ' all of the "mgr", "extensions", and "dt_utils" schemas.';
-      select r2.rolname
-      into r
-      from
-        pg_proc p
-        inner join
-        pg_namespace nn
-        on p.pronamespace = nn.oid
-        inner join
-        pg_roles r2
-        on p.proowner = r2.oid
-      where p.proname = 'set_tenant_database_setting'
-      and   nn.nspname = 'mgr';
-
-      assert r is not null, 'Unexpected: procedure "set_tenant_database_setting()" not found.';
-
-      assert r = 'yugabyte', 'Unexpected: procedure "set_tenant_database_setting()"'||
-                              ' should be owned by "yugabyte" not: "'||r||'"';
-
     else
       assert false, '"mgr.assert_expected_schemas()" programming error for: "'||current_database()||'"';
   end case;

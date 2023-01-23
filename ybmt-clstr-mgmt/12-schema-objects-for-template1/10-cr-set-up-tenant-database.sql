@@ -36,6 +36,9 @@ begin
   assert current_role = 'clstr$mgr',
     'You must authorize as "current_role" to call "set_up_tenant_database()"';
 
+  -- Belt and braces.
+  execute format($$alter role all in database %I set client_min_messages = warning$$, db);
+
   assert mgr.is_good_tenant_role_name(mgr_role),       'Bad tenant role name: '||mgr_role;
   assert mgr.is_good_tenant_role_name(client_role),    'Bad tenant role name: '||client_role;
 
@@ -93,7 +96,7 @@ begin
   execute format('grant execute on procedure mgr.cr_role(text, boolean, boolean, text) to %I;',                      mgr_role);
   execute format('grant execute on procedure mgr.drop_role(text) to %I;',                                            mgr_role);
   execute format('grant execute on procedure mgr.drop_all_regular_local_roles() to %I;',                             mgr_role);
-
+  execute format('grant execute on procedure mgr.drop_all_temp_schemas() to %I;',                                    mgr_role);
   --------------------------------------------------------------------------------
   -- Create the <db>$client role.
 
@@ -115,6 +118,13 @@ begin
   execute format('comment on database %I is %L',   db,             database_db_comment      );
   execute format('comment on role     %I is %L',   mgr_role,       role_db$mgr_comment      );
   execute format('comment on role     %I is %L',   client_role,    role_db$client_comment   );
+
+  --------------------------------------------------------------------------------
+  -- This is a hygiene practice. Temporary schemas are created on demand.
+  -- But sometimes you know that the activity you ahve designed for a particular database
+  -- will never create temorary objects. It's nice to be able to conform that
+  -- this is the case by querying the "mgr.temp_schemas" view.
+  call mgr.drop_all_temp_schemas();
 end;
 $body$;
 
