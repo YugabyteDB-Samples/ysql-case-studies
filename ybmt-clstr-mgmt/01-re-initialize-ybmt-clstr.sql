@@ -43,6 +43,11 @@ revoke all on schema mgr from public;
 create schema client_safe authorization clstr$mgr;
 revoke all on schema client_safe from public;
 
+set role yugabyte;
+\ir 12-schema-objects-for-template1/14-cr-drop-all-temp-schemas.sql
+grant execute on procedure mgr.drop_all_temp_schemas() to clstr$mgr;
+set role clstr$mgr;
+
 \ir 12-schema-objects-for-template1/01-cr-where-am-i.sql
 \ir 12-schema-objects-for-template1/02-cr-random-script-filename.sql
 \ir 12-schema-objects-for-template1/03-cr-ybmt-utility-views-and-functions.sql
@@ -61,7 +66,9 @@ revoke all on schema client_safe from public;
 \ir 13-schema-objects-for-yugabyte-db-only/05-cr_drop-all-improper-ymbt_roles.sql
 \ir 13-schema-objects-for-yugabyte-db-only/06-cr-assert-re-initialized-clstr-ok.sql
 
-reset role;
+call mgr.drop_all_temp_schemas();
+
+set role yugabyte;
 revoke create on schema mgr from clstr$mgr;
 revoke all     on database yugabyte from clstr$mgr;
 grant  connect on database yugabyte to   clstr$mgr;

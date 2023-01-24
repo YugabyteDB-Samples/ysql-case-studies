@@ -23,6 +23,20 @@ where not (nspname::text = 'information_schema' or nspname::text ~ '^pg' or nspn
 grant select on table mgr.schemas to public;
 ----------------------------------------------------------------------------------------------------
 
+create view mgr.temp_schemas(schema, owner) as
+select
+  n.nspname,
+  r.rolname
+from
+  pg_namespace as n
+  inner join
+  pg_roles as r
+  on n.nspowner = r.oid
+where n.nspname ~ '^pg_temp';
+
+grant select on table mgr.temp_schemas to public;
+----------------------------------------------------------------------------------------------------
+
 create view mgr.roles_and_schemas(rank, is_super, name, schemas) as
 with c(rank, is_super, r_name, s_name) as (
   select
@@ -34,9 +48,9 @@ with c(rank, is_super, r_name, s_name) as (
     r.name,
     s.name
   from
-    mgr.roles r
+    mgr.roles as r
     left outer join
-    mgr.schemas s
+    mgr.schemas as s
     on s.owner = r.oid)
 select
   rank,
@@ -60,7 +74,7 @@ as $body$
     select array
       (
         select r1.rolname
-        from pg_auth_members m inner join pg_roles r1 on m.roleid = r1.oid
+        from pg_auth_members as m inner join pg_roles as r1 on m.roleid = r1.oid
         where m.member = r2.oid
         order by r1.rolname
       )
@@ -207,9 +221,9 @@ create view mgr.schema_objects(oid, owner, schema, name, kind, catalog, security
         null,
         null::text[]
       from
-        pg_type t
+        pg_type as t
         inner join
-        pg_class c
+        pg_class as c
         on t.typname = c.relname and t.typnamespace = c.relnamespace
       where t.typtype ='c'
       -- Filter out the row that's automatically generated as the partner
@@ -270,9 +284,9 @@ create view mgr.schema_objects(oid, owner, schema, name, kind, catalog, security
         null,
         null::text[]
       from
-        pg_operator o
+        pg_operator as o
         inner join
-        pg_proc p
+        pg_proc as p
         on o.oprcode = p.oid
     )
 select
@@ -288,9 +302,10 @@ select
 from
   o
   inner join
-  mgr.schemas s
+  mgr.schemas as s
   on o.schema_oid = s.oid
-  inner join pg_roles r
+  inner join
+  pg_roles as r
   on o.owner_oid = r.oid
   where s.name <> 'extensions';
 
@@ -307,10 +322,12 @@ with
       s.name,
       c.relname
     from
-      pg_class c
-      inner join mgr.roles r
+      pg_class as c
+      inner join
+      mgr.roles as r
       on c.relowner = r.oid
-      inner join mgr.schemas s
+      inner join
+      mgr.schemas as s
       on c.relnamespace = s.oid
     where relkind in ('r', 'v'))
 select
@@ -320,9 +337,9 @@ select
   t.tgname,
   pg_get_triggerdef(t.oid, true) as def
 from
-  relations c
+  relations as c
   inner join
-  pg_trigger t
+  pg_trigger as t
   on t.tgrelid = c.oid
   where not t.tgisinternal;
 
@@ -467,8 +484,9 @@ select
     else          'special (unexpected)'
   end
 from
-  pg_event_trigger t
-  inner join mgr.roles r
+  pg_event_trigger as t
+  inner join
+  mgr.roles as r
   on t.evtowner = r.oid;
 
 grant select on table mgr.event_triggers to public;
@@ -615,7 +633,7 @@ select
   c.contype,
   c.expr
 from
-  mgr.schema_objects o
+  mgr.schema_objects as o
   inner join
   c
   on c.schema_object_oid = o.oid and
@@ -747,9 +765,9 @@ declare
   subprogram constant mgr.sr_source[] := (
       select       array_agg((p.oid, p.prosrc)::mgr.sr_source)
         from
-          pg_proc p
+          pg_proc as p
           inner join
-          pg_namespace n
+          pg_namespace as n
           on p.pronamespace = n.oid
         where p.prokind       = any(array['p', 'f']::char[])
         and   p.proname::text = p_name
@@ -855,7 +873,7 @@ declare
   db_pad       constant int    not null := (select max(length(q.n)) from unnest(included_dbs) as q(n)) + 2;
   rol_pad      constant int    not null := (
                                              select max(length(r.rolname))
-                                             from pg_database d inner join pg_roles r on d.datdba = r.oid
+                                             from pg_database as d inner join pg_roles as r on d.datdba = r.oid
                                              where d.datname = any(included_dbs)
                                            ) + 2;
   db_name   name not null := ''::name;
@@ -867,11 +885,12 @@ begin
   for db_name, db_owner, comment in (
     select d.datname, r.rolname, c.description
     from
-      pg_database d
+      pg_database as d
       inner join
-      pg_roles r
+      pg_roles as r
       on d.datdba = r.oid
-      inner join pg_shdescription c
+      inner join
+      pg_shdescription as c
       on d.oid = c.objoid
     where c.classoid = 1262
     and d.datname = any(included_dbs)
@@ -907,8 +926,9 @@ with
   roles_with_comments(name, comment) as (
     select r.name, c.description
     from
-      mgr.non_reserved_roles r
-      inner join pg_shdescription c
+      mgr.non_reserved_roles as r
+      inner join
+      pg_shdescription as c
       on r.oid = c.objoid
     where  c.classoid = 1260),
 
@@ -916,9 +936,9 @@ with
       select
         r.name, d.datname, r.comment
       from
-        roles_with_comments r
+        roles_with_comments as r
         cross join
-        pg_database d
+        pg_database as d
       where has_database_privilege(r.name, d.datname, 'connect')
     )
 select r_name, comment
@@ -967,8 +987,9 @@ declare
   global_roles constant mgr.rolname_and_comment[] := (
     select array_agg((r.rolname, c.description)::mgr.rolname_and_comment order by r.rolname)
     from
-      pg_roles r
-      inner join pg_shdescription c
+      pg_roles as r
+      inner join
+      pg_shdescription as c
       on r.oid = c.objoid
     where c.classoid = 1260
     and r.rolname in ('yugabyte', 'clstr$mgr', 'clstr$developer'));
@@ -1030,8 +1051,11 @@ select
   end, 
   o.kind, 
   c.rank
-from mgr.schema_objects o
-inner join candidates c using(name)
+from
+  mgr.schema_objects as o
+  inner join
+  candidates as c
+  using(name)
 where o.schema = 'mgr'
 and o.kind in ('view', 'function');
 
