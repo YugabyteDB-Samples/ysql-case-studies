@@ -1,21 +1,21 @@
 \t on
-select rule_off('08-query-the-j-books-table', 'level_3');
+select client_safe.rule_off('08-query-the-j-books-table', 'level_3');
 \t off
 --------------------------------------------------------------------------------
 -- Set up psql "colon-shortcuts" for the key names used here.
-select title()
+select json.title()
 \gset k_
 
-select year()
+select json.year()
 \gset k_
 
-select authors()
+select json.authors()
 \gset k_
 
-select given_name()
+select json.given_name()
 \gset k_
 
-select family_name()
+select json.family_name()
 \gset k_
 
 --------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ with c(year, title) as (
   select
     (book_info->>:k_year)::int,
     book_info->>:k_title
-  from j_books)
+  from json.j_books)
 select year, title
 from c
 where year between $1 and $2
@@ -43,7 +43,7 @@ explain execute q1(2000, 2010);
 -- Title
 prepare q2(text) as
 select book_info->>:k_title as title
-from j_books
+from json.j_books
 where to_tsvector('english', book_info->>:k_title) @@ to_tsquery('english', $1);
 
 execute q2('time');
@@ -54,7 +54,7 @@ explain execute q2('contrary');
 -- Querying for an author's "given name" or "family name" within the "authors" array
 -- is hard. Do some research first and look at a couple of techniques.
 
--- This is no good for the "j_books" JSON schema.
+-- This is no good for the "json.j_books" JSON schema.
 with c(k, j) as (
   values
     (1, '["Jane", "Mary", "Fred"]'::jsonb),
@@ -71,7 +71,7 @@ where j ? 'Mary';
 select
   k,
   (book_info->:k_authors->0)->>:k_family_name as first_author_family_name
-from j_books
+from json.j_books
 order by k;
 /*
 --------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ order by k;
 --------------------------------------------------------------------------------
 */;
 
--- It would be straightforward to extend the notion of the j_books_keys()
+-- It would be straightforward to extend the notion of the json.j_books_keys()
 -- function with a variant that returns double-quoted key names for queries
 -- like the ones that immediately follow this comment. Doing so would be useful
 -- in real application code. But concatinating such values into the "text"
@@ -119,21 +119,21 @@ order by k;
 select
   k,
   (book_info->:k_authors)::text as authors
-from j_books
+from json.j_books
 where book_info->:k_authors @> '[{"family name": "Kernighan"}]'::jsonb;
 
 -- Counter-example: searching at the wrong level in the document tree.
 select
   k,
   (book_info->:k_authors)::text as authors
-from j_books
+from json.j_books
 where book_info @> ('{"family name": "Kernighan"}')::jsonb;
 
 -- Counter-counter-example (but you'd never do this):
 select
   k,
   book_info
-from j_books
+from json.j_books
 where book_info @> ('{"authors": [{"given name": "Amy", "family name": "Tan"}]}')::jsonb;
 
 -- Use "prepare" to focus on the real test-value of interest.
@@ -141,7 +141,7 @@ prepare q3(text) as
 select
   k,
   (book_info->:k_authors)::text as authors
-from j_books
+from json.j_books
 where book_info->:k_authors @> ('[{"family name": "'||$1||'"}]')::jsonb
 order by k;
 
@@ -153,7 +153,7 @@ explain execute q3('Sting');
 --------------------------------------------------------------------------------
 -- Finally, expand the "authors" array using jsonb_array_elements()
 -- with CROSS JOIN LATERAL and WITH ORDINALITY.
-create view v(k, title, pos, given_name, family_name) as
+create view pg_temp.v(k, title, pos, given_name, family_name) as
 with
   c1 (k, title, pos, obj) as (
     select
@@ -162,7 +162,7 @@ with
       arr.pos,
       arr.obj
     from
-    j_books
+    json.j_books
     cross join lateral
     jsonb_array_elements(book_info->:k_authors) with ordinality as arr(obj, pos))
 select
@@ -179,7 +179,7 @@ select
   pos,
   given_name,
   family_name
-from v
+from pg_temp.v
 where given_name is not null
 order by k, pos;
 
@@ -190,7 +190,7 @@ select
   pos,
   given_name,
   family_name
-from v
+from pg_temp.v
 where family_name = $1
 order by k, pos;
 

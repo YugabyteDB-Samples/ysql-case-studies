@@ -10,23 +10,25 @@
 /*
 ------------------------------------------------------------------------------------------
 
-  drop procedure if exists populate_t(
+  drop procedure if exists covid.populate_t(
     int,  double precision,  double precision,  double precision,  double precision)
     cascade;
 
-  drop table if exists t cascade;
-  create table t(
+  drop table if exists covid.t cascade;
+
+  create table covid.t(
     k      int primary key,
     x      double precision,
     y      double precision,
     delta  double precision);
 
-  create procedure populate_t(
+  create procedure covid.populate_t(
     no_of_rows  in int,
     slope       in double precision,
     intercept   in double precision,
     mean        in double precision,
     stddev      in double precision)
+    set search_path = pg_catalog, covid, extensions, pg_temp
     language plpgsql
   as $body$
   begin
@@ -57,7 +59,7 @@
   end;
   $body$;
 
-  call populate_t(
+  call covid.populate_t(
     no_of_rows  => 100,
     mean        =>  0.0,
     stddev      => 5.0,
@@ -65,14 +67,14 @@
     intercept   =>  131.4);
 
   \t on
-  select rule_off('Synthetic data analysis results', 'level_3');
+  select client_safe.rule_off('Synthetic data analysis results', 'level_3');
   \t off
   with a as (
     select
       regr_r2       ((y + delta), x) as r2,
       regr_slope    ((y + delta), x) as s,
       regr_intercept((y + delta), x) as i
-    from t)
+    from covid.t)
   select
     to_char(r2, '0.99') as r2,
     to_char(s,  '90.9') as s,
@@ -80,13 +82,13 @@
   from a;
 
   \t on
-  select rule_off(array[
+  select client_safe.rule_off(array[
     'Synthetic data analysis results',
     'Expect slightly different results for each run ''cos data is generatated by "normal_rand()"',
     'Copy to ".csv" file for graphing.']);
   select
     round(x)::text||','||round(y + delta)::text
-  from t
+  from covid.t
   where
     x > 60        and
     x < 95        and

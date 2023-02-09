@@ -1,5 +1,6 @@
-create function pure_sql_version(max_c1 in int)
+create function cte_basics_proc.pure_sql_version(max_c1 in int)
   returns table(c1 int, c2 int)
+  set search_path = pg_catalog, pg_temp
   language sql
 as $body$
   with
@@ -22,4 +23,4 @@ as $body$
   select c1, c2 from r order by c1, c2;
 $body$;
 
-select c1, c2 from pure_sql_version(4) order by c1, c2;
+select c1, c2 from cte_basics_proc.pure_sql_version(4) order by c1, c2;

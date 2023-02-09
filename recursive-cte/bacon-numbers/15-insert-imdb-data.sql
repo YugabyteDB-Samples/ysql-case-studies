@@ -17,35 +17,35 @@
   be quite long, you can use a symbolic link (which "\copy" does understand).
 */;
 
-delete from edges;
-delete from cast_members;
-delete from actors;
-delete from movies;
+delete from bacon.edges;
+delete from bacon.cast_members;
+delete from bacon.actors;
+delete from bacon.movies;
 
-alter table cast_members drop constraint cast_members_fk1;
-alter table cast_members drop constraint cast_members_fk2;
+alter table bacon.cast_members drop constraint cast_members_fk1;
+alter table bacon.cast_members drop constraint cast_members_fk2;
 
-\copy cast_members(actor, movie) from '/etc/ysql-case-studies/recursive-cte/bacon-numbers/imdb-data/imdb.small.txt' with delimiter '|';
+\copy bacon.cast_members(actor, movie) from '/etc/ysql-case-studies/recursive-cte/bacon-numbers/imdb-data/imdb.small.txt' with delimiter '|';
 
-insert into actors select distinct actor from cast_members;
-insert into movies select distinct movie from cast_members;
+insert into bacon.actors select distinct actor from bacon.cast_members;
+insert into bacon.movies select distinct movie from bacon.cast_members;
 
-alter table cast_members
+alter table bacon.cast_members
 add constraint cast_members_fk1 foreign key (actor)
-  references actors(actor)
+  references bacon.actors(actor)
   match full
   on delete cascade
   on update restrict;
 
-alter table cast_members
+alter table bacon.cast_members
 add constraint cast_members_fk2 foreign key(movie)
-  references movies(movie)
+  references bacon.movies(movie)
   match full
   on delete cascade
   on update restrict;
 
 \t on
-select 'count(*) from cast_members... '||to_char(count(*), '9,999') from cast_members;
-select 'count(*) from actors......... '||to_char(count(*), '9,999') from actors;
-select 'count(*) from movies......... '||to_char(count(*), '9,999') from movies;
+select 'count(*) from cast_members... '||to_char(count(*), '9,999') from bacon.cast_members;
+select 'count(*) from actors......... '||to_char(count(*), '9,999') from bacon.actors;
+select 'count(*) from movies......... '||to_char(count(*), '9,999') from bacon.movies;
 \t off

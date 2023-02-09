@@ -1,14 +1,13 @@
-drop procedure if exists xform_to_covidcast_fb_survey_results() cascade;
-
-create procedure xform_to_covidcast_fb_survey_results()
+create procedure covid.xform_to_covidcast_fb_survey_results()
+  set search_path = pg_catalog, covid, pg_temp
   language plpgsql
 as $body$
 declare
   -- Check that the staging tables have the expected names for their roles.
   -- Each subquery assignemnt will fail if doesn't return exactly one row.
-  mask_wearers_name    text not null := (select staging_table from covidcast_names where staging_table = 'mask_wearers');
-  symptoms_name        text not null := (select staging_table from covidcast_names where staging_table = 'symptoms');
-  cmnty_symptoms_name  text not null := (select staging_table from covidcast_names where staging_table = 'cmnty_symptoms');
+  mask_wearers_name    text not null := (select staging_table from covid.covidcast_names where staging_table = 'mask_wearers');
+  symptoms_name        text not null := (select staging_table from covid.covidcast_names where staging_table = 'symptoms');
+  cmnty_symptoms_name  text not null := (select staging_table from covid.covidcast_names where staging_table = 'cmnty_symptoms');
 
   stmt text not null := '
     insert into covidcast_fb_survey_results(
@@ -27,9 +26,7 @@ declare
       inner join %3I as c using (time_value, geo_value)';
 
 begin
-  drop table if exists covidcast_fb_survey_results cascade;
-
-  create table covidcast_fb_survey_results(
+  create table covid.covidcast_fb_survey_results(
     survey_date                 date     not null,
     state                       text     not null,
     mask_wearing_pct            numeric  not null,

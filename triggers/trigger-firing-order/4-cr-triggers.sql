@@ -1,8 +1,9 @@
-create procedure create_trigger(
+create procedure trg_firing_order.create_trigger(
   tg_table_name  in text,
   tg_when        in text,
   tg_level       in text)
   security definer
+  set search_path = pg_catalog, trg_firing_order, pg_temp
   language plpgsql
 as $body$
 declare
@@ -12,7 +13,7 @@ declare
         %2$s insert or update or delete
         on %1$I
         for each %3$s
-      execute function generic_trg()
+      execute function trg_firing_order.generic_trg()
     ',
     tg_table_name, tg_when, tg_level);
 begin
@@ -22,12 +23,12 @@ $body$;
 
 --                      table      when      level
 
-call create_trigger('masters', 'before', 'statement');
-call create_trigger('masters', 'before', 'row'      );
-call create_trigger('masters', 'after',  'row'      );
-call create_trigger('masters', 'after',  'statement');
+call trg_firing_order.create_trigger('masters', 'before', 'statement');
+call trg_firing_order.create_trigger('masters', 'before', 'row'      );
+call trg_firing_order.create_trigger('masters', 'after',  'row'      );
+call trg_firing_order.create_trigger('masters', 'after',  'statement');
 
-call create_trigger('details', 'before', 'statement');
-call create_trigger('details', 'before', 'row'      );
-call create_trigger('details', 'after',  'row'      );
-call create_trigger('details', 'after',  'statement');
+call trg_firing_order.create_trigger('details', 'before', 'statement');
+call trg_firing_order.create_trigger('details', 'before', 'row'      );
+call trg_firing_order.create_trigger('details', 'after',  'row'      );
+call trg_firing_order.create_trigger('details', 'after',  'statement');

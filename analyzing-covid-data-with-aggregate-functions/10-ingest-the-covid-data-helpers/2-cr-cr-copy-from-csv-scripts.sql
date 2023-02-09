@@ -1,12 +1,11 @@
-drop function if exists cr_copy_from_scripts(int) cascade;
-
-create function cr_copy_from_scripts(which in int)
+create function covid.cr_copy_from_scripts(which in int)
   returns text
+  set search_path = pg_catalog, covid, pg_temp
   language plpgsql
 as $body$
 <<b>>declare
   copy_from_csv constant text :=
-    $$\copy %I from %L with (format 'csv', header true);$$;
+    $$\copy covid.%I from %L with (format 'csv', header true);$$;
 
   csv_file       text not null := '';
   staging_table  text not null := '';

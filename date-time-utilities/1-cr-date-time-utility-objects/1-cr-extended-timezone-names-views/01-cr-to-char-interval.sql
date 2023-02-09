@@ -21,7 +21,7 @@
 
 create function ext_tz_names.to_char_interval(i in interval)
   returns text
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -69,7 +69,7 @@ call mgr.grant_priv( 'execute', 'function', 'ext_tz_names.to_char_interval(inter
 \t on
 select ext_tz_names.to_char_interval( '10:00'::interval);
 select ext_tz_names.to_char_interval( '09:30'::interval);
-select to_char_interval( '00:00'::interval);
+select ext_tz_names.to_char_interval( '00:00'::interval);
 select ext_tz_names.to_char_interval('-09:30'::interval);
 select ext_tz_names.to_char_interval('-10:00'::interval);
 \t off

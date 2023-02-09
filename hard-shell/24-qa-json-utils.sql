@@ -4,7 +4,7 @@ call mgr.set_role('qa');
 \pset null '<NULL>'
 
 ----------------------------------------------------------------------------------------------------
-select  rule_off('POSITIVE TESTS for json_utils.json_object_keys_ok()', 'level_2');
+select  client_safe.rule_off('POSITIVE TESTS for json_utils.json_object_keys_ok()', 'level_2');
 
 select qa_json_utils.json_object_keys_ok_outcome(
   'OK',
@@ -42,7 +42,7 @@ select qa_json_utils.json_object_keys_ok_outcome(
   $$('a', 'string', true), ('b', 'number', false), ('c', 'boolean', true), ('d', 'string', false)$$);
 
 ----------------------------------------------------------------------------------------------------
-select  rule_off('NEGATIVE TESTS for json_utils.json_object_keys_ok()', 'level_2');
+select  client_safe.rule_off('NEGATIVE TESTS for json_utils.json_object_keys_ok()', 'level_2');
 
 select qa_json_utils.json_object_keys_ok_outcome(
   'Input is SQL NULL',

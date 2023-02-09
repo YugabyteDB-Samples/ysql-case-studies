@@ -1,30 +1,31 @@
-create procedure create_path_table(name in text, temp in boolean)
+create procedure bacon.create_path_table(name in text, temp in boolean)
+  set search_path = pg_catalog, bacon, pg_temp
   language plpgsql
 as $body$
 declare
   drop_table constant text := '
-    drop table if exists ? cascade';
+    drop table if exists %I cascade';
 
   create_table constant text := '
-    create table ?(
+    create table bacon.%I(
       k     serial  primary key,
       path  text[]  not null)';
 
   create_temp_table constant text := '
-    create temporary table ?(
+    create temporary table %I(
       k     serial  primary key,
       path  text[]  not null)';
 
   cache_sequence constant text := '
-    alter sequence ?_k_seq  cache 100000';
+    alter sequence %I cache 100000';
 begin
-  execute replace(drop_table,     '?', name);
+  execute format(drop_table, name);
   case temp
-    when true then execute replace(create_temp_table, '?', name);
-    else           execute replace(create_table,      '?', name);
+    when true then execute format(create_temp_table, name);
+    else           execute format(create_table,      name);
   end case;
-  execute replace(cache_sequence, '?', name);
+  execute format(cache_sequence, name||'_k_seq');
 end;
 $body$;
 
-call create_path_table('raw_paths', false);
+call bacon.create_path_table('raw_paths', false);

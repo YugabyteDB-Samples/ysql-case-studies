@@ -1,36 +1,36 @@
-create or replace view covidcast_fb_survey_results_v as
+create view covid.covidcast_fb_survey_results_v as
 select
   survey_date,
   state,
   mask_wearing_pct,
   cmnty_symptoms_pct as symptoms_pct
-from covidcast_fb_survey_results;
+from covid.covidcast_fb_survey_results;
 
 \t on
-select rule_off('Basic COVID data analysis.', 'level_2');
-select rule_off('Symptoms by state for survey date = 2020-10-21.', 'level_3');
+select client_safe.rule_off('Basic COVID data analysis.', 'level_2');
+select client_safe.rule_off('Symptoms by state for survey date = 2020-10-21.', 'level_3');
 \t off
 select
   round(mask_wearing_pct)  as "% wearing mask",
   round(symptoms_pct)      as "% with symptoms",
   state
-from covidcast_fb_survey_results_v
+from covid.covidcast_fb_survey_results_v
 where survey_date = to_date('2020-10-21', 'yyyy-mm-dd')
 order by 1, 2, 3;
 
 \t on
-select rule_off('Symptoms by state, overall average.', 'level_3');
+select client_safe.rule_off('Symptoms by state, overall average.', 'level_3');
 \t off
 select
   round(avg(mask_wearing_pct))  as "% wearing mask",
   round(avg(symptoms_pct))      as "% with symptoms",
   state
-from covidcast_fb_survey_results_v
+from covid.covidcast_fb_survey_results_v
 group by state
 order by 1, 2, 3;
 
 \t on
-select rule_off('Daily regression analysis report.', 'level_3');
+select client_safe.rule_off('Daily regression analysis report.', 'level_3');
 \t off
 with a as (
   select
@@ -40,7 +40,7 @@ with a as (
     regr_r2       (symptoms_pct, mask_wearing_pct) as r2,
     regr_slope    (symptoms_pct, mask_wearing_pct) as s,
     regr_intercept(symptoms_pct, mask_wearing_pct) as i
-  from covidcast_fb_survey_results_v
+  from covid.covidcast_fb_survey_results_v
   group by survey_date)
 select
   to_char(survey_date,      'mm/dd')  as survey_date,
@@ -53,14 +53,14 @@ from a
 order by survey_date;
 
 \t on
-select rule_off('Regression analysis report for survey date = 2020-10-21.', 'level_3');
+select client_safe.rule_off('Regression analysis report for survey date = 2020-10-21.', 'level_3');
 \t off
 with a as (
   select
     max(survey_date)                               as survey_date,
     regr_slope    (symptoms_pct, mask_wearing_pct) as s,
     regr_intercept(symptoms_pct, mask_wearing_pct) as i
-  from covidcast_fb_survey_results_v
+  from covid.covidcast_fb_survey_results_v
   where survey_date = to_date('2020-10-21', 'yyyy-mm-dd'))
 select
   to_char(survey_date,      'mm/dd')  as survey_date,
@@ -72,7 +72,7 @@ with a as (
   select regr_r2 (symptoms_pct, mask_wearing_pct) as r2,
   regr_slope    (symptoms_pct, mask_wearing_pct) as s,
   regr_intercept(symptoms_pct, mask_wearing_pct) as i
-  from covidcast_fb_survey_results_v
+  from covid.covidcast_fb_survey_results_v
   group by survey_date)
 select
   to_char(avg(r2), '0.99') as "avg(R-squared)",
@@ -81,12 +81,12 @@ select
 from a;
 
 \t on
-select rule_off(array[
+select client_safe.rule_off(array[
   'COVID data analysis results for graphing.',
   'Copy these results to a ".csv" file for graphing']);
 select
   round(mask_wearing_pct)::text||','||round(symptoms_pct)::text
-from covidcast_fb_survey_results_v
+from covid.covidcast_fb_survey_results_v
 where survey_date = to_date('2020-10-21', 'yyyy-mm-dd')
 order by 1;
 \t off

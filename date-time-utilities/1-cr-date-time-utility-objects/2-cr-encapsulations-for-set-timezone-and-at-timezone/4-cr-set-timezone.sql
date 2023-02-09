@@ -15,6 +15,7 @@ call mgr.revoke_all_from_public('procedure', 'ext_tz_names.set_timezone(text)');
 call mgr.grant_priv( 'execute', 'procedure', 'ext_tz_names.set_timezone(text)', 'public');
 
 create procedure ext_tz_names.set_timezone(i in interval)
+  set search_path = pg_catalog, pg_temp
   language plpgsql
 as $body$
 begin

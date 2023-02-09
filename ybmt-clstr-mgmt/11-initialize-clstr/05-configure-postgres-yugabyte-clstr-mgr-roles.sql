@@ -15,7 +15,7 @@ alter role postgres with
   login password null;
 
 -- Just in case an intervention needs "posgres" to be allowed to start sessions 
-alter role postgres set search_path = client_safe, dt_utils, mgr, extensions, pg_catalog, pg_temp;
+alter role postgres set search_path = pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp;
 --------------------------------------------------------------------------------
 
 alter role yugabyte with
@@ -28,7 +28,7 @@ alter role yugabyte with
   connection limit 0
   login password 'x';
 
-alter role yugabyte set search_path = client_safe, dt_utils, mgr, extensions, pg_catalog, pg_temp;
+alter role yugabyte set search_path = pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp;
 --------------------------------------------------------------------------------
 
 alter role clstr$mgr with
@@ -75,7 +75,7 @@ grant pg_signal_backend to clstr$mgr;
 -- Will revoke these privileges as soon as they're no longer needed.
 grant connect on database yugabyte to clstr$mgr;
 grant create  on database yugabyte to clstr$mgr;
-alter role clstr$mgr set search_path = client_safe, dt_utils, mgr, extensions, pg_catalog, pg_temp;
+alter role clstr$mgr set search_path = pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp;
 --------------------------------------------------------------------------------
 
 alter role clstr$developer with

@@ -1,4 +1,5 @@
-create procedure assert_model_ok(p in interval_parameterization_t)
+create procedure date_time_tests.assert_model_ok(p in dt_utils.interval_parameterization_t)
+  set search_path = pg_catalog, date_time_tests, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare

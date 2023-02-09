@@ -13,7 +13,7 @@ begin
   for s in (
     select t.schema from mgr.temp_schemas as t)
   loop
-    execute format('drop schema %I', s); 
+    execute format('drop schema %I cascade', s); 
   end loop;
 end;
 $body$;

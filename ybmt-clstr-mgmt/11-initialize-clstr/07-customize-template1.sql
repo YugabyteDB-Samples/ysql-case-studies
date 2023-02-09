@@ -45,7 +45,7 @@ grant usage on schema extensions to public;
 grant execute on procedure mgr.set_tenant_database_setting(text, text, text) to clstr$mgr;
 
 \ir ../12-schema-objects-for-template1/14-cr-drop-all-temp-schemas.sql
-grant execute on procedure mgr.drop_all_temp_schemas() to clstr$mgr with grant option;
+grant execute on procedure mgr.drop_all_temp_schemas() to clstr$mgr;
 
 /*
   Experiment by commenting this out.

@@ -1,4 +1,4 @@
-\t on \\ select rule_off('The "extended_timezone_names" views', 'level_2'); \t off
+\t on \\ select client_safe.rule_off('The "extended_timezone_names" views', 'level_2'); \t off
 
 \ir 1-canonical-no-country-no-dst.sql
 \ir 2-canonical-real-country-no-dst.sql

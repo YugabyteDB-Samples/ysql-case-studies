@@ -1,5 +1,6 @@
-create function fibonacci_series_cte(max_x in int)
+create function cte_basics_fib.fibonacci_series_cte(max_x in int)
   returns table(x int, f int)
+  set search_path = pg_catalog, pg_temp
   language sql
 as $body$
   with
@@ -22,5 +23,5 @@ $body$;
 
 -- 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144
 select x, f as "fib(x)"
-from fibonacci_series_cte(12)
+from cte_basics_fib.fibonacci_series_cte(12)
 order by x;

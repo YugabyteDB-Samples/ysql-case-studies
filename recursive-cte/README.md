@@ -1,13 +1,13 @@
 # "recursive-cte"
 
-**NOTE:** Make sure that you read the section _"Working with just a single case study"_ in the _"README.md"_ on the _"ybmt-clstr-mgmt"_ directory before running this case-study.
+**NOTE:** Make sure that you read the section _"Working with just a single case-study"_ in the _"README.md"_ on the _"ybmt-clstr-mgmt"_ directory before running this case-study.
 
 There are two small demonstrations and two case-studies under this directory. They complement the material that the following sections, within the YSQL documentation section [The recursive CTE](https://docs.yugabyte.com/preview/api/ysql/the-sql-language/with-clause/recursive-cte/), cover:
 
 - [The recursive CTE](https://docs.yugabyte.com/preview/api/ysql/the-sql-language/with-clause/recursive-cte/) &gt; [Pseudocode definition of the semantics](https://docs.yugabyte.com/preview/api/ysql/the-sql-language/with-clause/recursive-cte/#pseudocode-definition-of-the-semantics)
 
-- [Case study: using a recursive CTE to traverse an employee hierarchy](https://docs.yugabyte.com/preview/api/ysql/the-sql-language/with-clause/emps-hierarchy/)
-- [Case study: using a recursive CTE to compute Bacon Numbers for actors listed in the IMDb](https://docs.yugabyte.com/preview/api/ysql/the-sql-language/with-clause/bacon-numbers/)
+- [Case-study: using a recursive CTE to traverse an employee hierarchy](https://docs.yugabyte.com/preview/api/ysql/the-sql-language/with-clause/emps-hierarchy/)
+- [Case-study: using a recursive CTE to compute Bacon Numbers for actors listed in the IMDb](https://docs.yugabyte.com/preview/api/ysql/the-sql-language/with-clause/bacon-numbers/)
 
 You can find the code under the following directories:
 

@@ -1,16 +1,13 @@
-call create_path_table('previous_paths', false);
-call create_path_table('temp_paths',     false);
+call bacon.create_path_table('previous_paths', false);
+call bacon.create_path_table('temp_paths',     false);
 
-create procedure find_paths(start_node in text, prune in boolean)
+create procedure bacon.find_paths(start_node in text, prune in boolean)
+  set search_path = pg_catalog, bacon, pg_temp
   language plpgsql
 as $body$
-<<b>>declare
+declare
   n int not null := 0;
 begin
-  -- Will be created at the end when "prune" is true.
-  drop index if exists raw_paths_terminal_unq cascade;
-  commit;
-
   -- Emulate the non-recursive term.
   delete from raw_paths;
   delete from previous_paths;
@@ -58,11 +55,5 @@ begin
     insert into previous_paths(path) select t.path from temp_paths t;
     insert into raw_paths (path) select t.path from temp_paths t;
   end loop;
-  commit;
-
-  if prune then
-    create unique index raw_paths_terminal_unq on raw_paths(terminal(path));
-    commit;
-  end if;
-end b;
+end;
 $body$;

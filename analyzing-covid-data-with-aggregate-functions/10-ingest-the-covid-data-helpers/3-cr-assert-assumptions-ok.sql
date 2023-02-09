@@ -1,6 +1,5 @@
-drop procedure if exists assert_assumptions_ok(date, date) cascade;
-
-create procedure assert_assumptions_ok(start_survey_date in date, end_survey_date in date)
+create procedure covid.assert_assumptions_ok(start_survey_date in date, end_survey_date in date)
+  set search_path = pg_catalog, covid, pg_temp
   language plpgsql
 as $body$
 declare
@@ -17,26 +16,29 @@ declare
 
   expected_state_count constant int := cardinality(expected_states);
 
+  signal_qry constant text not null :=
+    'select distinct signal from covid.%I';
+
   actual_states_qry constant text not null :=
-    'select array_agg(distinct geo_value order by geo_value) from ?';
+    'select array_agg(distinct geo_value order by geo_value) from %I';
 
   actual_states text[] not null := '{}';
 
   expected_dates date[] not null := array[start_survey_date];
 
   actual_dates_qry constant text not null :=
-    'select array_agg(distinct time_value order by time_value) from ?';
+    'select array_agg(distinct time_value order by time_value) from %I';
 
   actual_dates date[] not null := '{}';
 
   expected_date_count int not null := 0;
 
-  names constant covidcast_names[] not null := (
-    select array_agg((csv_file, staging_table, signal)::covidcast_names) from covidcast_names);
+  names constant covid.covidcast_names[] not null := (
+    select array_agg((csv_file, staging_table, signal)::covid.covidcast_names) from covid.covidcast_names);
 
   expected_total_count int not null := 0;
 
-  r covidcast_names not null := ('', '', '');
+  r covid.covidcast_names not null := ('', '', '');
   d  date     not null := start_survey_date;
   t  text     not null := '';
   n  int      not null := 0;
@@ -52,8 +54,8 @@ begin
 
   foreach r in array names loop
 
-    -- signal: One of covidcast_names.signal.
-    execute replace('select distinct signal from ?', '?', r.staging_table) into t;
+    -- signal: One of covid.covidcast_names.signal.
+    execute format(signal_qry, r.staging_table) into t;
     assert t = r.signal, 'signal from '||r.staging_table||' <> "'||r.signal||'"';
 
     -- geo_type: state.
@@ -73,7 +75,7 @@ begin
     assert n = expected_total_count, 'count from '||r.staging_table||' <> expected_total_count';
 
     -- geo_value: Check list of actual distinct states is as expected.
-    execute replace(actual_states_qry, '?', r.staging_table) into actual_states;
+    execute format(actual_states_qry, r.staging_table) into actual_states;
     assert actual_states = expected_states, 'actual_states <> expected_states';
 
     -- geo_value: Expected distinct state (i.e. "geo_value") count(*).
@@ -81,7 +83,7 @@ begin
     assert n = expected_state_count, 'distinct state count per survey date from '||r.staging_table||' <> expected_state_count';
 
     -- time_value: Check list of actual distinct survey dates is as expected.
-    execute replace(actual_dates_qry, '?', r.staging_table) into actual_dates;
+    execute format(actual_dates_qry, r.staging_table) into actual_dates;
     assert actual_dates = expected_dates, 'actual_dates <> expected_dates';
 
     -- time_value: Expected distinct survey date (i.e. "time_value") count(*).
@@ -118,15 +120,15 @@ begin
     chk_code_and_geo_values constant text := $$
     with
       a1 as (
-        select to_char(code, '90')||' '||geo_value as v from ?1),
+        select to_char(code, '90')||' '||geo_value as v from %I),
       v1 as (
         select v, count(v) as n from a1 group by v),
       a2 as (
-        select to_char(code, '90')||' '||geo_value as v from ?2),
+        select to_char(code, '90')||' '||geo_value as v from %I),
       v2 as (
         select v, count(v) as n from a2 group by v),
       a3 as (
-        select to_char(code, '90')||' '||geo_value as v from ?3),
+        select to_char(code, '90')||' '||geo_value as v from %I),
       v3 as (
         select v, count(v) as n from a3 group by v),
 
@@ -146,11 +148,9 @@ begin
 
     select count(*) from r$$;
   begin
-    execute replace(replace(replace(chk_code_and_geo_values, 
-    '?1', names[1].staging_table),
-    '?2', names[2].staging_table),
-    '?3', names[3].staging_table
-    ) into n;
+    execute format(chk_code_and_geo_values,
+      names[1].staging_table, names[2].staging_table, names[3].staging_table)
+      into n;
 
     assert n = 0, '(code, geo_value) tuples from the three staging tables disagree';
   end;
@@ -160,24 +160,24 @@ begin
     chk_putative_pks constant text := '
       with
         v1 as (
-          select geo_value, time_value from ?1
+          select geo_value, time_value from %1$I
           except
-          select geo_value, time_value from ?2),
+          select geo_value, time_value from %2$I),
 
         v2 as (
-          select geo_value, time_value from ?2
+          select geo_value, time_value from %2$I
           except
-          select geo_value, time_value from ?1),
+          select geo_value, time_value from %1$I),
 
         v3 as (
-          select geo_value, time_value from ?1
+          select geo_value, time_value from %1$I
           except
-          select geo_value, time_value from ?3),
+          select geo_value, time_value from %3$I),
 
         v4 as (
-          select geo_value, time_value from ?3
+          select geo_value, time_value from %3$I
           except
-          select geo_value, time_value from ?1),
+          select geo_value, time_value from %1$I),
 
         v5 as (
           select geo_value, time_value from v1
@@ -190,18 +190,16 @@ begin
 
       select count(*) from v5';
   begin
-    execute replace(replace(replace(chk_putative_pks,
-        '?1', names[1].staging_table),
-        '?2', names[2].staging_table),
-        '?3', names[3].staging_table)
+    execute format(chk_putative_pks,
+      names[1].staging_table, names[2].staging_table, names[3].staging_table)
       into n;
 
     assert n = 0, 'pk values from ' ||
-      replace(replace(replace('?1, ?2, ?3',
-        '?1', names[1].staging_table),
-        '?2', names[2].staging_table),
-        '?3', names[3].staging_table) ||
-      ' do not line up';
+      format('%I, %I, %I',
+        names[1].staging_table,
+        names[2].staging_table,
+        names[3].staging_table) ||
+        ' do not line up';
   end;
 end;
 $body$;

@@ -1,5 +1,6 @@
-create function interval_mm_dd_ss(p in interval_parameterization_t)
+create function date_time_tests.interval_mm_dd_ss(p in interval_parameterization_t)
   returns interval_mm_dd_ss_t
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare

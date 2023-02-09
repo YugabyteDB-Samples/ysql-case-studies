@@ -4,43 +4,47 @@
 \t on
 select '------------------------------------------------------------';
 select 'Seed: Kevin Bacon';
-call find_paths('Kevin Bacon (I)', true);
+drop index if exists bacon.raw_paths_terminal_unq cascade;
+call bacon.find_paths('Kevin Bacon (I)', true);
+create unique index raw_paths_terminal_unq on bacon.raw_paths(bacon.terminal(path));
 
-select 'total number of pruned paths:            '||count(*)::text from raw_paths;
+select 'total number of pruned paths:            '||count(*)::text from bacon.raw_paths;
 
-select 'Max path length:                         '||max(cardinality(path)) from raw_paths;
+select 'Max path length:                         '||max(cardinality(path)) from bacon.raw_paths;
 
 select 'unreached:                               '||actor
-from actors
+from bacon.actors
 where actor not in (
-  select terminal(path) from raw_paths)
+  select bacon.terminal(path) from bacon.raw_paths)
 order by actor;
 
-select 'Maximum distance match:                  '||terminal(path)
-from raw_paths
+select 'Maximum distance match:                  '||bacon.terminal(path)
+from bacon.raw_paths
 where cardinality(path) = (
-  select max(cardinality(path)) from raw_paths);
+  select max(cardinality(path)) from bacon.raw_paths);
 
-call create_path_table('unq_containing_paths', false);
-call restrict_to_unq_containing_paths('raw_paths', 'unq_containing_paths');
-select 'total number of unique containing paths: '||count(*)::text from unq_containing_paths;
+call bacon.create_path_table('unq_containing_paths', false);
+call bacon.restrict_to_unq_containing_paths('raw_paths', 'unq_containing_paths');
+select 'total number of unique containing paths: '||count(*)::text from bacon.unq_containing_paths;
 
-select t from decorated_paths_report('raw_paths', 'Christopher Nolan');
+select t from bacon.decorated_paths_report('raw_paths', 'Christopher Nolan');
 
 select '------------------------------------------------------------';
 select 'Seed: Christopher Nolan';
-call find_paths('Christopher Nolan', true);
+drop index if exists bacon.raw_paths_terminal_unq cascade;
+call bacon.find_paths('Christopher Nolan', true);
+create unique index raw_paths_terminal_unq on bacon.raw_paths(bacon.terminal(path));
 
-select 'total number of pruned paths:            '||count(*)::text from raw_paths;
+select 'total number of pruned paths:            '||count(*)::text from bacon.raw_paths;
 
-select 'Max path length:                         '||max(cardinality(path)) from raw_paths;
+select 'Max path length:                         '||max(cardinality(path)) from bacon.raw_paths;
 
 select 'unreached:                               '||actor
-from actors
+from bacon.actors
 where actor not in (
-  select terminal(path) from raw_paths)
+  select bacon.terminal(path) from bacon.raw_paths)
 order by actor;
 
-select t from decorated_paths_report('raw_paths', 'Kevin Bacon (I)');
+select t from bacon.decorated_paths_report('raw_paths', 'Kevin Bacon (I)');
 
 \t off

@@ -2,13 +2,13 @@
  Create 6 tenant databases
  ==================================================================================================================================
 
- 1273 ms
+ 1205 ms
 
  ==================================================================================================================================
  Drop and re-create those 6 tenant databases
  ==================================================================================================================================
 
- 1766 ms
+ 1808 ms
 
  ==================================================================================================================================
  analyzing-covid-data-with-aggregate-functions
@@ -250,7 +250,7 @@
  95,12
  96,12
 
- analyzing-covid-data-with-aggregate-functions: 182 ms
+ analyzing-covid-data-with-aggregate-functions: 188 ms
 
  ==================================================================================================================================
  recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm
@@ -292,7 +292,7 @@
   4 | 42
   4 | 43
 
- recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm: 33 ms
+ recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm: 30 ms
 
  ==================================================================================================================================
  recursive-cte/basics/fibonacci
@@ -346,7 +346,7 @@
  11 |     89
  12 |    144
 
- recursive-cte/basics/fibonacci: 30 ms
+ recursive-cte/basics/fibonacci: 36 ms
 
  ==================================================================================================================================
  recursive-cte/employee-hierarchy
@@ -457,7 +457,7 @@
 
  doris > fred > mary
 
- recursive-cte/employee-hierarchy: 43 ms
+ recursive-cte/employee-hierarchy: 40 ms
 
  ==================================================================================================================================
  recursive-cte/bacon-numbers
@@ -825,7 +825,7 @@
 
  Nothing survives. So the (so-called) recursion stops.
 
- recursive-cte/bacon-numbers: 441 ms
+ recursive-cte/bacon-numbers: 482 ms
 
  ==================================================================================================================================
  date-time-utilities
@@ -1917,7 +1917,7 @@
  select timezone('MST', '2021-06-07 12:00:00');               > OK
  select '2021-06-07 12:00:00 MST'::timestamptz;               > OK
 
- date-time-utilities: 3215 ms
+ date-time-utilities: 3147 ms
 
  ==================================================================================================================================
  json-relational-equivalence
@@ -2390,7 +2390,7 @@
 
  - - 15-assert-j-books-r-books-j-view-identical - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- json-relational-equivalence: 116 ms
+ json-relational-equivalence: 108 ms
 
  ==================================================================================================================================
  hard-shell
@@ -2573,8 +2573,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (883c97e1-1079-444c-99d3-4b7772b0aed2,                                     +
-                         91dba8aa-f7f9-430c-942f-e3cd730d4259, small portable workbench).
+ pg_exception_detail:  Failing row contains (b9b79500-d156-4f65-99c6-9f579a82d817,                                     +
+                         c2f60e19-09ab-4d82-bc66-e4a08e8d96e9, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
@@ -2955,8 +2955,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (8164f2d7-ed98-4527-8386-73a2d27478b0,                                     +
-                         6b165744-bf59-43b1-8325-b830890b2fc8, small portable workbench).
+ pg_exception_detail:  Failing row contains (efe68e92-3915-4d3d-b278-c0e4b0f6eb46,                                     +
+                         b19cd950-790e-4fb2-9da1-22c435341733, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
@@ -2978,7 +2978,7 @@
  
  _______________
 
- hard-shell: 255 ms
+ hard-shell: 243 ms
 
  ==================================================================================================================================
  triggers/trigger-firing-order
@@ -3076,20 +3076,20 @@
  after  update on details    for each statement  >           
 
 -[ RECORD 1 ]-----------------------------------------------------------
-name     | RI_ConstraintTrigger_a_17417
+name     | RI_ConstraintTrigger_a_17441
 tab_name | masters
-def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_17417" A...
+def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_17441" A...
 
--[ RECORD 1 ]--------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER DELETE ON masters FROM details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_cascade_del"()
--[ RECORD 2 ]--------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER INSERT ON details FROM masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_ins"()
--[ RECORD 3 ]--------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER UPDATE ON details FROM masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_upd"()
--[ RECORD 4 ]--------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER UPDATE ON masters FROM details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_noaction_upd"()
+-[ RECORD 1 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER DELETE ON trg_firing_order.masters FROM trg_firing_order.details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_cascade_del"()
+-[ RECORD 2 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER INSERT ON trg_firing_order.details FROM trg_firing_order.masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_ins"()
+-[ RECORD 3 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER UPDATE ON trg_firing_order.details FROM trg_firing_order.masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_upd"()
+-[ RECORD 4 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER UPDATE ON trg_firing_order.masters FROM trg_firing_order.details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_noaction_upd"()
 
- triggers/trigger-firing-order: 81 ms
+ triggers/trigger-firing-order: 64 ms
 
  ==================================================================================================================================
  Tenant databases and tenant roles in tenant database "d1"
@@ -3117,7 +3117,7 @@ definition |  AFTER UPDATE ON masters FROM details NOT DEFERRABLE INITIALLY IMME
                       
  d1$cte_basics_proc   Owns all the objects for the "recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm" case study.
                       
- d1$cte_employees     Owns all the objects for the "recursive-cte/employee-hierarchy" case study.
+ d1$employees         Owns all the objects for the "recursive-cte/employee-hierarchy" case study.
                       
  d1$json              Owns all the objects that demonstrate the non-lossy mutual xform 
                       between a conventional relational representation and a JSON representation 
@@ -3130,5 +3130,5 @@ definition |  AFTER UPDATE ON masters FROM details NOT DEFERRABLE INITIALLY IMME
  End-to-end time
  ==================================================================================================================================
 
- 7.57 ss
+ 7.55 ss
 

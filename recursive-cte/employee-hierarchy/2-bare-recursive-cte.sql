@@ -1,4 +1,4 @@
-create view top_down_simple(depth, mgr_name, name) as
+create view employees.top_down_simple(depth, mgr_name, name) as
 with
   recursive hierarchy_of_emps(depth, mgr_name, name) as (
     -- Non-recursive term.
@@ -9,7 +9,7 @@ with
         1,
         '-',
         name
-      from emps             
+      from employees.emps             
       where mgr_name is null
     )
     union all
@@ -25,7 +25,7 @@ with
         e.mgr_name,
         e.name
       from
-      emps as e
+      employees.emps as e
       inner join
       hierarchy_of_emps as h on e.mgr_name = h.name 
     )
@@ -40,7 +40,7 @@ select
   depth,
   mgr_name,                                              
   name                    
-from top_down_simple
+from employees.top_down_simple
 order by                                
   depth,
   mgr_name nulls first,

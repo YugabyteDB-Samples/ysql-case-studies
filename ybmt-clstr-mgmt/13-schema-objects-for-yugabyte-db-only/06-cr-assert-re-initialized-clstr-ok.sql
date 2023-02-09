@@ -58,7 +58,7 @@ begin
         assert cardinality(r.config) = 1,
           'Unexpected: "cardinality(r.config)" for "postgres": '||
           cardinality(r.config)::text;
-        assert (r.config)[1] = 'search_path=client_safe, dt_utils, mgr, extensions, pg_catalog, pg_temp',
+        assert (r.config)[1] = 'search_path=pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp',
           'Unexpected for "postgres": '||(r.config)[1];
 
       when 'yugabyte' then
@@ -73,7 +73,7 @@ begin
         assert cardinality(r.config) = 1,
           'Unexpected: "cardinality(r.config)" for "yugabyte": '||
           cardinality(r.config)::text;
-        assert (r.config)[1] = 'search_path=client_safe, dt_utils, mgr, extensions, pg_catalog, pg_temp',
+        assert (r.config)[1] = 'search_path=pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp',
           'Unexpected for "yugabyte": '||(r.config)[1];
 
       when 'clstr$mgr' then
@@ -88,7 +88,7 @@ begin
         assert cardinality(r.config) = 1,
           'Unexpected: "cardinality(r.config)" for "clstr$mgr": '||
           cardinality(r.config)::text;
-        assert (r.config)[1] = 'search_path=client_safe, dt_utils, mgr, extensions, pg_catalog, pg_temp',
+        assert (r.config)[1] = 'search_path=pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp',
           'Unexpected for "clstr$mgr": '||(r.config)[1];
 
       when 'clstr$developer' then

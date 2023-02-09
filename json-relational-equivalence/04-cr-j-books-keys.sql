@@ -1,13 +1,14 @@
 \t on
-select rule_off('04-cr-j-books_keys', 'level_3');
+select client_safe.rule_off('04-cr-j-books_keys', 'level_3');
 \t off
 --------------------------------------------------------------------------------
 -- HERE IS THE SINGLE POINT OF DEFINITION FOR THE NAMES AND DATATYPES OF THE BOOKS KEYS.
 -- We need to be able to map a SQL or PL/pgSQL identifer to a name, so we need to
 -- use a composite type.
 
-create function j_books_keys()
-  returns j_books_keys
+create function json.j_books_keys()
+  returns json.j_books_keys
+  set search_path = pg_catalog, json, pg_temp
   language plpgsql
 as $body$
 declare
@@ -34,10 +35,11 @@ end;
 $body$;
 ------------------------------------------------------------------------------------------
 
-create function top_level_keys()
-  returns key_facts[]
-  language plpgsql
+create function json.top_level_keys()
+  returns json.key_facts[]
   immutable
+  set search_path = pg_catalog, json, pg_temp
+  language plpgsql
 as $body$
 declare
   ks constant j_books_keys not null := j_books_keys();
@@ -61,10 +63,11 @@ begin
 end;
 $body$;
 
-create function author_keys()
-  returns key_facts[]
-  language plpgsql
+create function json.author_keys()
+  returns json.key_facts[]
   immutable
+  set search_path = pg_catalog, json, pg_temp
+  language plpgsql
 as $body$
 declare
   ks constant j_books_keys not null := j_books_keys();
@@ -92,50 +95,64 @@ $body$;
     \gset k_
 */;
 
-create function title()
+create function json.title()
   returns text
+  immutable
+  set search_path = pg_catalog, json, pg_temp
   language sql
 as $body$
   select (''''||((j_books_keys()).title).key||'''')::text;
 $body$;
 
-create function isbn()
+create function json.isbn()
   returns text
+  immutable
+  set search_path = pg_catalog, json, pg_temp
   language sql
 as $body$
   select (''''||((j_books_keys()).isbn).key||'''')::text;
 $body$;
 
-create function year()
+create function json.year()
   returns text
+  immutable
+  set search_path = pg_catalog, json, pg_temp
   language sql
 as $body$
   select (''''||((j_books_keys()).year).key||'''')::text;
 $body$;
 
-create function authors()
+create function json.authors()
   returns text
+  immutable
+  set search_path = pg_catalog, json, pg_temp
   language sql
 as $body$
   select (''''||((j_books_keys()).authors).key||'''')::text;
 $body$;
 
-create function genre()
+create function json.genre()
   returns text
+  immutable
+  set search_path = pg_catalog, json, pg_temp
   language sql
 as $body$
   select (''''||((j_books_keys()).genre).key||'''')::text;
 $body$;
 
-create function given_name()
+create function json.given_name()
   returns text
+  immutable
+  set search_path = pg_catalog, json, pg_temp
   language sql
 as $body$
   select (''''||((j_books_keys()).given_name).key||'''')::text;
 $body$;
 
-create function family_name()
+create function json.family_name()
   returns text
+  immutable
+  set search_path = pg_catalog, json, pg_temp
   language sql
 as $body$
   select (''''||((j_books_keys()).family_name).key||'''')::text;
@@ -144,11 +161,13 @@ $body$;
 ------------------------------------------------------------------------------------------
 -- TESTS/DEMOS
 
--- This simply lists out what "j_books_keys()" defines in a user-friendly fashion.
--- It isn't used outside of this file.
+-- These simply lists out what "j_books_keys()" and so on define in a user-friendly fashion.
+-- They aren't used outside of this file.
 
-create function j_books_keys_list()
+create function pg_temp.j_books_keys_list()
   returns table(z text)
+  immutable
+  set search_path = pg_catalog, json, pg_temp
   language plpgsql
 as $body$
 declare
@@ -164,10 +183,12 @@ begin
 end;
 $body$;
 
-select j_books_keys_list() as "all keys and their data types";
+select pg_temp.j_books_keys_list() as "all keys and their data types";
 
-create function top_level_keys_list()
+create function pg_temp.top_level_keys_list()
   returns table(z text)
+  immutable
+  set search_path = pg_catalog, json, pg_temp
   language plpgsql
 as $body$
 declare
@@ -180,10 +201,12 @@ begin
 end;
 $body$;
 
-select top_level_keys_list() as "top-level keys and their data types";
+select pg_temp.top_level_keys_list() as "top-level keys and their data types";
 
-create function author_keys_list()
+create function pg_temp.author_keys_list()
   returns table(z text)
+  immutable
+  set search_path = pg_catalog, json, pg_temp
   language plpgsql
 as $body$
 declare
@@ -196,4 +219,4 @@ begin
 end;
 $body$;
 
-select author_keys_list() as "author keys and their data types";
+select pg_temp.author_keys_list() as "author keys and their data types";

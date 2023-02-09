@@ -1,13 +1,13 @@
-create view top_down_paths(path) as          
+create view employees.top_down_paths(path) as          
 with
   recursive paths(path) as (
     select array[name]              -- array constructor
-    from emps
+    from employees.emps
     where mgr_name is null
     union all
     select p.path||e.name           -- appending a new element to the existing array
     from
-      emps as e
+      employees.emps as e
       inner join paths as p         -- "path[cardinality(path)]" gets the last element
       on e.mgr_name = p.path[cardinality(path)] 
   )
@@ -15,7 +15,7 @@ select path from paths;
 
 -- Breadth first traversal
 select cardinality(path) as depth, path
-from top_down_paths
+from employees.top_down_paths
 order by
   depth,
   path[2] asc nulls first,
@@ -25,7 +25,7 @@ order by
 
 -- Depth first traversal
 select cardinality(path) as depth, path
-from top_down_paths
+from employees.top_down_paths
 order by
   path[2] asc nulls first,
   path[3] asc nulls first,
@@ -36,7 +36,7 @@ order by
 -- of the depth first traversal display.
 select                             
   rpad(' ', 2*cardinality(path) - 2, ' ')||path[cardinality(path)] as "emps hierarchy"
-from top_down_paths
+from employees.top_down_paths
 order by
   path[2] asc nulls first,
   path[3] asc nulls first,
@@ -50,7 +50,7 @@ with
     select
       cardinality(path) as depth,
       path
-    from top_down_paths),
+    from employees.top_down_paths),
   a2 as (
     select
       depth,

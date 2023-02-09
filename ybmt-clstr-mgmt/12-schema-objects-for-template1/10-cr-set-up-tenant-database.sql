@@ -46,7 +46,7 @@ begin
     These settings are not copied from "template1".
   */
   execute format($$alter database %I set client_min_messages   = 'warning';                                          $$, db);
-  execute format($$alter database %I set search_path = client_safe, dt_utils, mgr, extensions, pg_catalog, pg_temp;  $$, db);
+  execute format($$alter database %I set search_path = pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp;  $$, db);
   execute format($$alter database %I set transaction_isolation = 'read committed';                                   $$, db);
 
   call mgr.set_tenant_database_setting(db, 'log_error_verbosity', 'verbose');
@@ -88,7 +88,7 @@ begin
       login password ''m'';',
       mgr_role, 'clstr$developer');
 
-  execute format('alter role %I set search_path = client_safe, dt_utils, mgr, extensions, pg_catalog, pg_temp;',     mgr_role);
+  execute format('alter role %I set search_path = pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp;',     mgr_role);
   execute format('grant all on database %I to %I;',                                                              db, mgr_role);
 
   execute format('grant execute on procedure mgr.comment_on_current_db(text) to %I;',                                mgr_role);
@@ -96,7 +96,6 @@ begin
   execute format('grant execute on procedure mgr.cr_role(text, boolean, boolean, text) to %I;',                      mgr_role);
   execute format('grant execute on procedure mgr.drop_role(text) to %I;',                                            mgr_role);
   execute format('grant execute on procedure mgr.drop_all_regular_local_roles() to %I;',                             mgr_role);
-  execute format('grant execute on procedure mgr.drop_all_temp_schemas() to %I;',                                    mgr_role);
   --------------------------------------------------------------------------------
   -- Create the <db>$client role.
 
@@ -111,8 +110,8 @@ begin
       login password ''c'';',
       client_role);
 
-  execute format('alter role %I set search_path = client_safe, pg_catalog,  pg_temp;',      client_role);
-  execute format('grant connect on database %I to %I;',                                 db, client_role);
+  execute format('alter role %I set search_path = pg_catalog, client_safe, pg_temp;',      client_role);
+  execute format('grant connect on database %I to %I;',                                db, client_role);
   --------------------------------------------------------------------------------
 
   execute format('comment on database %I is %L',   db,             database_db_comment      );
@@ -120,9 +119,8 @@ begin
   execute format('comment on role     %I is %L',   client_role,    role_db$client_comment   );
 
   --------------------------------------------------------------------------------
-  -- This is a hygiene practice. Temporary schemas are created on demand.
-  -- But sometimes you know that the activity you ahve designed for a particular database
-  -- will never create temorary objects. It's nice to be able to conform that
+  -- This is a hygiene practice. A temporary schema is created on demand and dropped
+  -- when the session the created it ends. It's nice to be able to confirm that
   -- this is the case by querying the "mgr.temp_schemas" view.
   call mgr.drop_all_temp_schemas();
 end;

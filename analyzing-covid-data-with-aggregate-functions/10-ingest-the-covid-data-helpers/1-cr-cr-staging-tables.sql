@@ -1,14 +1,10 @@
-drop procedure if exists cr_staging_tables() cascade;
-
-create procedure cr_staging_tables()
+create procedure covid.cr_staging_tables()
+  set search_path = pc_catalog, covid, pg_temp
   language plpgsql
 as $body$
 declare
-  drop_table constant text := '
-    drop table if exists %I cascade';
-
   create_staging_table constant text := '
-    create table %I(
+    create table covid.%I(
       code         int     not null,
       geo_value    text    not null,
       signal       text    not null,
@@ -29,8 +25,6 @@ declare
   name text not null := '';
 begin
   foreach name in array names loop
-    execute format(drop_table, name);
-
     execute format(create_staging_table, name, name);
   end loop;
 end;

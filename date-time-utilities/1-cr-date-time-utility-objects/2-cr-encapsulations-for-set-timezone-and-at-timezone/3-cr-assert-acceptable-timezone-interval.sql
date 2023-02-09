@@ -1,5 +1,5 @@
 create procedure ext_tz_names.assert_acceptable_timezone_interval(i in interval)
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare

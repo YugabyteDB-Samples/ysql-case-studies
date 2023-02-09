@@ -5,7 +5,7 @@ create function ext_tz_names.jan_and_jul_tz_abbrevs_and_offsets()
   jul_abbrev  text,
   jan_offset  interval,
   jul_offset  interval)
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare

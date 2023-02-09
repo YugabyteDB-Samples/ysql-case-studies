@@ -1,5 +1,5 @@
 \t on
-select rule_off('02-cr-detect-and-strip-null-keys', 'level_3');
+select client_safe.rule_off('02-cr-detect-and-strip-null-keys', 'level_3');
 \t off
 
 /*
@@ -22,9 +22,10 @@ ________________________________________________________________________________
 */;
 \t on
 
-create function no_null_keys(j in jsonb)
+create function json.no_null_keys(j in jsonb)
   returns boolean
   immutable
+  set search_path = pg_catalog, pg_temp
   language sql
 as $body$
   select (j = jsonb_strip_nulls(j))::boolean;
@@ -56,13 +57,14 @@ $body$;
 select jsonb_pretty(pg_temp.j());
 select jsonb_pretty(jsonb_strip_nulls(pg_temp.j()));
 
-create function no_null_keys_test()
+create function json.no_null_keys_test()
   returns text
+  set search_path = pg_catalog, pg_temp
   language plpgsql
 as $body$
 declare
-  b1 constant boolean not null := no_null_keys(                   pg_temp.j() );
-  b2 constant boolean not null := no_null_keys(jsonb_strip_nulls( pg_temp.j() ));
+  b1 constant boolean not null := json.no_null_keys(                   pg_temp.j() );
+  b2 constant boolean not null := json.no_null_keys(jsonb_strip_nulls( pg_temp.j() ));
 begin
   return
     'no_null_keys(raw input): '     ||b1::text||'   |   '||
@@ -70,6 +72,6 @@ begin
 end;
 $body$;
 
-select no_null_keys_test();
+select json.no_null_keys_test();
 
 \t off

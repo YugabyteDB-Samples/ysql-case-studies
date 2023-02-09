@@ -1,6 +1,5 @@
 \c d1 d1$mgr
 call mgr.cr_role('trg_firing_order', comment=>'Owns all the objects for the "Trigger Firing Order" case study.');
-call mgr.prepend_to_current_search_path('trg_firing_order');
 call mgr.set_role('trg_firing_order');
 
 \ir 1-cr-tracing-helpers.sql

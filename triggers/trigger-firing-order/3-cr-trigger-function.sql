@@ -1,6 +1,7 @@
-create function generic_trg()
+create function trg_firing_order.generic_trg()
   returns trigger
   security definer
+  set search_path = pg_catalog, trg_firing_order, pg_temp
   language plpgsql
 as $body$
 declare
