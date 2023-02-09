@@ -1,4 +1,5 @@
-create procedure procedural_version(max_c1 in int)
+create procedure cte_basics_proc.procedural_version(max_c1 in int)
+  set search_path = pg_catalog, cte_basics_proc, pg_temp
   language plpgsql
 as $body$
 begin
@@ -23,5 +24,5 @@ begin
 end;
 $body$;
 
-call procedural_version(4);
-select c1, c2 from final_results order by c1, c2;
+call cte_basics_proc.procedural_version(4);
+select c1, c2 from cte_basics_proc.final_results order by c1, c2;

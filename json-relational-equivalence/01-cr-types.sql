@@ -1,5 +1,5 @@
 \t on
-select rule_off('01-cr-types', 'level_3');
+select client_safe.rule_off('01-cr-types', 'level_3');
 \t off
 
 /*
@@ -19,25 +19,25 @@ select rule_off('01-cr-types', 'level_3');
 */;
 
 -- Notice that "given name" allows nulls but "family name" doesn't.
-create type a_name as (
+create type json.a_name as (
   "given name"  text,
   "family name" text);
 
-create type book_info as (
+create type json.book_info as (
   isbn     text,
   title    text,
   year     int,
-  authors  a_name[],
+  authors  json.a_name[],
   genre    text);
 
-create type key_facts as (key text, data_type text);
+create type json.key_facts as (key text, data_type text);
 
-create type j_books_keys as (
-  isbn         key_facts,
-  title        key_facts,
-  year         key_facts,
-  authors      key_facts,
-  given_name   key_facts,
-  family_name  key_facts,
-  genre        key_facts
+create type json.j_books_keys as (
+  isbn         json.key_facts,
+  title        json.key_facts,
+  year         json.key_facts,
+  authors      json.key_facts,
+  given_name   json.key_facts,
+  family_name  json.key_facts,
+  genre        json.key_facts
 );

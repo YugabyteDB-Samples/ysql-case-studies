@@ -1,5 +1,6 @@
-create function decorated_paths_report(tab in text, terminal in text default null)
+create function bacon.decorated_paths_report(tab in text, terminal in text default null)
   returns table(t text)
+  set search_path = pg_catalog, bacon, pg_temp
   language plpgsql
 as $body$
 <<b>>declare
@@ -8,12 +9,12 @@ as $body$
 
   stmt_start constant text := 'select array_agg((path::text) '||
                               'order by cardinality(path), terminal(path), path) '||
-                              'from ?';
+                              'from %I';
 
   where_ constant text := ' where terminal(path) = $1';
 
-  all_terminals_stmt  constant text := replace(stmt_start, '?', tab);
-  one_terminal_stmt   constant text := replace(stmt_start, '?', tab)||where_;
+  all_terminals_stmt  constant text := format(stmt_start, tab);
+  one_terminal_stmt   constant text := format(stmt_start, tab)||where_;
 
   paths text[] not null := '{}';
   p     text   not null := '';
@@ -67,8 +68,3 @@ begin
   t := rpad('-', 50, '-');                                       return next;
 end b;
 $body$;
-
-\t on
-select t from decorated_paths_report('raw_paths');
-select t from decorated_paths_report('raw_paths', 'Helen');
-\t off

@@ -10,4 +10,4 @@ It's a feature of _git_ that it doesn't preserve an empty directory when you pus
 
 This file preserves the otherwise empty _"ask-tom-approach"_ directory when the local _git_ clone of this repo (where the repo content is developed) is merged back into the Internet-visible [main](https://github.com/YugabyteDB-Samples/ysql-case-studies) instance.
 
-This case study will focus on an implementation of the approach that's described by the famous Oracle Database expert Tom Kyte (now retired) in the post [Mandatory Relationships between tables](https://asktom.oracle.com/pls/apex/f?p=100:11:0::::P11_QUESTION_ID:22885524653897).
+This case-study will focus on an implementation of the approach that's described by the famous Oracle Database expert Tom Kyte (now retired) in the post [Mandatory Relationships between tables](https://asktom.oracle.com/pls/apex/f?p=100:11:0::::P11_QUESTION_ID:22885524653897).

@@ -1,4 +1,4 @@
-create table trigger_firings(
+create table trg_firing_order.trigger_firings(
   k              serial primary key,
   tg_when        text   not null,
   tg_op          text   not null default '',
@@ -8,7 +8,7 @@ create table trigger_firings(
   tg_name        text   not null default '');
 --------------------------------------------------------------------------------
 
-create procedure log_a_firing(
+create procedure trg_firing_order.log_a_firing(
   tg_when        in text,
   tg_op          in text = '',
   tg_table_name  in text = '',
@@ -17,6 +17,7 @@ create procedure log_a_firing(
   tg_name        in text = '')
 
   security definer
+  set search_path = pg_catalog, trg_firing_order, pg_temp
   language plpgsql
 as $body$
 begin
@@ -36,8 +37,9 @@ end;
 $body$;
 --------------------------------------------------------------------------------
 
-create procedure log_a_constraint_check(v in text, constraint_fn in text)
+create procedure trg_firing_order.log_a_constraint_check(v in text, constraint_fn in text)
   security definer
+  set search_path = pg_catalog, trg_firing_order, pg_temp
   language plpgsql
 as $body$
 begin
@@ -49,8 +51,9 @@ end;
 $body$;
 --------------------------------------------------------------------------------
 
-create procedure log_a_comment(t in text = '')
+create procedure trg_firing_order.log_a_comment(t in text = '')
   security definer
+  set search_path = pg_catalog, trg_firing_order, pg_temp
   language plpgsql
 as $body$
 begin
@@ -60,10 +63,11 @@ $body$;
 --------------------------------------------------------------------------------
 
 -- Produce a nicely readable report from the raw contents of "trigger_firings".
-create function trigger_firings()
+create function trg_firing_order.trigger_firings()
   returns table(z text)
   stable
   security definer
+  set search_path = pg_catalog, trg_firing_order, pg_temp
   language plpgsql
 as $body$
 declare

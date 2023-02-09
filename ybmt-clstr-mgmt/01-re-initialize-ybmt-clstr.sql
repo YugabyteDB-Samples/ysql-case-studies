@@ -63,7 +63,7 @@ set role clstr$mgr;
 \ir 13-schema-objects-for-yugabyte-db-only/02-cr-drop-all-non-system-databases-script.sql
 \ir 13-schema-objects-for-yugabyte-db-only/03-cr-drop-tenant-databases-script.sql
 \ir 13-schema-objects-for-yugabyte-db-only/04-cr-create-tenant-databases-script.sql
-\ir 13-schema-objects-for-yugabyte-db-only/05-cr_drop-all-improper-ymbt_roles.sql
+\ir 13-schema-objects-for-yugabyte-db-only/05-cr-drop-all-improper-ymbt-roles.sql
 \ir 13-schema-objects-for-yugabyte-db-only/06-cr-assert-re-initialized-clstr-ok.sql
 
 call mgr.drop_all_temp_schemas();

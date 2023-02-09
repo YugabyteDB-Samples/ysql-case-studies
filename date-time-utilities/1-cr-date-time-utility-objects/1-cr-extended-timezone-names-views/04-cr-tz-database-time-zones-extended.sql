@@ -65,7 +65,7 @@ create function ext_tz_names.tz_database_time_zones_extended_good()
     lat_long         text,
     region_coverage  text,
     status           text)
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare

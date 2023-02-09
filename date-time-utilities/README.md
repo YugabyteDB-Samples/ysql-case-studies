@@ -1,6 +1,6 @@
 # "date-time-utilities"
 
-**NOTE:** Make sure that you read the section _"Working with just a single case study"_ in the _"README.md"_ on the _"ybmt-clstr-mgmt"_ directory before running this case-study.
+**NOTE:** Make sure that you read the section _"Working with just a single case-study"_ in the _"README.md"_ on the _"ybmt-clstr-mgmt"_ directory before running this case-study.
 
 The code and data in the _"date-time-utilities"_ directory tree implement what the following sections, within the [Date and time data types and functionality](https://docs.yugabyte.com/preview/api/ysql/datatypes/type_datetime/) YSQL documentation section, cover:
 
@@ -18,7 +18,7 @@ This code is therefore installed into the _dt_utils_ schema in the _template1_ d
 
 Notice this section within the [Date and time data types and functionality](https://docs.yugabyte.com/preview/api/ysql/datatypes/type_datetime/) YSQL documentation section:
 
-- [Case study: implementing a stopwatch with SQL](https://docs.yugabyte.com/preview/api/ysql/datatypes/type_datetime/stopwatch/)
+- [Case-study: implementing a stopwatch with SQL](https://docs.yugabyte.com/preview/api/ysql/datatypes/type_datetime/stopwatch/)
 
 The approach that this describes is also generically useful. It is therefore installed into the _client_safe_ schema in the _template1_ database to make it available in every tenant database. You can find the source code in the _"05-cr-stopwatch.sql"_ script on the _"12-schema-objects-for-template1"_ directory under the _"ybmt-clstr-mgmt"_ directory.
 

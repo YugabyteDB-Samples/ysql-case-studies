@@ -1,3 +1,101 @@
+create view mgr.all_schema_objects(owner, schema, name, kind, catalog) as
+  with o(owner_oid, schema_oid, name, kind, catalog) as
+    (
+      select
+        relowner,
+        relnamespace,
+        relname,
+        case relkind
+          when 'r' then 'table'
+          when 'v' then 'view'
+          when 'i' then 'index'
+          when 'S' then 'sequence'
+          when 'c' then 'composite-type'
+          when 't' then 'TOAST table'
+          else          'other'
+        end,
+        'pg_class'::text
+      from pg_class
+      -- Filter out the row that's automatically generated as the partner
+      -- to a manually created composite type.
+      where relkind <> 'c'
+
+    union all
+      select
+        t.typowner,
+        t.typnamespace,
+        t.typname,
+        'composite-type',
+        'pg_type'::text
+      from
+        pg_type as t
+        inner join
+        pg_class as c
+        on t.typname = c.relname and t.typnamespace = c.relnamespace
+      where t.typtype ='c'
+      -- Filter out the row that's automatically generated as the partner
+      -- to a manually created table or manually created view - or even a sequence!.
+      and not (c.relkind = 'r' or c.relkind = 'v' or c.relkind = 'S')
+
+    union all
+      select
+        typowner,
+        typnamespace,
+        typname,
+        case typtype
+          when 'd' then 'domain'
+          when 'e' then 'enum'
+          else          'other'
+        end,
+        'pg_type'::text
+      from pg_type t
+      where (typtype = 'd' or typtype = 'e')
+
+    union all
+      select
+        proowner,
+        pronamespace,
+        proname,
+        case prokind
+          when 'f' then 'function'
+          when 'p' then 'procedure'
+          when 'a' then 'aggregate'
+          when 'w' then 'window'
+        end,
+        'pg_proc'::text
+      from pg_proc
+
+    union all
+      select
+        o.oprowner,
+        o.oprnamespace,
+        o.oprname||' [impl. by '||p.proname||']',
+        'operator',
+        'pg_operator'::text
+      from
+        pg_operator as o
+        inner join
+        pg_proc as p
+        on o.oprcode = p.oid
+    )
+select
+  r.rolname,
+  n.nspname,
+  o.name,
+  o.kind,
+  o.catalog
+from
+  o
+  inner join
+  pg_namespace as n
+  on o.schema_oid = n.oid
+  inner join
+  pg_roles as r
+  on o.owner_oid = r.oid;
+
+grant select on table mgr.all_schema_objects to public;
+----------------------------------------------------------------------------------------------------
+
 create view mgr.roles(is_super, name, oid) as
 select
   rolsuper,
@@ -32,7 +130,8 @@ from
   inner join
   pg_roles as r
   on n.nspowner = r.oid
-where n.nspname ~ '^pg_temp';
+where n.oid = pg_my_temp_schema()
+or    pg_is_other_temp_schema(n.oid);
 
 grant select on table mgr.temp_schemas to public;
 ----------------------------------------------------------------------------------------------------
@@ -257,7 +356,8 @@ create view mgr.schema_objects(oid, owner, schema, name, kind, catalog, security
         case prokind
           when 'f' then 'function'
           when 'p' then 'procedure'
-          else          'other'
+          when 'a' then 'aggregate'
+          when 'w' then 'window'
         end,
         'pg_proc',
         case

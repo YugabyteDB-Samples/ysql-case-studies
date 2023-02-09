@@ -306,7 +306,7 @@ begin
     'connection limit 0 nologin password null',                             r_name::text);
 
   -- Set a sensible default. Notice that procedure "set_role_search_path()" lets you change it.
-  execute format('alter role %I set search_path = client_safe, dt_utils, mgr, extensions, pg_catalog, pg_temp', r_name::text);
+  execute format('alter role %I set search_path = pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp', r_name::text);
 
   execute format('grant connect on database %I to %I', current_database(),  r_name::text);
   execute format('grant create  on database %I to %I', current_database(),  r_name::text);
@@ -376,9 +376,9 @@ create procedure mgr.prepend_to_current_search_path(p in text)
   language plpgsql
 as $body$
 declare
-  curr_path constant text not null := current_setting('search_path');
+  curr_path constant text not null := replace(current_setting('search_path'), 'pg_catalog, ', '');
 begin
-  execute format ('set search_path = %s', p||', '||curr_path);
+  execute format ('set search_path = %s', 'pg_catalog, '||p||', '||curr_path);
 end;
 $body$;
 revoke all     on procedure mgr.prepend_to_current_search_path(text) from public;
@@ -523,7 +523,7 @@ declare
       and   name <> this_database_client
     );
 begin
-  -- Routine hygiene.
+  -- Routine belt-and-braces hygiene.
   call mgr.drop_all_temp_schemas();
 
   if (roles_to_be_dropped is not null and cardinality(roles_to_be_dropped) > 0) then

@@ -1,6 +1,7 @@
-drop function if exists timezones_md_table() cascade;
-create function timezones_md_table()
+drop function if exists date_time_tests.timezones_md_table() cascade;
+create function date_time_tests.timezones_md_table()
   returns table(z text)
+  set search_path = pg_catalog, date_time_tests, ext_tz_names, pg_temp
   language plpgsql
 as $body$
 declare
@@ -45,6 +46,6 @@ end;
 $body$;
 
 \t on
-select rule_off('"canonical_real_country_with_dst" .md file', 'level_3');
-select z from timezones_md_table();
+select client_safe.rule_off('"canonical_real_country_with_dst" .md file', 'level_3');
+select z from date_time_tests.timezones_md_table();
 \t off

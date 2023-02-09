@@ -1,6 +1,7 @@
 -- Classic text-book demo of recursive function invocation.
-create function fib(n in int)
+create function cte_basics_fib.fib(n in int)
   returns int
+  set search_path = pg_catalog, cte_basics_fib, pg_temp
   language plpgsql
 as $body$
 declare
@@ -19,8 +20,9 @@ begin
 end;
 $body$;
 
-create function fibonacci_series(max_x in int)
+create function cte_basics_fib.fibonacci_series(max_x in int)
   returns table(x int, f int)
+  set search_path = pg_catalog, cte_basics_fib, pg_temp
   language plpgsql
 as $body$
 begin
@@ -31,13 +33,14 @@ end;
 $body$;
 
 -- 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144
-select x, f as "fib(x)" from fibonacci_series(12);
+select x, f as "fib(x)" from cte_basics_fib.fibonacci_series(12);
 
 drop function if exists fibonacci_series(int) cascade;
 
 -- Ordinary iterative implementation of "fibonacci_series()"
-create function fibonacci_series_plpgsql(max_x in int)
+create function cte_basics_fib.fibonacci_series_plpgsql(max_x in int)
   returns table(x int, f int)
+  set search_path = pg_catalog, pg_temp
   language plpgsql
 as $body$
 declare
@@ -58,4 +61,4 @@ begin
 end;
 $body$;
 
-select x, f as "fib(x)" from fibonacci_series_plpgsql(12);
+select x, f as "fib(x)" from cte_basics_fib.fibonacci_series_plpgsql(12);

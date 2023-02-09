@@ -1,6 +1,6 @@
 # "hard-shell"
 
-**NOTE:** Make sure that you read the section _"Working with just a single case study"_ in the _"README.md"_ on the _"ybmt-clstr-mgmt"_ directory before running this case-study.
+**NOTE:** Make sure that you read the section _"Working with just a single case-study"_ in the _"README.md"_ on the _"ybmt-clstr-mgmt"_ directory before running this case-study.
 
 The account of this case-study is not yet included in the YSQL documentation. It was written to complement this presentation in Yugabyte Inc's Friday Tech Talks series (a.k.a. YFTT) delivered by Bryn Llewellyn on 15-July-2022. The recording is here:
 
@@ -25,9 +25,13 @@ The premise of the talk is that you should hide the internals of your applicatio
 - _0.sql_ creates and tests the entire kit, runs the functionality tests, and writes the output to a spool file. This allows straightforward regression testing.
 - YB & PG produce identical spooled output—barring small cosmetic differences.
 - The API is defined by procedures with a standard _"in text, inout text"_ signature. Both the input and output are the plain text representation of a _jsonb_ value.
-- JSON lets you express a variety of possible outcomes (different according to “success”, “expected error” or “unexpected error” in a single parsable value. 
-- Business functions often imply multi-statement txns. 
-- _"Security definer"_ and _"security invoker"_ subprograms are both used in the implementation according to what bests suits the purpose. 
-- Everything to do with exception handling is kept in the database (behind the hard shell). The client deals only with JSON. 
+- JSON lets you express a variety of possible outcomes (different according to “success”, “expected error” or “unexpected error” in a single parsable value.
+
+- Business functions often imply multi-statement txns.
+
+- _"Security definer"_ and _"security invoker"_ subprograms are both used in the implementation according to what bests suits the purpose.
+
+- Everything to do with exception handling is kept in the database (behind the hard shell). The client deals only with JSON.
+
 - The design allows UI-independent testing. You need only dedicated Pl/pgSQL and e.g. _ysqlsh_ scripts to invoke them—or a Python harness if you prefer.
 - An _enum_ is used where in Oracle database you'd simply use package spec constants.

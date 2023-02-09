@@ -1,9 +1,10 @@
-delete from raw_paths;
+delete from bacon.raw_paths;
 
-alter table raw_paths add column repeat_nr int;
+alter table bacon.raw_paths add column repeat_nr int;
 
-create function raw_paths_trg_f()
-  returns trigger 
+create function bacon.raw_paths_trg_f()
+  returns trigger
+  set search_path = pg_catalog, bacon, pg_temp
   language plpgsql
 as $body$
 declare
@@ -15,6 +16,6 @@ begin
 end;
 $body$;
 
-create trigger raw_paths_trg after insert on raw_paths
+create trigger raw_paths_trg after insert on bacon.raw_paths
 for each statement
-execute function raw_paths_trg_f();
+execute function bacon.raw_paths_trg_f();

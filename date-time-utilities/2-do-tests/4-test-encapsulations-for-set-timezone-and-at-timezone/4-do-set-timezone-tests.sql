@@ -1,3 +1,6 @@
+-- Force the use of qualified idenitifiers
+set search_path = pg_catalog, pg_temp;
+
 do $body$
 declare
   tz_in  text not null := '';
@@ -9,7 +12,7 @@ declare
     'Europe/Amsterdam'];
 begin
   foreach tz_in in array good_zones loop
-    call set_timezone(tz_in);
+    call ext_tz_names.set_timezone(tz_in);
     show timezone into tz_out;
     declare
       msg constant text not null := tz_in||' assert failed';
@@ -19,7 +22,7 @@ begin
   end loop;
 
   begin
-    call set_timezone('Bad');
+    call ext_tz_names.set_timezone('Bad');
     assert false, 'Logic error'; 
   exception when invalid_parameter_value then
     declare
@@ -43,16 +46,16 @@ do $body$
 declare
   tz_out text not null := '';
 begin
-  call set_timezone(make_interval(hours=>-7));
+  call ext_tz_names.set_timezone(make_interval(hours=>-7));
   show timezone into tz_out;
   assert tz_out= '<-07>+07', 'Assert <-07>+07 failed';
 
-  call set_timezone(make_interval(hours=>-5, mins=>45));
+  call ext_tz_names.set_timezone(make_interval(hours=>-5, mins=>45));
   show timezone into tz_out;
   assert tz_out= '<-04:15>+04:15', 'Assert <-04:15>+04:15 failed';
 
   begin
-    call set_timezone(make_interval(hours=>19));
+    call ext_tz_names.set_timezone(make_interval(hours=>19));
     assert false, 'Logic error'; 
   exception when invalid_parameter_value then
     declare

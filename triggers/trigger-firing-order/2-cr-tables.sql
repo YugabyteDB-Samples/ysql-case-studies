@@ -1,8 +1,8 @@
-create table masters(
+create table trg_firing_order.masters(
   mk  serial primary key,
   v   text not null unique);
 
-create table details(
+create table trg_firing_order.details(
   mk  int,
   dk  serial,
   v   text not null unique,
@@ -10,5 +10,5 @@ create table details(
   constraint details_pk primary key(mk, dk),
 
   constraint details_fk foreign key(mk)
-    references masters(mk)
+    references trg_firing_order.masters(mk)
     on delete cascade);

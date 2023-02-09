@@ -1,4 +1,6 @@
 -- Use a prepared statement parameterized by employee of interest.
+-- Notice that the result of "prepare" is not a schema-object and so
+-- the attempt to shema-qualify its name causes an error.
 prepare bottom_up_simple(text) as
 with
   recursive hierarchy_of_emps(depth, name, mgr_name) as (
@@ -11,7 +13,7 @@ with
         0,
         name,
         mgr_name
-      from emps             
+      from employees.emps             
       where name = $1
     )
 
@@ -30,7 +32,7 @@ with
         e.name,
         e.mgr_name
       from
-      emps as e
+      employees.emps as e
       inner join
       hierarchy_of_emps as h on h.mgr_name = e.name
     )
@@ -43,8 +45,9 @@ from hierarchy_of_emps;
 
 execute bottom_up_simple('joan');
 
-create function bottom_up_path(start_name in text)
-  returns name_t[]
+create function employees.bottom_up_path(start_name in text)
+  returns employees.name_t[]
+  set search_path = pg_catalog, employees, pg_temp
   language sql
 as $body$
   with
@@ -69,11 +72,11 @@ as $body$
   limit 1;
 $body$;
 
-select bottom_up_path('joan');
+select employees.bottom_up_path('joan');
 
-drop function if exists bottom_up_path_display(text) cascade;
-create function bottom_up_path_display(start_name in text)
+create function employees.bottom_up_path_display(start_name in text)
   returns text
+  set search_path = pg_catalog, employees, pg_temp
   language plpgsql
 as $body$
 declare
@@ -88,6 +91,6 @@ end;
 $body$;
 
 \t on
-select bottom_up_path_display('joan');
-select bottom_up_path_display('doris');
+select employees.bottom_up_path_display('joan');
+select employees.bottom_up_path_display('doris');
 \t off

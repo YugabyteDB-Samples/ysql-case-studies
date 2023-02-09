@@ -1,39 +1,40 @@
 \t on
-select rule_off('06-alter-j-books-add-indexes-and-constraints', 'level_3');
+select client_safe.rule_off('06-alter-j-books-add-indexes-and-constraints', 'level_3');
 \t off
 --------------------------------------------------------------------------------
 
 -- FIRST, SOME INDEXES.
 -- Unique index on the "isbn" key's "string" value.
-create unique index j_books_isbn_unq on j_books((book_info->>'isbn'));
+create unique index j_books_isbn_unq on json.j_books((book_info->>'isbn'));
 
 -- Non-unique index on the "year" key's "number" value.
-create index j_books_year on j_books(((book_info->>'year')::int));
+create index j_books_year on json.j_books(((book_info->>'year')::int));
 
 -- Non-unique partial index on the "genre" key's "string" value.
-create index j_books_genre on j_books((book_info->>'genre'))
+create index j_books_genre on json.j_books((book_info->>'genre'))
 where book_info->>'genre' is not null;
 
 -- GIN index on the "title" key's "string" value.
-create index j_books_title_gin on j_books using gin (to_tsvector('english', book_info->>'title'));
+create index j_books_title_gin on json.j_books using gin (to_tsvector('english', book_info->>'title'));
 
 -- GIN index on the "authors" key's "string" value.
-create index j_books_book_authors_gin on j_books using gin((book_info->'authors'));
+create index j_books_book_authors_gin on json.j_books using gin((book_info->'authors'));
 
 -- NOW, SOME CONSTRAINTS.
 /*
 We'll do this at the end:
 
-  alter table j_books add constraint j_books_book_info_is_conformant
-    check(j_books_book_info_is_conformant(book_info));
+  alter table json.j_books add constraint j_books_book_info_is_conformant
+    check(json.j_books_book_info_is_conformant(book_info));
 
 So first we need to write the function. It's the only way to express some of the rules.
 So we may as well express *all* of them in one place.
 */;
 
-create function j_books_book_info_is_conformant(book_info in jsonb)
+create function json.j_books_book_info_is_conformant(book_info in jsonb)
    returns boolean
    immutable
+   set search_path = pg_catalog, json, pg_temp
    language plpgsql
 as $body$
 declare
@@ -263,5 +264,5 @@ begin
 end;
 $body$;
 
-alter table j_books add constraint j_books_book_info_is_conformant
-  check(j_books_book_info_is_conformant(book_info));
+alter table json.j_books add constraint j_books_book_info_is_conformant
+  check(json.j_books_book_info_is_conformant(book_info));

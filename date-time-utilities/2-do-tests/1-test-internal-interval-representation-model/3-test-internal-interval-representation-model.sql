@@ -1,4 +1,5 @@
-create procedure test_internal_interval_representation_model()
+create procedure date_time_tests.test_internal_interval_representation_model()
+  set search_path = pg_catalog, date_time_tests, dt_utils, pg_temp
   language plpgsql
 as $body$
 begin
@@ -84,4 +85,4 @@ begin
   end;
 $body$;
 
-call test_internal_interval_representation_model();
+call date_time_tests.test_internal_interval_representation_model();

@@ -44,8 +44,8 @@ The account is structured as follows:
     - _Background_
     - _What does the "06-xfer-schema-grants-from-public-to-clstr-developer.sql" script do?_
   - The currently available case-studies
-    - Working with just a single case study
-    - End-to-end test of the YBMT scheme and all of the case studies
+    - Working with just a single case-study
+    - End-to-end test of the YBMT scheme and all of the case-studies
 
 ## Overview
 
@@ -53,11 +53,11 @@ This section describes what the YBMT scheme is for and what its high-level chara
 
 ### What is YBMT for?
 
-The YBMT scheme was designed and implemented to allow any number of YSQL case-studies, which in general each uses a set of objects whose ownership is spread among several roles and that are located in several schemas, all to be installed into the same cluster without interfering with each other and without needing special design to achieve this. The term "case-study" implies that the YBMT's purpose is pedagogy; and this is indeed the case. And one of the goals of the pedagogy is to show that each case study runs without error, and with the same effect, in both YB and PG.
+The YBMT scheme was designed and implemented to allow any number of YSQL case-studies, which in general each uses a set of objects whose ownership is spread among several roles and that are located in several schemas, all to be installed into the same cluster without interfering with each other and without needing special design to achieve this. The term "case-study" implies that the YBMT's purpose is pedagogy; and this is indeed the case. And one of the goals of the pedagogy is to show that each case-study runs without error, and with the same effect, in both YB and PG.
 
 However, the notions can certainly inform the design of real-world multitenancy schemes. Having said this, YBMT's notions are entirely semantic. In other words, the scheme has no physical component and in no way reflects any of YugabyteDB's special distributed storage layer features.
 
-Typically, each case study is installed in a dedicated database. But a study whose objects all have a single owner is typically installed, together with other such studies, into a single dedicated database for such studies. Of course, if you prefer, you could install every case-study into its own dedicated database. And you'd achieve this by making only tiny changes to the installation scripts, as this repo has them, that implement such a single-owner study.
+Typically, each case-study is installed in a dedicated database. But a study whose objects all have a single owner is typically installed, together with other such studies, into a single dedicated database for such studies. Of course, if you prefer, you could install every case-study into its own dedicated database. And you'd achieve this by making only tiny changes to the installation scripts, as this repo has them, that implement such a single-owner study.
 
 ### High-level description of YBMT
 
@@ -304,7 +304,7 @@ The role-provisioning procedures are brought by _template1_ and are owned by _cl
 
 The regime is aided by a further enforced convention. When database _d7_ is provisioned, a dedicated ordinary role _d7$mgr_ is created as its manager and _execute_ on the various role-management procedures is granted to this role. This role is ordinary in the sense that it has no powerful attributes set. In particular, it is created _"... with nosuperuser nocreatedb nocreaterole ..."_. It is special _only_ by virtue of being empowered to execute the role-management procedures. When _d7$mgr_ invokes _cr_role('mary')_, the procedure also grants _d7$mary_ to _d7$mgr_ so that, later, a session whose _session_user_ is _d7$mgr_ can invoke _set_role('mary')_. Because the _set role_ SQL statement doesn't itself require a password, all that's needed to work within the particular database _d7_ is to start by authorizing as _d7$mgr_.
 
-The net effect is that the _.sql_ scripts that implement a case study need to spell the database name and the name of its manager role _only_ in the context of one (or a small few) _"\c"_ meta-commands. It's therefore a trivial effort to repurpose such a set of scripts to use _any_ database.
+The net effect is that the _.sql_ scripts that implement a case-study need to spell the database name and the name of its manager role _only_ in the context of one (or a small few) _"\c"_ meta-commands. It's therefore a trivial effort to repurpose such a set of scripts to use _any_ database.
 
 ## The YBMT implementation
 
@@ -316,7 +316,7 @@ The YBMT scheme is implemented by three major cluster-level operations, each orc
 
 Then, at the tenant database level, each is provided with a set of role provisioning procedures, brought by the _template1_ database, to create, configure, and drop local roles for that database.
 
-The _template1_ database also brings some views and generic utilities that proved to be useful while developing the YBMT scheme and while installing and running the case studies. Most notable among these are views that encapsulate frequently-used joins among the catalog tables (for example, to show the name of the owner and the name of the schema for a schema-object). Some of these join views are further encapsulated by table functions that make the output easier to read than the output of a simple SQL query against the join view.
+The _template1_ database also brings some views and generic utilities that proved to be useful while developing the YBMT scheme and while installing and running the case-studies. Most notable among these are views that encapsulate frequently-used joins among the catalog tables (for example, to show the name of the owner and the name of the schema for a schema-object). Some of these join views are further encapsulated by table functions that make the output easier to read than the output of a simple SQL query against the join view.
 
 All of these operations, both at cluster-level and at tenant-database-level, are described in the following subsections. It is recommended that you try these operations as soon as you have understood enough from what follows to know what to type. Then you can study the code further to learn how it all works.
 
@@ -328,7 +328,7 @@ Everything that follows assumes that you will use only _psql_ and _ysqlsh_ and t
 
 There are, inevitably, some references to directories and paths (in the client-side environment) in what follows and in the _.sql_ scripts themselves. These assume that you clone the _"ysql-case-studies"_ repo to a machine with a Linux-like operating system and that you run _psql_ and _ysqlsh_ there. If you prefer to use a Windows laptop, then it will be simplest to work entirely within a Ubuntu virtual machine. While the PG client code is available for Windows, the YB client code is not. If you insist on using Windows natively, then you can simply use _psql_ to connect to YB as well as to PG. 
 
-It doesn't matter where, in your machine's directory hierarchy, you create your local _git_ clone of the [ysql-case-studies](https://github.com/YugabyteDB-Samples/ysql-case-studies) repo. But notice that some of the case studies use the _"\copy"_ meta-command to install data—and this works best when the target file is specified using an absolute path.
+It doesn't matter where, in your machine's directory hierarchy, you create your local _git_ clone of the [ysql-case-studies](https://github.com/YugabyteDB-Samples/ysql-case-studies) repo. But notice that some of the case-studies use the _"\copy"_ meta-command to install data—and this works best when the target file is specified using an absolute path.
 
 > **NOTE:** The _"\copy"_ meta-command has no syntax ("like _"\copyr"_ is to _"\copy"_ as _"\ir"_ is to _"\i"_) to express that a relative path is to be treated as relative to the directory where the script in which it is invoked is found. Rather, it's always taken as relative to the current working directory from which _psql_ or _ysqlsh_ is invoked. Nor does _"\copy"_ understand an environment variable.
 >
@@ -931,11 +931,11 @@ triggers
 
 The leaves in this directory hierarchy hold the actual case-studies—and there are currently _eleven_ of these.
 
-Each of the eleven case-studies has its own _"README.md"_. And the code that implements each is organized in its own directory hierarchy.
+Each of the nine case-studies has its own _"README.md"_. And the code that implements each is organized in its own directory hierarchy.
 
-### Working with just a single case study
+### Working with just a single case-study
 
-The top directory for each of the case studies has a script called _"0.sql"_ and a file called _"x.sql"_.
+The top directory for each of the case-studies has a script called _"0.sql"_ and a file called _"x.sql"_.
 
 The _"0.sql"_ script creates the artifacts that implement the case-study. (It hard-codes the name of the database that it will use.) Sometimes, all of these artifacts are have the same owner and live in the same schema. But, in general, the schema-objects are owned, jointly, by several roles where several of these own more than one schema to house its schema-objects. In every case, the _0.sql_ script calls the _cr_role()_ procedure as required and creates the required schemas. It then conducts some tests. Sometimes, these use the PL/pgSQL's _assert_ feature—and so "test succeeded" results in silent completion. Otherwise, the scripts execute _select_ statements and the results are seen in the terminal window.
 
@@ -976,17 +976,17 @@ These differences inevitably show up. But you can easily see them for what they 
 
 Sometimes, the spooled output differs slightly when the tests are run using YB from when they are run using PG. The differences, here too, are inessential. For example, they might reflect differences in the execution plan for a query. In such cases, both the _"yb-0.sql"_ and the _"pg-0.sql"_ reference files are provided. In other cases, when there are no such differences, just a single reference file, called _"0.txt"_, is provided.
 
-### End-to-end test of the YBMT scheme and all of the case studies
+### End-to-end test of the YBMT scheme and all of the case-studies
 
 Look at the _"0-end-to-end-test.sql"_ master script located directly on the _"ysql-case-studies"_ directory. It (re)initializes the YBMT cluster and creates six tenant databases.
 
-Tenant _d0_ is intended for any _ad hoc_ tests that you might like to invent and try—for example to test the effects of the role-provisioning procedures. And tenants _d1_ through _d5_ house the eleven case-studies. Each of tenants _d2_ through _d5_ each houses a single multi-role, multi-schema case-study; and tenant _d1_ houses seven single-role, single-schema case-study.
+Tenant _d0_ is intended for any _ad hoc_ tests that you might like to invent and try—for example to test the effects of the role-provisioning procedures. And tenants _d1_ through _d5_ house the nine case-studies. Each of tenants _d2_ through _d5_ each houses a single multi-role, multi-schema case-study; and tenant _d1_ houses seven single-role, single-schema case-study.
 
-Then it runs each of the eleven case studies. Each of these steps is individually timed. And so, too, is the overall elapsed time.
+Then it runs each of the nine case-studies. Each of these steps is individually timed. And so, too, is the overall elapsed time.
 
 #### How the timing is done
 
-Look at the section [Case study: implementing a stopwatch with SQL](https://docs.yugabyte.com/preview/api/ysql/datatypes/type_datetime/stopwatch/) in the YSQL documentation. The code that this section describes is installed in the _client_safe_ schema in the _template1_ database. This means that even _"client"_ sessions can use it. You might find it convenient to define these two shortcuts in your _psqlrc_ file:
+Look at the section [Case-study: implementing a stopwatch with SQL](https://docs.yugabyte.com/preview/api/ysql/datatypes/type_datetime/stopwatch/) in the YSQL documentation. The code that this section describes is installed in the _client_safe_ schema in the _template1_ database. This means that even _"client"_ sessions can use it. You might find it convenient to define these two shortcuts in your _psqlrc_ file:
 
 ```
 \set start_stopwatch 'select extract(epoch from clock_timestamp())::text as s0 \\gset stopwatch_'
@@ -1012,7 +1012,7 @@ Notice that _:stopwatch_reading_ renders the elapsed time in sensible units with
 - The script first invokes _"01-re-initialize-ybmt-clstr.sql"_, without timing it, so that the starting condition is well-defined.
 - Then it sets _:lower_db_no_ to _0_ and _:upper_db_no_ to _5_ to specify the creation of the six tenant databases and invokes, and times, _02-drop-and-re-create-tenant-databases.sql_.
 - Then, leaving _:lower_db_no_ and _:upper_db_no_ unchanged, it simply invokes, and times, _02-drop-and-re-create-tenant-databases.sql_ for a second time. This second invocation will take longer than the first because the first time there are no extant tenant databases to drop and the second time there are six (albeit empty) extant tenant databases.
-- Then it invokes, and times, the _"0.sql"_ script for each of the eleven case-studies.
+- Then it invokes, and times, the _"0.sql"_ script for each of the nine case-studies.
 
 Spooling is turned on at the start, and turned off at the finish, of the end-to-end test—using the same logic as shown above to write to _"yb.sql"_ or _"pg.sql"_ on the _"output"_ directory directly under the _"ysql-case-studies"_ directory.
 
@@ -1038,7 +1038,7 @@ These are the YB and PG reference spool files for the indicated variants:
 
 #### Discussion of the results
 
-The main purpose of the _"0.sql"_ script for each case study, and the _"0-end-to-end-test.sql"_ script, is to test the _correctness_ of the functionality and to test that the outcomes are the same in YB and in PG. You can see, by running the tests in your own environment, that this purpose is well-satisfied. The timings are of secondary interest. You'll inevitably notice these high-level outcomes:
+The main purpose of the _"0.sql"_ script for each case-study, and the _"0-end-to-end-test.sql"_ script, is to test the _correctness_ of the functionality and to test that the outcomes are the same in YB and in PG. You can see, by running the tests in your own environment, that this purpose is well-satisfied. The timings are of secondary interest. You'll inevitably notice these high-level outcomes:
 
 - There's a noticeably large run-to-run variation in the elapsed time for any particular test. This means that the timings must be regarded as just a rough indication. Proper timing experiments would need to do many repetitions and calculate appropriate measures of central tendency and confidence.
 - YB (even using a single node cluster) is noticeably slower than PG. This is well-known—and only to be expected.
@@ -1046,4 +1046,4 @@ The main purpose of the _"0.sql"_ script for each case study, and the _"0-end-to
 - Within the _installation_ tasks, the dominating contribution to the total elapsed time is configuring the YBMT cluster and creating a set of tenant databases. But this is a very rare task. Once the tenant databases exist, then the installation and maintenance of artifacts within one of these is relatively quick. Moreover, these tasks can be done concurrently in each of many tenant databases as long as the DDLs done in any one of these are done in self-imposed single-user mode.
 - It seems that the least privileges regimes impose a speed penalty. This is presumably because of how SQL compilation works—and so the effect would not be felt by ordinary run-time activity in a warmed up production system. SQL compilation has to check that the role that does the compilation has the privileges that allow the required kinds of operation. Presumably, the internal implementation is quicker when such a privilege is available because it's been granted to _public_ than because it's been granted to a role that, in turn, is granted to the role that does the compilation. Notice that:
   - This effect is hardly noticeable in PG; but it is noticeable in YB. And in YB, it has its biggest effect at YBMT configuration time and at tenant database creation time. (This is very much to be expected.)
-  - In YB, where the effects are noticeable, they are noticeable in the tests for each of the case studies only when the maximally secure option is chosen that revokes the _execute_ privilege from (almost all of) the _pg_catalog_ functions. This, too, is to be expected because very many of these functions are routinely used by application code both at DDL time and at run-time. (In contrast, the _pg_catalog_ tables and views are very rarely accessed by application code—neither at DDL time nor at run-time.)
+  - In YB, where the effects are noticeable, they are noticeable in the tests for each of the case-studies only when the maximally secure option is chosen that revokes the _execute_ privilege from (almost all of) the _pg_catalog_ functions. This, too, is to be expected because very many of these functions are routinely used by application code both at DDL time and at run-time. (In contrast, the _pg_catalog_ tables and views are very rarely accessed by application code—neither at DDL time nor at run-time.)

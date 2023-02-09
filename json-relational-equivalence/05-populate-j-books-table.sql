@@ -1,10 +1,10 @@
 \t on
-select rule_off('05-populate-j-books-table', 'level_3');
+select client_safe.rule_off('05-populate-j-books-table', 'level_3');
 \t off
 --------------------------------------------------------------------------------
-truncate table j_books;
+truncate table json.j_books;
 
-insert into j_books(book_info)
+insert into json.j_books(book_info)
 values
     (' {
          "isbn"    : "978-0-14-303809-2",
@@ -89,5 +89,5 @@ values
        } ');
 
 select k, jsonb_pretty(book_info) as book_info
-from j_books
+from json.j_books
 order by k;

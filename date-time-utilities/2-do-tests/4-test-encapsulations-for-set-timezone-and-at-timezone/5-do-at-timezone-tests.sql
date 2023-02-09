@@ -1,3 +1,6 @@
+-- Force the use of qualified idenitifiers
+set search_path = pg_catalog, pg_temp;
+
 -- #1: "at_timezone(text, timestamp)" overload.
 -- There's no value in including a bad-value negative test because doing so would simply be a repeat,
 -- and therefore redundant, test of the assert_approved_timezone_name() procedure.
@@ -16,7 +19,7 @@ declare
     'Europe/Amsterdam'];
 begin
   foreach tz in array good_zones loop
-    tz_result   := at_timezone(tz, t_plain);
+    tz_result   := ext_tz_names.at_timezone(tz, t_plain);
     tz_expected := t_text||' '||tz;
 
     declare
@@ -48,7 +51,7 @@ begin
   foreach i in array i_vals loop
     hh := ltrim(to_char(extract(hour   from i), 'SG09')); -- Essential to prefix with the sign.
     mm := ltrim(to_char(extract(minute from i), '09'));
-    tz_result   := at_timezone(i, t_plain);
+    tz_result   := ext_tz_names.at_timezone(i, t_plain);
     tz_expected := t_text||' '||hh||':'||mm;
     declare
       msg constant text not null := i::text||' assert failed';

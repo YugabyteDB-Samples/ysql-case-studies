@@ -3,7 +3,6 @@ call mgr.cr_role('json', with_temp_on_db=>true, comment=>
   'Owns all the objects that demonstrate the non-lossy mutual xform '||e'\n'||
   'between a conventional relational representation and a JSON representation '||e'\n'||
   'of facts about books and their authors. ');
-call mgr.prepend_to_current_search_path('json');
 call mgr.set_role('json');
 ----------------------------------------------------------------------------------------------------
 
@@ -11,9 +10,9 @@ call mgr.set_role('json');
 \t off
 
 \ir 01-cr-types.sql
-\ir 02-cr-no_null_keys.sql
+\ir 02-cr-no-null-keys.sql
 \ir 03-cr-j-books-table.sql
-\ir 04-cr-j-books_keys.sql
+\ir 04-cr-j-books-keys.sql
 \ir 05-populate-j-books-table.sql
 \ir 06-alter-j-books-add-indexes-and-constraints.sql
 \ir 08-query-the-j-books-table.sql

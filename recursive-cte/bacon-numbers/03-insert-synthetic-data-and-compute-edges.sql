@@ -1,5 +1,8 @@
-do $body$
-begin
+drop procedure if exists pg_temp.p();
+create procedure pg_temp.p()
+  set search_path = pg_catalog, bacon, pg_temp
+  language sql
+as $body$
   delete from edges;
   delete from cast_members;
   delete from actors;
@@ -63,7 +66,7 @@ begin
     ( 'Steve'  ,  'The Tempest'            ),
     ( 'Steve'  ,  'King Lear'              ),
     ( 'Steve'  ,  'Macbeth'                );
-end;
 $body$;
 
-call insert_edges();
+call pg_temp.p();
+call bacon.insert_edges();

@@ -1,12 +1,13 @@
-create table edges(
+create table bacon.edges(
   node_1 text,
   node_2 text,
   movies text[],
   constraint edges_pk primary key(node_1, node_2),
-  constraint edges_fk_1 foreign key(node_1) references actors(actor),
-  constraint edges_fk_2 foreign key(node_2) references actors(actor));
+  constraint edges_fk_1 foreign key(node_1) references bacon.actors(actor),
+  constraint edges_fk_2 foreign key(node_2) references bacon.actors(actor));
 
-create or replace procedure insert_edges()
+create procedure bacon.insert_edges()
+  set search_path = pg_catalog, bacon, pg_temp
   language plpgsql
 as $body$
 begin

@@ -1,4 +1,4 @@
-\ir 01-cr-to_char-interval.sql
+\ir 01-cr-to-char-interval.sql
 \ir 02-cr-jan-and-jul-tz-abbrevs-and-offsets.sql
 \ir 03-copy-from-tz-database.sql
 \ir 04-cr-tz-database-time-zones-extended.sql

@@ -7,7 +7,7 @@
 
 create function dt_utils.mm_value_ok(mm in int)
   returns text
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -25,7 +25,7 @@ grant  execute on function dt_utils.mm_value_ok(int) to   public;
 
 create function dt_utils.interval_months_ok(i in interval)
   returns boolean
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 begin
@@ -83,7 +83,7 @@ grant  usage on domain dt_utils.interval_months_t to   public;
 
 create function dt_utils.dd_value_ok(dd in int)
   returns text
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -101,7 +101,7 @@ grant  execute on function dt_utils.dd_value_ok(int) to   public;
 
 create function dt_utils.interval_days_ok(i in interval)
   returns boolean
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 begin
@@ -159,7 +159,7 @@ grant  usage on domain dt_utils.interval_days_t to   public;
 
 create function dt_utils.ss_value_ok(ss in double precision)
   returns text
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -177,7 +177,7 @@ grant  execute on function dt_utils.ss_value_ok(double precision) to   public;
 
 create function dt_utils.interval_seconds_ok(i in interval)
   returns boolean
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 begin
@@ -237,7 +237,7 @@ grant  usage on domain dt_utils.interval_seconds_t to   public;
 
 create function dt_utils.interval_months(years in int default 0, months in int default 0)
   returns dt_utils.interval_months_t
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -261,7 +261,7 @@ grant  execute on function dt_utils.interval_months(int, int) to   public;
 
 create function dt_utils.interval_months(t_finish in timestamptz, t_start in timestamptz)
   returns dt_utils.interval_months_t
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -318,7 +318,7 @@ grant  execute on function dt_utils.interval_months(timestamptz, timestamptz) to
 
 create function dt_utils.interval_months(i in dt_utils.interval_months_t, f in double precision)
   returns dt_utils.interval_months_t
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -346,7 +346,7 @@ grant  execute on function dt_utils.interval_months(dt_utils.interval_months_t, 
 
 create function dt_utils.interval_days(days in int default 0)
   returns dt_utils.interval_days_t
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -369,7 +369,7 @@ grant  execute on function dt_utils.interval_days(int) to   public;
 
 create function dt_utils.interval_days(t_finish in timestamptz, t_start in timestamptz)
   returns dt_utils.interval_days_t
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -398,7 +398,7 @@ grant  execute on function dt_utils.interval_days(timestamptz, timestamptz) to  
 
 create function dt_utils.interval_days(i in dt_utils.interval_days_t, f in double precision)
   returns dt_utils.interval_days_t
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -429,7 +429,7 @@ create function dt_utils.interval_seconds(
   mins  in int              default 0,
   secs  in double precision default 0.0)
   returns dt_utils.interval_seconds_t
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -454,7 +454,7 @@ grant  execute on function dt_utils.interval_seconds(int, int, double precision)
 
 create function dt_utils.interval_seconds(t_finish in timestamptz, t_start in timestamptz)
   returns dt_utils.interval_seconds_t
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -480,7 +480,7 @@ grant  execute on function dt_utils.interval_seconds(timestamptz, timestamptz) t
 
 create function dt_utils.interval_seconds(i in dt_utils.interval_seconds_t, f in double precision)
   returns dt_utils.interval_seconds_t
-  set search_path = dt_utils, pg_catalog, pg_temp
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare

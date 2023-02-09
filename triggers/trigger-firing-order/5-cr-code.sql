@@ -1,9 +1,10 @@
-create type          mk_and_ds  as (mk int, ds text[]);
-create type          m_and_ds   as (m text, ds text[]);
+create type          trg_firing_order.mk_and_ds  as (mk int, ds text[]);
+create type          trg_firing_order.m_and_ds   as (m text, ds text[]);
 
-create procedure upsert_master_insert_details(
-  m_and_ds in m_and_ds)
+create procedure trg_firing_order.upsert_master_insert_details(
+  m_and_ds in trg_firing_order.m_and_ds)
   security definer
+  set search_path = pg_catalog, trg_firing_order, pg_temp
   language plpgsql
 as $body$
 declare
@@ -24,8 +25,9 @@ end;
 $body$;
 --------------------------------------------------------------------------------
 
-create procedure update_one_detail(old_v in text, new_v in text)
+create procedure trg_firing_order.update_one_detail(old_v in text, new_v in text)
   security definer
+  set search_path = pg_catalog, trg_firing_order, pg_temp
   language plpgsql
 as $body$
 begin
@@ -34,8 +36,9 @@ end;
 $body$;
 --------------------------------------------------------------------------------
 
-create procedure delete_specified_details(dvs variadic text[] = null)
+create procedure trg_firing_order.delete_specified_details(dvs variadic text[] = null)
   security definer
+  set search_path = pg_catalog, trg_firing_order, pg_temp
   language plpgsql
 as $body$
 begin
@@ -49,8 +52,9 @@ end;
 $body$;
 --------------------------------------------------------------------------------
 
-create procedure cascade_delete_specified_masters(mvs variadic text[] = null)
+create procedure trg_firing_order.cascade_delete_specified_masters(mvs variadic text[] = null)
   security definer
+  set search_path = pg_catalog, trg_firing_order, pg_temp
   language plpgsql
 as $body$
 begin
@@ -64,10 +68,11 @@ end;
 $body$;
 --------------------------------------------------------------------------------
 
-create function master_and_details_report()
+create function trg_firing_order.master_and_details_report()
   returns table(z text)
   stable
   security definer
+  set search_path = pg_catalog, trg_firing_order, pg_temp
   language plpgsql
 as $body$
 declare

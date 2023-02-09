@@ -1,4 +1,5 @@
-create procedure do_tests()
+create procedure date_time_tests.do_tests()
+  set search_path = pg_catalog, dt_utils, pg_temp
   language plpgsql
 as $body$
 declare
@@ -125,4 +126,4 @@ begin
 end;
 $body$;
 
-call do_tests();
+call date_time_tests.do_tests();

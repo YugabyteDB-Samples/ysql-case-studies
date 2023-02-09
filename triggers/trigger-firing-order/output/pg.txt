@@ -90,16 +90,16 @@
  after  update on details    for each statement  >           
 
 -[ RECORD 1 ]-----------------------------------------------------------
-name     | RI_ConstraintTrigger_a_23035
+name     | RI_ConstraintTrigger_a_17769
 tab_name | masters
-def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_23035" A...
+def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_17769" A...
 
--[ RECORD 1 ]--------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER DELETE ON masters FROM details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_cascade_del"()
--[ RECORD 2 ]--------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER INSERT ON details FROM masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_ins"()
--[ RECORD 3 ]--------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER UPDATE ON details FROM masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_upd"()
--[ RECORD 4 ]--------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER UPDATE ON masters FROM details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_noaction_upd"()
+-[ RECORD 1 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER DELETE ON trg_firing_order.masters FROM trg_firing_order.details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_cascade_del"()
+-[ RECORD 2 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER INSERT ON trg_firing_order.details FROM trg_firing_order.masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_ins"()
+-[ RECORD 3 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER UPDATE ON trg_firing_order.details FROM trg_firing_order.masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_upd"()
+-[ RECORD 4 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER UPDATE ON trg_firing_order.masters FROM trg_firing_order.details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_noaction_upd"()
 

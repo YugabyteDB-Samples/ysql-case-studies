@@ -1,4 +1,4 @@
-create type extended_timezone_names_columns_t as (
+create type date_time_tests.extended_timezone_names_columns_t as (
   name_pad             int,
   abbrev_pad           int,
   xxx_offset_pad       int,
@@ -8,8 +8,9 @@ create type extended_timezone_names_columns_t as (
   region_coverage_pad  int,
   status_pad           int);
 
-create function extended_timezone_names_columns()
+create function date_time_tests.extended_timezone_names_columns()
   returns extended_timezone_names_columns_t
+  set search_path = pg_catalog, date_time_tests, ext_tz_names, pg_temp
   language plpgsql
 as $body$
 <<b>>declare

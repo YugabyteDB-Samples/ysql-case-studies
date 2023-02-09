@@ -1,6 +1,7 @@
-create function terminal(path in text[])
+create function bacon.terminal(path in text[])
   returns text
   immutable
+  set search_path = pg_catalog, bacon, pg_temp
   language plpgsql
 as $body$
 begin
@@ -8,14 +9,14 @@ begin
 end;
 $body$;
 
-create procedure find_paths(start_node in text)
+create procedure bacon.find_paths(start_node in text)
+  set search_path = pg_catalog, bacon, pg_temp
   language plpgsql
 as $body$
 begin
   -- See "cr-find-paths-with-pruning.sql". This index demonstrates that
   -- no more than one path has been found to any particular terminal node.
-  drop index if exists raw_paths_terminal_unq cascade;
-  commit;
+  drop index if exists bacon.raw_paths_terminal_unq cascade;
   delete from raw_paths;
 
   with

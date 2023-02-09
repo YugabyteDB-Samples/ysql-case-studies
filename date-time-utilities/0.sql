@@ -11,10 +11,8 @@ call mgr.grant_priv('usage', 'schema', 'ext_tz_names', 'public');
 \ir 1-cr-date-time-utility-objects/2-cr-encapsulations-for-set-timezone-and-at-timezone/0.sql
 \ir 1-cr-date-time-utility-objects/3-cr-functions-for-legal-scopes-for-syntax-context/0.sql
 
-reset role;
+set role d2$mgr;
 call mgr.cr_role('date_time_tests', comment=>'Owns all the objects for testing the "date-time-utilities".');
-call mgr.prepend_to_current_search_path('ext_tz_names');
-call mgr.prepend_to_current_search_path('date_time_tests');
 call mgr.set_role('date_time_tests');
 
 \ir 2-do-tests/1-test-internal-interval-representation-model/0.sql

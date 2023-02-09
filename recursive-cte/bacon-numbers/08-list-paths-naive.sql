@@ -1,3 +1,3 @@
 \t on
-select t from list_paths('raw_paths');
+select t from bacon.list_paths('raw_paths');
 \t off

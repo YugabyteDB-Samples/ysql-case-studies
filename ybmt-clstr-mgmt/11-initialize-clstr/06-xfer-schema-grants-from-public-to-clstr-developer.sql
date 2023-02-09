@@ -107,7 +107,7 @@ $body$;
   The "allowlist" elements below are simply examples. It's hard to see how any harm could follow
   from allowing the "client" role to execute any of these. However (see the "hard-shell" case-study)
   if the client-facing API is entirely text in, text out subprograms, encoded as JSON, it's hard see
-  too haow any in the list (even text concatenation) would be useful.
+  too how any in the list (even text concatenation) would be useful.
 
   For "oid::regprocedure",
   see https://postgrespro.com/list/thread-id/1914117 (Tom Lane, 04-Mar-2005).

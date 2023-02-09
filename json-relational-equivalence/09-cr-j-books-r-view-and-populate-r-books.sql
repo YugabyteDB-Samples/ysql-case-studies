@@ -1,12 +1,13 @@
 \t on
-select rule_off('09-cr-j-books-r-view-and-populate-r-books', 'level_3');
+select client_safe.rule_off('09-cr-j-books-r-view-and-populate-r-books', 'level_3');
 \t off
 --------------------------------------------------------------------------------
 
 deallocate all;
 
-create function sql_authors(j in jsonb)
-  returns a_name[]
+create function json.sql_authors(j in jsonb)
+  returns json.a_name[]
+  set search_path = pg_catalog, json, temp
   language plpgsql
 as $body$
 declare
@@ -26,15 +27,15 @@ begin
 end;
 $body$;
 
-create view j_books_r_view(k, isbn, title, year, authors, genre) as
+create view json.j_books_r_view(k, isbn, title, year, authors, genre) as
 select
   k,
   (book_info->>'isbn')::text,
   (book_info->>'title')::text,
   (book_info->>'year')::int,
-  (sql_authors(book_info->'authors')),
+  (json.sql_authors(book_info->'authors')),
   book_info->>'genre'
-from j_books;
+from json.j_books;
 
 -- WHICH SQL WOULD YOU PREFER TO EMBED IN YOUR APP'S CODE?
 
@@ -44,7 +45,7 @@ select
   book_info->>'isbn'              as isbn,
   book_info->>'title'             as title,
   book_info-> 'authors'::text  as authors_jsonb_array
-from j_books
+from json.j_books
 where book_info->>'isbn' = $1;
 
 execute q5('978-0-13-110362-7');
@@ -56,7 +57,7 @@ select
   isbn,
   title,
   authors::text as authors_sql_array
-from j_books_r_view
+from json.j_books_r_view
 where isbn = $1;
 
 execute q6('978-0-13-110362-7');
@@ -86,35 +87,36 @@ explain execute q6('978-0-13-110362-7');
               )
 */;
 
-create table genres(
+create table json.genres(
   k      integer
            generated always as identity primary key,
   genre  text not null);
 
-create table authors(
+create table json.authors(
   k            integer
                  generated always as identity primary key,
   given_name   text,
   family_name  text not null);
 
-create unique index authors_full_name_unq on authors(coalesce(given_name, '<null>'), family_name);
+create unique index authors_full_name_unq on json.authors(coalesce(given_name, '<null>'), family_name);
 
 -- Want to be able to "set r_books.k" manually when the table is first populated and then let the
 -- sequence determine it for subsequent inserts. But once set, it's not allowed to change it.
 -- So use "serial" with a trigger to prevent updating it- — and not "int generated always as identity".
-create table r_books(
+create table json.r_books(
   k            serial primary key,
   isbn         text not null,
   title        text not null,
   year         int not null,
-  genre_k      int references genres(k)
+  genre_k      int references json.genres(k)
 
   -- Just for illustration. This should use the REGEXP approach that
   -- "j_books_book_info_is_conformant(()" implements
   constraint r_books_isbn_len_ok check(length(isbn) = 17));
 
-create function trg_enforce_r_books_k_immutable()
+create function json.trg_enforce_r_books_k_immutable()
   returns trigger
+  set search_path = pg_catalog, pg_temp
   language plpgsql
 as $body$
 begin
@@ -125,17 +127,17 @@ $body$;
 
 create trigger enforce_r_books_k_immutable
   after update
-  on r_books
+  on json.r_books
   for each row
   when (old.k != new.k)
-execute procedure trg_enforce_r_books_k_immutable();
+execute procedure json.trg_enforce_r_books_k_immutable();
 
-create index r_books_title_gin  on r_books using gin (to_tsvector('english', title));
-create index r_books_year       on r_books(year);
-create index r_books_genre_k    on r_books(genre_k);
+create index r_books_title_gin  on json.r_books using gin (to_tsvector('english', title));
+create index r_books_year       on json.r_books(year);
+create index r_books_genre_k    on json.r_books(genre_k);
 
 -- Intersection table between "r_books" and "authors"
-create table bs_and_as(
+create table json.bs_and_as(
   r_books_k int not null,
   authors_k int not null,
   pos       int not null, 
@@ -146,7 +148,7 @@ create table bs_and_as(
 
 -- Copy the relevant data from j_books_r_view to a throw-away table
 -- so that it can be read and updated in successive steps.
-create temp table r_books_temp(
+create table pg_temp.r_books_temp(
   k                   int not null,
   isbn                text not null,
   title               text not null,
@@ -157,46 +159,46 @@ create temp table r_books_temp(
   genre               text,   
   genre_k             int);
 
-insert into r_books_temp(k, isbn, title, year, pos,     author_given_name, author_family_name, genre)
-select                   k, isbn, title, year, arr.pos, arr.given_name,    arr.family_name,    genre
+insert into pg_temp.r_books_temp(k, isbn, title, year, pos,     author_given_name, author_family_name, genre)
+select                           k, isbn, title, year, arr.pos, arr.given_name,    arr.family_name,    genre
 from
-  j_books_r_view
+  json.j_books_r_view
   cross join lateral
   unnest(authors) with ordinality as arr(given_name, family_name, pos)
 order by k, pos;
 
-insert into genres(genre)
+insert into json.genres(genre)
 select genre
-from r_books_temp
+from pg_temp.r_books_temp
 where genre is not null
 group by genre
 order by genre;
 
-select * from genres order by k;
+select * from json.genres order by k;
 
-update r_books_temp b
+update pg_temp.r_books_temp b
 set genre_k = (
-    select k from genres where genre = b.genre
+    select k from json.genres where genre = b.genre
   )
 where genre is not null;
 
-insert into r_books(k, isbn, title, year, genre_k)
-select              k, isbn, title, year, genre_k
-from r_books_temp
+insert into json.r_books(k, isbn, title, year, genre_k)
+select                   k, isbn, title, year, genre_k
+from pg_temp.r_books_temp
 group by k, isbn, title, year, genre_k;
 
-alter table r_books add constraint r_books_genre_k_fk
-  foreign key(genre_k) references genres(k)
+alter table json.r_books add constraint r_books_genre_k_fk
+  foreign key(genre_k) references json.genres(k)
   match full
   on delete cascade;
 
-insert into authors(given_name,        family_name       )
-select              author_given_name, author_family_name
-from r_books_temp
+insert into json.authors(given_name,        family_name       )
+select                   author_given_name, author_family_name
+from pg_temp.r_books_temp
 group by author_given_name, author_family_name
 order by author_given_name, author_family_name;
 
-select * from authors order by k;
+select * from json.authors order by k;
 
 -- Populate the intersection table.
 -- This can doubltless be done more efficiently.
@@ -211,29 +213,29 @@ declare
 begin
   for      b_k, b_pos, b_given_name,      b_family_name in (
     select k,   pos,   author_given_name, author_family_name
-    from r_books_temp)
+    from pg_temp.r_books_temp)
   loop
     select k
     into a_k
-    from authors
+    from json.authors
     where
       given_name  is not distinct from b_given_name and
       family_name =                    b_family_name;
 
-    insert into bs_and_as(r_books_k, authors_k, pos) values(b_k, a_k, b_pos);
+    insert into json.bs_and_as(r_books_k, authors_k, pos) values(b_k, a_k, b_pos);
   end loop;
 end;
 $body$;
 
-select * from r_books order by k;
+select * from json.r_books order by k;
 
-select * from bs_and_as order by r_books_k, authors_k, pos;
+select * from json.bs_and_as order by r_books_k, authors_k, pos;
 
 -- Finished!
 ----------------------------------------------------------------------------------------------------
 -- Present the 3NF representation as a single relation with "authors" as a SQL array.
 
-create view r_books_view(k, isbn, title, year, authors, genre) as
+create view json.r_books_view(k, isbn, title, year, authors, genre) as
 with
   c1(k, isbn, title, year, genre) as (
     select
@@ -243,9 +245,9 @@ with
       b.year,
       g.genre
     from
-      r_books as b
+      json.r_books as b
       left outer join
-      genres as g
+      json.genres as g
       on (b.genre_k = g.k)
     ),
 
@@ -255,9 +257,9 @@ with
       i.authors_k,
       i.pos
     from
-      r_books as b
+      json.r_books as b
       inner join
-      bs_and_as as i
+      json.bs_and_as as i
       on (b.k = i.r_books_k)
     ),
 
@@ -283,12 +285,12 @@ with
       c3.title,
       c3.year,
       c3.pos,
-      (a.given_name, a.family_name)::a_name, 
+      (a.given_name, a.family_name)::json.a_name, 
       c3.genre
     from
       c3
       inner join
-      authors as a
+      json.authors as a
       on (c3.authors_k = a.k)
     )
 
@@ -302,4 +304,4 @@ select
 from c4
 group by k, isbn, title, year, genre;
 
-select * from r_books_view order by k;
+select * from json.r_books_view order by k;
