@@ -12,6 +12,8 @@ alter role postgres with
   noreplication
   nobypassrls
   connection limit -1
+
+  -- "login" needed to allow index backfill .
   login password null;
 
 -- Just in case an intervention needs "posgres" to be allowed to start sessions 

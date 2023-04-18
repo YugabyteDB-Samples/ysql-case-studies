@@ -925,8 +925,8 @@ recursive-cte
 triggers
   trigger-firing-order
   mandatory-one-to-many-relationship
-    ask-tom-approach
-    triggers-to-check-the-rule-needs-serializable
+    ask-tom-approach [COMING SOON]
+    triggers-to-check-the-rule-needs-serializable [COMING SOON]
 ```
 
 The leaves in this directory hierarchy hold the actual case-studies—and there are currently _eleven_ of these.

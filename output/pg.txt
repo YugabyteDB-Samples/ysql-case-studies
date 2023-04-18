@@ -2,13 +2,13 @@
  Create 6 tenant databases
  ==================================================================================================================================
 
- 1296 ms
+ 490 ms
 
  ==================================================================================================================================
  Drop and re-create those 6 tenant databases
  ==================================================================================================================================
 
- 1797 ms
+ 840 ms
 
  ==================================================================================================================================
  analyzing-covid-data-with-aggregate-functions
@@ -250,7 +250,7 @@
  95,12
  96,12
 
- analyzing-covid-data-with-aggregate-functions: 172 ms
+ analyzing-covid-data-with-aggregate-functions: 190 ms
 
  ==================================================================================================================================
  recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm
@@ -292,7 +292,7 @@
   4 | 42
   4 | 43
 
- recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm: 31 ms
+ recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm: 37 ms
 
  ==================================================================================================================================
  recursive-cte/basics/fibonacci
@@ -346,7 +346,7 @@
  11 |     89
  12 |    144
 
- recursive-cte/basics/fibonacci: 33 ms
+ recursive-cte/basics/fibonacci: 38 ms
 
  ==================================================================================================================================
  recursive-cte/employee-hierarchy
@@ -457,7 +457,7 @@
 
  doris > fred > mary
 
- recursive-cte/employee-hierarchy: 38 ms
+ recursive-cte/employee-hierarchy: 48 ms
 
  ==================================================================================================================================
  recursive-cte/bacon-numbers
@@ -825,7 +825,7 @@
 
  Nothing survives. So the (so-called) recursion stops.
 
- recursive-cte/bacon-numbers: 452 ms
+ recursive-cte/bacon-numbers: 464 ms
 
  ==================================================================================================================================
  date-time-utilities
@@ -1102,7 +1102,6 @@
  America/Edmonton               | MST        | MDT        | -07:00     | -06:00     | CA           | Mountain - AB; BC (E); SK (W)
  America/Inuvik                 | MST        | MDT        | -07:00     | -06:00     | CA           | Mountain - NT (west)
  America/Mazatlan               | MST        | MDT        | -07:00     | -06:00     | MX           | Mountain Time - Baja California Sur, Nayarit, Sinaloa
- America/Ojinaga                | MST        | MDT        | -07:00     | -06:00     | MX           | Mountain Time US - Chihuahua (US border)
  America/Yellowknife            | MST        | MDT        | -07:00     | -06:00     | CA           | Mountain - NT (central)
  America/Bahia_Banderas         | CST        | CDT        | -06:00     | -05:00     | MX           | Central Time - Bahía de Banderas
  America/Chicago                | CST        | CDT        | -06:00     | -05:00     | US           | Central (most areas)
@@ -1224,146 +1223,117 @@
  Pacific/Pago_Pago                | SST    | SST        | SST        | -11:00     | -11:00     | -11:00     | false  | AS           | -1416-17042     | Samoa, Midway                                                             | Canonical
  Pacific/Samoa                    | SST    | SST        | SST        | -11:00     | -11:00     | -11:00     | false  | WS           |                 |                                                                           | Deprecated
  US/Samoa                         | SST    | SST        | SST        | -11:00     | -11:00     | -11:00     | false  | WS           |                 |                                                                           | Deprecated
- America/Adak                     | HST    | HST        | HDT        | -10:00     | -10:00     | -09:00     | false  | US           | +515248-1763929 | Aleutian Islands                                                          | Canonical
- America/Atka                     | HST    | HST        | HDT        | -10:00     | -10:00     | -09:00     | false  | US           |                 |                                                                           | Deprecated
  Etc/GMT+10                       | -10    | -10        | -10        | -10:00     | -10:00     | -10:00     | false  |              |                 |                                                                           | Canonical
  HST                              | HST    | HST        | HST        | -10:00     | -10:00     | -10:00     | false  |              |                 |                                                                           | Deprecated
  Pacific/Honolulu                 | HST    | HST        | HST        | -10:00     | -10:00     | -10:00     | false  | US           | +211825-1575130 | Hawaii                                                                    | Canonical
  Pacific/Johnston                 | HST    | HST        | HST        | -10:00     | -10:00     | -10:00     | false  | UM           |                 |                                                                           | Deprecated
  Pacific/Rarotonga                | -10    | -10        | -10        | -10:00     | -10:00     | -10:00     | false  | CK           | -2114-15946     |                                                                           | Canonical
  Pacific/Tahiti                   | -10    | -10        | -10        | -10:00     | -10:00     | -10:00     | false  | PF           | -1732-14934     | Society Islands                                                           | Canonical
- US/Aleutian                      | HST    | HST        | HDT        | -10:00     | -10:00     | -09:00     | false  | US           |                 |                                                                           | Deprecated
  US/Hawaii                        | HST    | HST        | HST        | -10:00     | -10:00     | -10:00     | false  | US           |                 |                                                                           | Deprecated
  Pacific/Marquesas                | -0930  | -0930      | -0930      | -09:30     | -09:30     | -09:30     | false  | PF           | -0900-13930     | Marquesas Islands                                                         | Canonical
- America/Anchorage                | AKST   | AKST       | AKDT       | -09:00     | -09:00     | -08:00     | false  | US           | +611305-1495401 | Alaska (most areas)                                                       | Canonical
- America/Juneau                   | AKST   | AKST       | AKDT       | -09:00     | -09:00     | -08:00     | false  | US           | +581807-1342511 | Alaska - Juneau area                                                      | Canonical
- America/Metlakatla               | AKST   | AKST       | AKDT       | -09:00     | -09:00     | -08:00     | false  | US           | +550737-1313435 | Alaska - Annette Island                                                   | Canonical
- America/Nome                     | AKST   | AKST       | AKDT       | -09:00     | -09:00     | -08:00     | false  | US           | +643004-1652423 | Alaska (west)                                                             | Canonical
- America/Sitka                    | AKST   | AKST       | AKDT       | -09:00     | -09:00     | -08:00     | false  | US           | +571035-1351807 | Alaska - Sitka area                                                       | Canonical
- America/Yakutat                  | AKST   | AKST       | AKDT       | -09:00     | -09:00     | -08:00     | false  | US           | +593249-1394338 | Alaska - Yakutat                                                          | Canonical
+ America/Adak                     | HDT    | HST        | HDT        | -09:00     | -10:00     | -09:00     | true   | US           | +515248-1763929 | Aleutian Islands                                                          | Canonical
+ America/Atka                     | HDT    | HST        | HDT        | -09:00     | -10:00     | -09:00     | true   | US           |                 |                                                                           | Deprecated
  Etc/GMT+9                        | -09    | -09        | -09        | -09:00     | -09:00     | -09:00     | false  |              |                 |                                                                           | Canonical
  Pacific/Gambier                  | -09    | -09        | -09        | -09:00     | -09:00     | -09:00     | false  | PF           | -2308-13457     | Gambier Islands                                                           | Canonical
- US/Alaska                        | AKST   | AKST       | AKDT       | -09:00     | -09:00     | -08:00     | false  | US           |                 |                                                                           | Deprecated
- America/Ensenada                 | PST    | PST        | PDT        | -08:00     | -08:00     | -07:00     | false  | MX           |                 |                                                                           | Deprecated
- America/Los_Angeles              | PST    | PST        | PDT        | -08:00     | -08:00     | -07:00     | false  | US           | +340308-1181434 | Pacific                                                                   | Canonical
- America/Santa_Isabel             | PST    | PST        | PDT        | -08:00     | -08:00     | -07:00     | false  | MX           |                 |                                                                           | Deprecated
- America/Tijuana                  | PST    | PST        | PDT        | -08:00     | -08:00     | -07:00     | false  | MX           | +3232-11701     | Pacific Time US - Baja California                                         | Canonical
- America/Vancouver                | PST    | PST        | PDT        | -08:00     | -08:00     | -07:00     | false  | CA           | +4916-12307     | Pacific - BC (most areas)                                                 | Canonical
- Canada/Pacific                   | PST    | PST        | PDT        | -08:00     | -08:00     | -07:00     | false  | CA           |                 |                                                                           | Deprecated
+ US/Aleutian                      | HDT    | HST        | HDT        | -09:00     | -10:00     | -09:00     | true   | US           |                 |                                                                           | Deprecated
+ America/Anchorage                | AKDT   | AKST       | AKDT       | -08:00     | -09:00     | -08:00     | true   | US           | +611305-1495401 | Alaska (most areas)                                                       | Canonical
+ America/Juneau                   | AKDT   | AKST       | AKDT       | -08:00     | -09:00     | -08:00     | true   | US           | +581807-1342511 | Alaska - Juneau area                                                      | Canonical
+ America/Metlakatla               | AKDT   | AKST       | AKDT       | -08:00     | -09:00     | -08:00     | true   | US           | +550737-1313435 | Alaska - Annette Island                                                   | Canonical
+ America/Nome                     | AKDT   | AKST       | AKDT       | -08:00     | -09:00     | -08:00     | true   | US           | +643004-1652423 | Alaska (west)                                                             | Canonical
+ America/Sitka                    | AKDT   | AKST       | AKDT       | -08:00     | -09:00     | -08:00     | true   | US           | +571035-1351807 | Alaska - Sitka area                                                       | Canonical
+ America/Yakutat                  | AKDT   | AKST       | AKDT       | -08:00     | -09:00     | -08:00     | true   | US           | +593249-1394338 | Alaska - Yakutat                                                          | Canonical
  Etc/GMT+8                        | -08    | -08        | -08        | -08:00     | -08:00     | -08:00     | false  |              |                 |                                                                           | Canonical
- Mexico/BajaNorte                 | PST    | PST        | PDT        | -08:00     | -08:00     | -07:00     | false  | MX           |                 |                                                                           | Deprecated
- PST8PDT                          | PST    | PST        | PDT        | -08:00     | -08:00     | -07:00     | false  |              |                 |                                                                           | Deprecated
  Pacific/Pitcairn                 | -08    | -08        | -08        | -08:00     | -08:00     | -08:00     | false  | PN           | -2504-13005     |                                                                           | Canonical
- US/Pacific                       | PST    | PST        | PDT        | -08:00     | -08:00     | -07:00     | false  | US           |                 |                                                                           | Deprecated
- America/Boise                    | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | US           | +433649-1161209 | Mountain - ID (south); OR (east)                                          | Canonical
- America/Cambridge_Bay            | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | CA           | +690650-1050310 | Mountain - NU (west)                                                      | Canonical
+ US/Alaska                        | AKDT   | AKST       | AKDT       | -08:00     | -09:00     | -08:00     | true   | US           |                 |                                                                           | Deprecated
  America/Creston                  | MST    | MST        | MST        | -07:00     | -07:00     | -07:00     | false  | CA           | +4906-11631     | MST - BC (Creston)                                                        | Canonical
  America/Dawson                   | MST    | MST        | MST        | -07:00     | -07:00     | -07:00     | false  | CA           | +6404-13925     | MST - Yukon (west)                                                        | Canonical
  America/Dawson_Creek             | MST    | MST        | MST        | -07:00     | -07:00     | -07:00     | false  | CA           | +5946-12014     | MST - BC (Dawson Cr, Ft St John)                                          | Canonical
- America/Denver                   | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | US           | +394421-1045903 | Mountain (most areas)                                                     | Canonical
- America/Edmonton                 | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | CA           | +5333-11328     | Mountain - AB; BC (E); SK (W)                                             | Canonical
+ America/Ensenada                 | PDT    | PST        | PDT        | -07:00     | -08:00     | -07:00     | true   | MX           |                 |                                                                           | Deprecated
  America/Fort_Nelson              | MST    | MST        | MST        | -07:00     | -07:00     | -07:00     | false  | CA           | +5848-12242     | MST - BC (Ft Nelson)                                                      | Canonical
  America/Hermosillo               | MST    | MST        | MST        | -07:00     | -07:00     | -07:00     | false  | MX           | +2904-11058     | Mountain Standard Time - Sonora                                           | Canonical
- America/Inuvik                   | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | CA           | +682059-1334300 | Mountain - NT (west)                                                      | Canonical
+ America/Los_Angeles              | PDT    | PST        | PDT        | -07:00     | -08:00     | -07:00     | true   | US           | +340308-1181434 | Pacific                                                                   | Canonical
  America/Mazatlan                 | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | MX           | +2313-10625     | Mountain Time - Baja California Sur, Nayarit, Sinaloa                     | Canonical
  America/Phoenix                  | MST    | MST        | MST        | -07:00     | -07:00     | -07:00     | false  | US           | +332654-1120424 | MST - Arizona (except Navajo)                                             | Canonical
- America/Shiprock                 | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | US           |                 |                                                                           | Deprecated
+ America/Santa_Isabel             | PDT    | PST        | PDT        | -07:00     | -08:00     | -07:00     | true   | MX           |                 |                                                                           | Deprecated
+ America/Tijuana                  | PDT    | PST        | PDT        | -07:00     | -08:00     | -07:00     | true   | MX           | +3232-11701     | Pacific Time US - Baja California                                         | Canonical
+ America/Vancouver                | PDT    | PST        | PDT        | -07:00     | -08:00     | -07:00     | true   | CA           | +4916-12307     | Pacific - BC (most areas)                                                 | Canonical
  America/Whitehorse               | MST    | MST        | MST        | -07:00     | -07:00     | -07:00     | false  | CA           | +6043-13503     | MST - Yukon (east)                                                        | Canonical
- America/Yellowknife              | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | CA           | +6227-11421     | Mountain - NT (central)                                                   | Canonical
- Canada/Mountain                  | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | CA           |                 |                                                                           | Deprecated
+ Canada/Pacific                   | PDT    | PST        | PDT        | -07:00     | -08:00     | -07:00     | true   | CA           |                 |                                                                           | Deprecated
  Canada/Yukon                     | MST    | MST        | MST        | -07:00     | -07:00     | -07:00     | false  | CA           |                 |                                                                           | Deprecated
  Etc/GMT+7                        | -07    | -07        | -07        | -07:00     | -07:00     | -07:00     | false  |              |                 |                                                                           | Canonical
  MST                              | MST    | MST        | MST        | -07:00     | -07:00     | -07:00     | false  |              |                 |                                                                           | Deprecated
- MST7MDT                          | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  |              |                 |                                                                           | Deprecated
+ Mexico/BajaNorte                 | PDT    | PST        | PDT        | -07:00     | -08:00     | -07:00     | true   | MX           |                 |                                                                           | Deprecated
  Mexico/BajaSur                   | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | MX           |                 |                                                                           | Deprecated
- Navajo                           | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | US           |                 |                                                                           | Deprecated
+ PST8PDT                          | PDT    | PST        | PDT        | -07:00     | -08:00     | -07:00     | true   |              |                 |                                                                           | Deprecated
  US/Arizona                       | MST    | MST        | MST        | -07:00     | -07:00     | -07:00     | false  | US           |                 |                                                                           | Deprecated
- US/Mountain                      | MST    | MST        | MDT        | -07:00     | -07:00     | -06:00     | false  | US           |                 |                                                                           | Deprecated
+ US/Pacific                       | PDT    | PST        | PDT        | -07:00     | -08:00     | -07:00     | true   | US           |                 |                                                                           | Deprecated
  America/Bahia_Banderas           | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | MX           | +2048-10515     | Central Time - Bahía de Banderas                                          | Canonical
  America/Belize                   | CST    | CST        | CST        | -06:00     | -06:00     | -06:00     | false  | BZ           | +1730-08812     |                                                                           | Canonical
- America/Chicago                  | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | US           | +415100-0873900 | Central (most areas)                                                      | Canonical
+ America/Boise                    | MDT    | MST        | MDT        | -06:00     | -07:00     | -06:00     | true   | US           | +433649-1161209 | Mountain - ID (south); OR (east)                                          | Canonical
+ America/Cambridge_Bay            | MDT    | MST        | MDT        | -06:00     | -07:00     | -06:00     | true   | CA           | +690650-1050310 | Mountain - NU (west)                                                      | Canonical
  America/Chihuahua                | CST    | MST        | MDT        | -06:00     | -07:00     | -06:00     | false  | MX           | +2838-10605     | Mountain Time - Chihuahua (most areas)                                    | Canonical
  America/Costa_Rica               | CST    | CST        | CST        | -06:00     | -06:00     | -06:00     | false  | CR           | +0956-08405     |                                                                           | Canonical
+ America/Denver                   | MDT    | MST        | MDT        | -06:00     | -07:00     | -06:00     | true   | US           | +394421-1045903 | Mountain (most areas)                                                     | Canonical
+ America/Edmonton                 | MDT    | MST        | MDT        | -06:00     | -07:00     | -06:00     | true   | CA           | +5333-11328     | Mountain - AB; BC (E); SK (W)                                             | Canonical
  America/El_Salvador              | CST    | CST        | CST        | -06:00     | -06:00     | -06:00     | false  | SV           | +1342-08912     |                                                                           | Canonical
  America/Guatemala                | CST    | CST        | CST        | -06:00     | -06:00     | -06:00     | false  | GT           | +1438-09031     |                                                                           | Canonical
- America/Indiana/Knox             | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | US           | +411745-0863730 | Central - IN (Starke)                                                     | Canonical
- America/Indiana/Tell_City        | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | US           | +375711-0864541 | Central - IN (Perry)                                                      | Canonical
- America/Knox_IN                  | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | US           | +411745-0863730 |                                                                           | Deprecated
+ America/Inuvik                   | MDT    | MST        | MDT        | -06:00     | -07:00     | -06:00     | true   | CA           | +682059-1334300 | Mountain - NT (west)                                                      | Canonical
  America/Managua                  | CST    | CST        | CST        | -06:00     | -06:00     | -06:00     | false  | NI           | +1209-08617     |                                                                           | Canonical
- America/Matamoros                | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | MX           | +2550-09730     | Central Time US - Coahuila, Nuevo León, Tamaulipas (US border)            | Canonical
- America/Menominee                | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | US           | +450628-0873651 | Central - MI (Wisconsin border)                                           | Canonical
  America/Merida                   | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | MX           | +2058-08937     | Central Time - Campeche, Yucatán                                          | Canonical
  America/Mexico_City              | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | MX           | +1924-09909     | Central Time                                                              | Canonical
  America/Monterrey                | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | MX           | +2540-10019     | Central Time - Durango; Coahuila, Nuevo León, Tamaulipas (most areas)     | Canonical
- America/North_Dakota/Beulah      | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | US           | +471551-1014640 | Central - ND (Mercer)                                                     | Canonical
- America/North_Dakota/Center      | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | US           | +470659-1011757 | Central - ND (Oliver)                                                     | Canonical
- America/North_Dakota/New_Salem   | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | US           | +465042-1012439 | Central - ND (Morton rural)                                               | Canonical
- America/Ojinaga                  | CST    | MST        | MDT        | -06:00     | -07:00     | -06:00     | false  | MX           | +2934-10425     | Mountain Time US - Chihuahua (US border)                                  | Canonical
- America/Rainy_River              | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | CA           | +4843-09434     | Central - ON (Rainy R, Ft Frances)                                        | Canonical
- America/Rankin_Inlet             | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | CA           | +624900-0920459 | Central - NU (central)                                                    | Canonical
  America/Regina                   | CST    | CST        | CST        | -06:00     | -06:00     | -06:00     | false  | CA           | +5024-10439     | CST - SK (most areas)                                                     | Canonical
- America/Resolute                 | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | CA           | +744144-0944945 | Central - NU (Resolute)                                                   | Canonical
+ America/Shiprock                 | MDT    | MST        | MDT        | -06:00     | -07:00     | -06:00     | true   | US           |                 |                                                                           | Deprecated
  America/Swift_Current            | CST    | CST        | CST        | -06:00     | -06:00     | -06:00     | false  | CA           | +5017-10750     | CST - SK (midwest)                                                        | Canonical
  America/Tegucigalpa              | CST    | CST        | CST        | -06:00     | -06:00     | -06:00     | false  | HN           | +1406-08713     |                                                                           | Canonical
- America/Winnipeg                 | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | CA           | +4953-09709     | Central - ON (west); Manitoba                                             | Canonical
- CST6CDT                          | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  |              |                 |                                                                           | Deprecated
- Canada/Central                   | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | CA           |                 |                                                                           | Deprecated
+ America/Yellowknife              | MDT    | MST        | MDT        | -06:00     | -07:00     | -06:00     | true   | CA           | +6227-11421     | Mountain - NT (central)                                                   | Canonical
+ Canada/Mountain                  | MDT    | MST        | MDT        | -06:00     | -07:00     | -06:00     | true   | CA           |                 |                                                                           | Deprecated
  Canada/Saskatchewan              | CST    | CST        | CST        | -06:00     | -06:00     | -06:00     | false  | CA           |                 |                                                                           | Deprecated
+ Chile/EasterIsland               | -06    | -06        | -05        | -06:00     | -06:00     | -05:00     | false  | CL           |                 |                                                                           | Deprecated
  Etc/GMT+6                        | -06    | -06        | -06        | -06:00     | -06:00     | -06:00     | false  |              |                 |                                                                           | Canonical
+ MST7MDT                          | MDT    | MST        | MDT        | -06:00     | -07:00     | -06:00     | true   |              |                 |                                                                           | Deprecated
  Mexico/General                   | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | MX           |                 |                                                                           | Deprecated
+ Navajo                           | MDT    | MST        | MDT        | -06:00     | -07:00     | -06:00     | true   | US           |                 |                                                                           | Deprecated
+ Pacific/Easter                   | -06    | -06        | -05        | -06:00     | -06:00     | -05:00     | false  | CL           | -2709-10926     | Easter Island                                                             | Canonical
  Pacific/Galapagos                | -06    | -06        | -06        | -06:00     | -06:00     | -06:00     | false  | EC           | -0054-08936     | Galápagos Islands                                                         | Canonical
- US/Central                       | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | US           |                 |                                                                           | Deprecated
- US/Indiana-Starke                | CST    | CST        | CDT        | -06:00     | -06:00     | -05:00     | false  | US           |                 |                                                                           | Deprecated
+ US/Mountain                      | MDT    | MST        | MDT        | -06:00     | -07:00     | -06:00     | true   | US           |                 |                                                                           | Deprecated
  America/Atikokan                 | EST    | EST        | EST        | -05:00     | -05:00     | -05:00     | false  | CA           | +484531-0913718 | EST - ON (Atikokan); NU (Coral H)                                         | Canonical
  America/Bogota                   | -05    | -05        | -05        | -05:00     | -05:00     | -05:00     | false  | CO           | +0436-07405     |                                                                           | Canonical
  America/Cancun                   | EST    | EST        | EST        | -05:00     | -05:00     | -05:00     | false  | MX           | +2105-08646     | Eastern Standard Time - Quintana Roo                                      | Canonical
  America/Cayman                   | EST    | EST        | EST        | -05:00     | -05:00     | -05:00     | false  | KY           | +1918-08123     |                                                                           | Alias
+ America/Chicago                  | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | US           | +415100-0873900 | Central (most areas)                                                      | Canonical
  America/Coral_Harbour            | EST    | EST        | EST        | -05:00     | -05:00     | -05:00     | false  | CA           |                 |                                                                           | Deprecated
- America/Detroit                  | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +421953-0830245 | Eastern - MI (most areas)                                                 | Canonical
  America/Eirunepe                 | -05    | -05        | -05        | -05:00     | -05:00     | -05:00     | false  | BR           | -0640-06952     | Amazonas (west)                                                           | Canonical
- America/Fort_Wayne               | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           |                 |                                                                           | Deprecated
- America/Grand_Turk               | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | TC           | +2128-07108     |                                                                           | Canonical
  America/Guayaquil                | -05    | -05        | -05        | -05:00     | -05:00     | -05:00     | false  | EC           | -0210-07950     | Ecuador (mainland)                                                        | Canonical
- America/Havana                   | CST    | CST        | CDT        | -05:00     | -05:00     | -04:00     | false  | CU           | +2308-08222     |                                                                           | Canonical
- America/Indiana/Indianapolis     | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +394606-0860929 | Eastern - IN (most areas)                                                 | Canonical
- America/Indiana/Marengo          | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +382232-0862041 | Eastern - IN (Crawford)                                                   | Canonical
- America/Indiana/Petersburg       | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +382931-0871643 | Eastern - IN (Pike)                                                       | Canonical
- America/Indiana/Vevay            | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +384452-0850402 | Eastern - IN (Switzerland)                                                | Canonical
- America/Indiana/Vincennes        | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +384038-0873143 | Eastern - IN (Da, Du, K, Mn)                                              | Canonical
- America/Indiana/Winamac          | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +410305-0863611 | Eastern - IN (Pulaski)                                                    | Canonical
- America/Indianapolis             | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +394606-0860929 |                                                                           | Deprecated
- America/Iqaluit                  | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | CA           | +6344-06828     | Eastern - NU (most east areas)                                            | Canonical
+ America/Indiana/Knox             | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | US           | +411745-0863730 | Central - IN (Starke)                                                     | Canonical
+ America/Indiana/Tell_City        | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | US           | +375711-0864541 | Central - IN (Perry)                                                      | Canonical
  America/Jamaica                  | EST    | EST        | EST        | -05:00     | -05:00     | -05:00     | false  | JM           | +175805-0764736 |                                                                           | Canonical
- America/Kentucky/Louisville      | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +381515-0854534 | Eastern - KY (Louisville area)                                            | Canonical
- America/Kentucky/Monticello      | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +364947-0845057 | Eastern - KY (Wayne)                                                      | Canonical
+ America/Knox_IN                  | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | US           | +411745-0863730 |                                                                           | Deprecated
  America/Lima                     | -05    | -05        | -05        | -05:00     | -05:00     | -05:00     | false  | PE           | -1203-07703     |                                                                           | Canonical
- America/Louisville               | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +381515-0854534 |                                                                           | Deprecated
- America/Montreal                 | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | CA           |                 |                                                                           | Deprecated
- America/Nassau                   | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | BS           | +2505-07721     |                                                                           | Canonical
- America/New_York                 | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           | +404251-0740023 | Eastern (most areas)                                                      | Canonical
- America/Nipigon                  | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | CA           | +4901-08816     | Eastern - ON, QC (no DST 1967-73)                                         | Canonical
+ America/Matamoros                | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | MX           | +2550-09730     | Central Time US - Coahuila, Nuevo León, Tamaulipas (US border)            | Canonical
+ America/Menominee                | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | US           | +450628-0873651 | Central - MI (Wisconsin border)                                           | Canonical
+ America/North_Dakota/Beulah      | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | US           | +471551-1014640 | Central - ND (Mercer)                                                     | Canonical
+ America/North_Dakota/Center      | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | US           | +470659-1011757 | Central - ND (Oliver)                                                     | Canonical
+ America/North_Dakota/New_Salem   | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | US           | +465042-1012439 | Central - ND (Morton rural)                                               | Canonical
  America/Panama                   | EST    | EST        | EST        | -05:00     | -05:00     | -05:00     | false  | PA           | +0858-07932     |                                                                           | Canonical
- America/Pangnirtung              | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | CA           | +6608-06544     | Eastern - NU (Pangnirtung)                                                | Canonical
- America/Port-au-Prince           | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | HT           | +1832-07220     |                                                                           | Canonical
  America/Porto_Acre               | -05    | -05        | -05        | -05:00     | -05:00     | -05:00     | false  | BR           |                 |                                                                           | Deprecated
+ America/Rainy_River              | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | CA           | +4843-09434     | Central - ON (Rainy R, Ft Frances)                                        | Canonical
+ America/Rankin_Inlet             | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | CA           | +624900-0920459 | Central - NU (central)                                                    | Canonical
+ America/Resolute                 | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | CA           | +744144-0944945 | Central - NU (Resolute)                                                   | Canonical
  America/Rio_Branco               | -05    | -05        | -05        | -05:00     | -05:00     | -05:00     | false  | BR           | -0958-06748     | Acre                                                                      | Canonical
- America/Thunder_Bay              | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | CA           | +4823-08915     | Eastern - ON (Thunder Bay)                                                | Canonical
- America/Toronto                  | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | CA           | +4339-07923     | Eastern - ON, QC (most areas)                                             | Canonical
+ America/Winnipeg                 | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | CA           | +4953-09709     | Central - ON (west); Manitoba                                             | Canonical
  Brazil/Acre                      | -05    | -05        | -05        | -05:00     | -05:00     | -05:00     | false  | BR           |                 |                                                                           | Deprecated
- Canada/Eastern                   | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | CA           |                 |                                                                           | Deprecated
- Chile/EasterIsland               | -05    | -06        | -05        | -05:00     | -06:00     | -05:00     | true   | CL           |                 |                                                                           | Deprecated
- Cuba                             | CST    | CST        | CDT        | -05:00     | -05:00     | -04:00     | false  | CU           |                 |                                                                           | Deprecated
+ CST6CDT                          | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   |              |                 |                                                                           | Deprecated
+ Canada/Central                   | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | CA           |                 |                                                                           | Deprecated
  EST                              | EST    | EST        | EST        | -05:00     | -05:00     | -05:00     | false  |              |                 |                                                                           | Deprecated
- EST5EDT                          | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  |              |                 |                                                                           | Deprecated
  Etc/GMT+5                        | -05    | -05        | -05        | -05:00     | -05:00     | -05:00     | false  |              |                 |                                                                           | Canonical
  Jamaica                          | EST    | EST        | EST        | -05:00     | -05:00     | -05:00     | false  | JM           | +175805-0764736 |                                                                           | Deprecated
- Pacific/Easter                   | -05    | -06        | -05        | -05:00     | -06:00     | -05:00     | true   | CL           | -2709-10926     | Easter Island                                                             | Canonical
- US/East-Indiana                  | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           |                 |                                                                           | Deprecated
- US/Eastern                       | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           |                 |                                                                           | Deprecated
- US/Michigan                      | EST    | EST        | EDT        | -05:00     | -05:00     | -04:00     | false  | US           |                 |                                                                           | Deprecated
+ US/Central                       | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | US           |                 |                                                                           | Deprecated
+ US/Indiana-Starke                | CDT    | CST        | CDT        | -05:00     | -06:00     | -05:00     | true   | US           |                 |                                                                           | Deprecated
  America/Anguilla                 | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | AI           | +1812-06304     |                                                                           | Alias
  America/Antigua                  | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | AG           | +1703-06148     |                                                                           | Alias
  America/Aruba                    | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | AW           | +1230-06958     |                                                                           | Alias
+ America/Asuncion                 | -04    | -04        | -03        | -04:00     | -04:00     | -03:00     | false  | PY           | -2516-05740     |                                                                           | Canonical
  America/Barbados                 | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | BB           | +1306-05937     |                                                                           | Canonical
  America/Blanc-Sablon             | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | CA           | +5125-05707     | AST - QC (Lower North Shore)                                              | Canonical
  America/Boa_Vista                | -04    | -04        | -04        | -04:00     | -04:00     | -04:00     | false  | BR           | +0249-06040     | Roraima                                                                   | Canonical
@@ -1371,39 +1341,61 @@
  America/Caracas                  | -04    | -04        | -04        | -04:00     | -04:00     | -04:00     | false  | VE           | +1030-06656     |                                                                           | Canonical
  America/Cuiaba                   | -04    | -04        | -04        | -04:00     | -04:00     | -04:00     | false  | BR           | -1535-05605     | Mato Grosso                                                               | Canonical
  America/Curacao                  | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | CW           | +1211-06900     |                                                                           | Canonical
+ America/Detroit                  | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +421953-0830245 | Eastern - MI (most areas)                                                 | Canonical
  America/Dominica                 | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | DM           | +1518-06124     |                                                                           | Alias
- America/Glace_Bay                | AST    | AST        | ADT        | -04:00     | -04:00     | -03:00     | false  | CA           | +4612-05957     | Atlantic - NS (Cape Breton)                                               | Canonical
- America/Goose_Bay                | AST    | AST        | ADT        | -04:00     | -04:00     | -03:00     | false  | CA           | +5320-06025     | Atlantic - Labrador (most areas)                                          | Canonical
+ America/Fort_Wayne               | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           |                 |                                                                           | Deprecated
+ America/Grand_Turk               | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | TC           | +2128-07108     |                                                                           | Canonical
  America/Grenada                  | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | GD           | +1203-06145     |                                                                           | Alias
  America/Guadeloupe               | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | GP           | +1614-06132     |                                                                           | Alias
  America/Guyana                   | -04    | -04        | -04        | -04:00     | -04:00     | -04:00     | false  | GY           | +0648-05810     |                                                                           | Canonical
- America/Halifax                  | AST    | AST        | ADT        | -04:00     | -04:00     | -03:00     | false  | CA           | +4439-06336     | Atlantic - NS (most areas); PE                                            | Canonical
+ America/Havana                   | CDT    | CST        | CDT        | -04:00     | -05:00     | -04:00     | true   | CU           | +2308-08222     |                                                                           | Canonical
+ America/Indiana/Indianapolis     | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +394606-0860929 | Eastern - IN (most areas)                                                 | Canonical
+ America/Indiana/Marengo          | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +382232-0862041 | Eastern - IN (Crawford)                                                   | Canonical
+ America/Indiana/Petersburg       | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +382931-0871643 | Eastern - IN (Pike)                                                       | Canonical
+ America/Indiana/Vevay            | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +384452-0850402 | Eastern - IN (Switzerland)                                                | Canonical
+ America/Indiana/Vincennes        | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +384038-0873143 | Eastern - IN (Da, Du, K, Mn)                                              | Canonical
+ America/Indiana/Winamac          | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +410305-0863611 | Eastern - IN (Pulaski)                                                    | Canonical
+ America/Indianapolis             | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +394606-0860929 |                                                                           | Deprecated
+ America/Iqaluit                  | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | CA           | +6344-06828     | Eastern - NU (most east areas)                                            | Canonical
+ America/Kentucky/Louisville      | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +381515-0854534 | Eastern - KY (Louisville area)                                            | Canonical
+ America/Kentucky/Monticello      | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +364947-0845057 | Eastern - KY (Wayne)                                                      | Canonical
  America/Kralendijk               | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | BQ           | +120903-0681636 |                                                                           | Alias
  America/La_Paz                   | -04    | -04        | -04        | -04:00     | -04:00     | -04:00     | false  | BO           | -1630-06809     |                                                                           | Canonical
+ America/Louisville               | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +381515-0854534 |                                                                           | Deprecated
  America/Lower_Princes            | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | SX           | +180305-0630250 |                                                                           | Alias
  America/Manaus                   | -04    | -04        | -04        | -04:00     | -04:00     | -04:00     | false  | BR           | -0308-06001     | Amazonas (east)                                                           | Canonical
  America/Marigot                  | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | MF           | +1804-06305     |                                                                           | Alias
  America/Martinique               | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | MQ           | +1436-06105     |                                                                           | Canonical
- America/Moncton                  | AST    | AST        | ADT        | -04:00     | -04:00     | -03:00     | false  | CA           | +4606-06447     | Atlantic - New Brunswick                                                  | Canonical
+ America/Montreal                 | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | CA           |                 |                                                                           | Deprecated
  America/Montserrat               | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | MS           | +1643-06213     |                                                                           | Alias
+ America/Nassau                   | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | BS           | +2505-07721     |                                                                           | Canonical
+ America/New_York                 | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           | +404251-0740023 | Eastern (most areas)                                                      | Canonical
+ America/Nipigon                  | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | CA           | +4901-08816     | Eastern - ON, QC (no DST 1967-73)                                         | Canonical
+ America/Pangnirtung              | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | CA           | +6608-06544     | Eastern - NU (Pangnirtung)                                                | Canonical
+ America/Port-au-Prince           | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | HT           | +1832-07220     |                                                                           | Canonical
  America/Port_of_Spain            | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | TT           | +1039-06131     |                                                                           | Canonical
  America/Porto_Velho              | -04    | -04        | -04        | -04:00     | -04:00     | -04:00     | false  | BR           | -0846-06354     | Rondônia                                                                  | Canonical
  America/Puerto_Rico              | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | PR           | +182806-0660622 |                                                                           | Canonical
+ America/Santiago                 | -04    | -04        | -03        | -04:00     | -04:00     | -03:00     | false  | CL           | -3327-07040     | Chile (most areas)                                                        | Canonical
  America/Santo_Domingo            | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | DO           | +1828-06954     |                                                                           | Canonical
  America/St_Barthelemy            | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | BL           | +1753-06251     |                                                                           | Alias
  America/St_Kitts                 | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | KN           | +1718-06243     |                                                                           | Alias
  America/St_Lucia                 | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | LC           | +1401-06100     |                                                                           | Alias
  America/St_Thomas                | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | VI           | +1821-06456     |                                                                           | Alias
  America/St_Vincent               | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | VC           | +1309-06114     |                                                                           | Alias
- America/Thule                    | AST    | AST        | ADT        | -04:00     | -04:00     | -03:00     | false  | GL           | +7634-06847     | Thule/Pituffik                                                            | Canonical
+ America/Thunder_Bay              | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | CA           | +4823-08915     | Eastern - ON (Thunder Bay)                                                | Canonical
+ America/Toronto                  | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | CA           | +4339-07923     | Eastern - ON, QC (most areas)                                             | Canonical
  America/Tortola                  | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | VG           | +1827-06437     |                                                                           | Alias
  America/Virgin                   | AST    | AST        | AST        | -04:00     | -04:00     | -04:00     | false  | VI           |                 |                                                                           | Deprecated
- Atlantic/Bermuda                 | AST    | AST        | ADT        | -04:00     | -04:00     | -03:00     | false  | BM           | +3217-06446     |                                                                           | Canonical
  Brazil/West                      | -04    | -04        | -04        | -04:00     | -04:00     | -04:00     | false  | BR           |                 |                                                                           | Deprecated
- Canada/Atlantic                  | AST    | AST        | ADT        | -04:00     | -04:00     | -03:00     | false  | CA           |                 |                                                                           | Deprecated
+ Canada/Eastern                   | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | CA           |                 |                                                                           | Deprecated
+ Chile/Continental                | -04    | -04        | -03        | -04:00     | -04:00     | -03:00     | false  | CL           |                 |                                                                           | Deprecated
+ Cuba                             | CDT    | CST        | CDT        | -04:00     | -05:00     | -04:00     | true   | CU           |                 |                                                                           | Deprecated
+ EST5EDT                          | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   |              |                 |                                                                           | Deprecated
  Etc/GMT+4                        | -04    | -04        | -04        | -04:00     | -04:00     | -04:00     | false  |              |                 |                                                                           | Canonical
- America/St_Johns                 | NST    | NST        | NDT        | -03:30     | -03:30     | -02:30     | false  | CA           | +4734-05243     | Newfoundland; Labrador (southeast)                                        | Canonical
- Canada/Newfoundland              | NST    | NST        | NDT        | -03:30     | -03:30     | -02:30     | false  | CA           |                 |                                                                           | Deprecated
+ US/East-Indiana                  | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           |                 |                                                                           | Deprecated
+ US/Eastern                       | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           |                 |                                                                           | Deprecated
+ US/Michigan                      | EDT    | EST        | EDT        | -04:00     | -05:00     | -04:00     | true   | US           |                 |                                                                           | Deprecated
  America/Araguaina                | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | BR           | -0712-04812     | Tocantins                                                                 | Canonical
  America/Argentina/Buenos_Aires   | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AR           | -3436-05827     | Buenos Aires (BA, CF)                                                     | Canonical
  America/Argentina/Catamarca      | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AR           | -2828-06547     | Catamarca (CT); Chubut (CH)                                               | Canonical
@@ -1418,7 +1410,6 @@
  America/Argentina/San_Luis       | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AR           | -3319-06621     | San Luis (SL)                                                             | Canonical
  America/Argentina/Tucuman        | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AR           | -2649-06513     | Tucumán (TM)                                                              | Canonical
  America/Argentina/Ushuaia        | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AR           | -5448-06818     | Tierra del Fuego (TF)                                                     | Canonical
- America/Asuncion                 | -03    | -04        | -03        | -03:00     | -04:00     | -03:00     | true   | PY           | -2516-05740     |                                                                           | Canonical
  America/Bahia                    | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | BR           | -1259-03831     | Bahia                                                                     | Canonical
  America/Belem                    | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | BR           | -0127-04829     | Pará (east); Amapá                                                        | Canonical
  America/Buenos_Aires             | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AR           | -3436-05827     |                                                                           | Deprecated
@@ -1426,32 +1417,37 @@
  America/Cayenne                  | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | GF           | +0456-05220     |                                                                           | Canonical
  America/Cordoba                  | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AR           | -3124-06411     |                                                                           | Deprecated
  America/Fortaleza                | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | BR           | -0343-03830     | Brazil (northeast: MA, PI, CE, RN, PB)                                    | Canonical
- America/Godthab                  | -03    | -03        | -02        | -03:00     | -03:00     | -02:00     | false  | GL           | +6411-05144     |                                                                           | Deprecated
+ America/Glace_Bay                | ADT    | AST        | ADT        | -03:00     | -04:00     | -03:00     | true   | CA           | +4612-05957     | Atlantic - NS (Cape Breton)                                               | Canonical
+ America/Goose_Bay                | ADT    | AST        | ADT        | -03:00     | -04:00     | -03:00     | true   | CA           | +5320-06025     | Atlantic - Labrador (most areas)                                          | Canonical
+ America/Halifax                  | ADT    | AST        | ADT        | -03:00     | -04:00     | -03:00     | true   | CA           | +4439-06336     | Atlantic - NS (most areas); PE                                            | Canonical
  America/Jujuy                    | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AR           | -2411-06518     |                                                                           | Deprecated
  America/Maceio                   | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | BR           | -0940-03543     | Alagoas, Sergipe                                                          | Canonical
  America/Mendoza                  | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AR           | -3253-06849     |                                                                           | Deprecated
- America/Miquelon                 | -03    | -03        | -02        | -03:00     | -03:00     | -02:00     | false  | PM           | +4703-05620     |                                                                           | Canonical
+ America/Moncton                  | ADT    | AST        | ADT        | -03:00     | -04:00     | -03:00     | true   | CA           | +4606-06447     | Atlantic - New Brunswick                                                  | Canonical
  America/Montevideo               | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | UY           | -345433-0561245 |                                                                           | Canonical
- America/Nuuk                     | -03    | -03        | -02        | -03:00     | -03:00     | -02:00     | false  | GL           | +6411-05144     | Greenland (most areas)                                                    | Canonical
  America/Paramaribo               | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | SR           | +0550-05510     |                                                                           | Canonical
  America/Punta_Arenas             | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | CL           | -5309-07055     | Region of Magallanes                                                      | Canonical
  America/Recife                   | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | BR           | -0803-03454     | Pernambuco                                                                | Canonical
  America/Rosario                  | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AR           |                 |                                                                           | Deprecated
  America/Santarem                 | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | BR           | -0226-05452     | Pará (west)                                                               | Canonical
- America/Santiago                 | -03    | -04        | -03        | -03:00     | -04:00     | -03:00     | true   | CL           | -3327-07040     | Chile (most areas)                                                        | Canonical
  America/Sao_Paulo                | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | BR           | -2332-04637     | Brazil (southeast: GO, DF, MG, ES, RJ, SP, PR, SC, RS)                    | Canonical
+ America/Thule                    | ADT    | AST        | ADT        | -03:00     | -04:00     | -03:00     | true   | GL           | +7634-06847     | Thule/Pituffik                                                            | Canonical
  Antarctica/Palmer                | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AQ           | -6448-06406     | Palmer                                                                    | Canonical
  Antarctica/Rothera               | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | AQ           | -6734-06808     | Rothera                                                                   | Canonical
+ Atlantic/Bermuda                 | ADT    | AST        | ADT        | -03:00     | -04:00     | -03:00     | true   | BM           | +3217-06446     |                                                                           | Canonical
  Atlantic/Stanley                 | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | FK           | -5142-05751     |                                                                           | Canonical
  Brazil/East                      | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  | BR           |                 |                                                                           | Deprecated
- Chile/Continental                | -03    | -04        | -03        | -03:00     | -04:00     | -03:00     | true   | CL           |                 |                                                                           | Deprecated
+ Canada/Atlantic                  | ADT    | AST        | ADT        | -03:00     | -04:00     | -03:00     | true   | CA           |                 |                                                                           | Deprecated
  Etc/GMT+3                        | -03    | -03        | -03        | -03:00     | -03:00     | -03:00     | false  |              |                 |                                                                           | Canonical
+ America/St_Johns                 | NDT    | NST        | NDT        | -02:30     | -03:30     | -02:30     | true   | CA           | +4734-05243     | Newfoundland; Labrador (southeast)                                        | Canonical
+ Canada/Newfoundland              | NDT    | NST        | NDT        | -02:30     | -03:30     | -02:30     | true   | CA           |                 |                                                                           | Deprecated
+ America/Godthab                  | -02    | -03        | -02        | -02:00     | -03:00     | -02:00     | false  | GL           | +6411-05144     |                                                                           | Deprecated
+ America/Miquelon                 | -02    | -03        | -02        | -02:00     | -03:00     | -02:00     | true   | PM           | +4703-05620     |                                                                           | Canonical
  America/Noronha                  | -02    | -02        | -02        | -02:00     | -02:00     | -02:00     | false  | BR           | -0351-03225     | Atlantic islands                                                          | Canonical
+ America/Nuuk                     | -02    | -03        | -02        | -02:00     | -03:00     | -02:00     | false  | GL           | +6411-05144     | Greenland (most areas)                                                    | Canonical
  Atlantic/South_Georgia           | -02    | -02        | -02        | -02:00     | -02:00     | -02:00     | false  | GS           | -5416-03632     |                                                                           | Canonical
  Brazil/DeNoronha                 | -02    | -02        | -02        | -02:00     | -02:00     | -02:00     | false  | BR           |                 |                                                                           | Deprecated
  Etc/GMT+2                        | -02    | -02        | -02        | -02:00     | -02:00     | -02:00     | false  |              |                 |                                                                           | Canonical
- America/Scoresbysund             | -01    | -01        | +00        | -01:00     | -01:00     |  00:00     | false  | GL           | +7029-02158     | Scoresbysund/Ittoqqortoormiit                                             | Canonical
- Atlantic/Azores                  | -01    | -01        | +00        | -01:00     | -01:00     |  00:00     | false  | PT           | +3744-02540     | Azores                                                                    | Canonical
  Atlantic/Cape_Verde              | -01    | -01        | -01        | -01:00     | -01:00     | -01:00     | false  | CV           | +1455-02331     |                                                                           | Canonical
  Etc/GMT+1                        | -01    | -01        | -01        | -01:00     | -01:00     | -01:00     | false  |              |                 |                                                                           | Canonical
  Africa/Abidjan                   | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  | CI           | +0519-00402     |                                                                           | Canonical
@@ -1469,14 +1465,10 @@
  Africa/Sao_Tome                  | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  | ST           | +0020+00644     |                                                                           | Canonical
  Africa/Timbuktu                  | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  | ML           |                 |                                                                           | Deprecated
  America/Danmarkshavn             | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  | GL           | +7646-01840     | National Park (east coast)                                                | Canonical
- Antarctica/Troll                 | +00    | +00        | +02        |  00:00     |  00:00     |  02:00     | false  | AQ           | -720041+0023206 | Troll                                                                     | Canonical
- Atlantic/Canary                  | WET    | WET        | WEST       |  00:00     |  00:00     |  01:00     | false  | ES           | +2806-01524     | Canary Islands                                                            | Canonical
- Atlantic/Faeroe                  | WET    | WET        | WEST       |  00:00     |  00:00     |  01:00     | false  | FO           | +6201-00646     |                                                                           | Deprecated
- Atlantic/Faroe                   | WET    | WET        | WEST       |  00:00     |  00:00     |  01:00     | false  | FO           | +6201-00646     |                                                                           | Canonical
- Atlantic/Madeira                 | WET    | WET        | WEST       |  00:00     |  00:00     |  01:00     | false  | PT           | +3238-01654     | Madeira Islands                                                           | Canonical
+ America/Scoresbysund             | +00    | -01        | +00        |  00:00     | -01:00     |  00:00     | true   | GL           | +7029-02158     | Scoresbysund/Ittoqqortoormiit                                             | Canonical
+ Atlantic/Azores                  | +00    | -01        | +00        |  00:00     | -01:00     |  00:00     | true   | PT           | +3744-02540     | Azores                                                                    | Canonical
  Atlantic/Reykjavik               | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  | IS           | +6409-02151     |                                                                           | Canonical
  Atlantic/St_Helena               | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  | SH           | -1555-00542     |                                                                           | Alias
- Eire                             | GMT    | GMT        | IST        |  00:00     |  00:00     |  01:00     | true   | IE           |                 |                                                                           | Deprecated
  Etc/GMT                          | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Canonical
  Etc/GMT+0                        | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Alias
  Etc/GMT-0                        | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Alias
@@ -1486,32 +1478,20 @@
  Etc/UTC                          | UTC    | UTC        | UTC        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Canonical
  Etc/Universal                    | UTC    | UTC        | UTC        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Deprecated
  Etc/Zulu                         | UTC    | UTC        | UTC        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Deprecated
- Europe/Belfast                   | GMT    | GMT        | BST        |  00:00     |  00:00     |  01:00     | false  | GB           |                 |                                                                           | Deprecated
- Europe/Dublin                    | GMT    | GMT        | IST        |  00:00     |  00:00     |  01:00     | true   | IE           | +5320-00615     |                                                                           | Canonical
- Europe/Guernsey                  | GMT    | GMT        | BST        |  00:00     |  00:00     |  01:00     | false  | GG           | +492717-0023210 |                                                                           | Alias
- Europe/Isle_of_Man               | GMT    | GMT        | BST        |  00:00     |  00:00     |  01:00     | false  | IM           | +5409-00428     |                                                                           | Alias
- Europe/Jersey                    | GMT    | GMT        | BST        |  00:00     |  00:00     |  01:00     | false  | JE           | +491101-0020624 |                                                                           | Alias
- Europe/Lisbon                    | WET    | WET        | WEST       |  00:00     |  00:00     |  01:00     | false  | PT           | +3843-00908     | Portugal (mainland)                                                       | Canonical
- Europe/London                    | GMT    | GMT        | BST        |  00:00     |  00:00     |  01:00     | false  | GB           | +513030-0000731 |                                                                           | Canonical
  Factory                          | -00    | -00        | -00        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Canonical
- GB                               | GMT    | GMT        | BST        |  00:00     |  00:00     |  01:00     | false  | GB           |                 |                                                                           | Deprecated
- GB-Eire                          | GMT    | GMT        | BST        |  00:00     |  00:00     |  01:00     | false  | GB           |                 |                                                                           | Deprecated
  GMT                              | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Alias
  GMT+0                            | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Deprecated
  GMT-0                            | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Deprecated
  GMT0                             | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Deprecated
  Greenwich                        | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Deprecated
  Iceland                          | GMT    | GMT        | GMT        |  00:00     |  00:00     |  00:00     | false  | IS           |                 |                                                                           | Deprecated
- Portugal                         | WET    | WET        | WEST       |  00:00     |  00:00     |  01:00     | false  | PT           |                 |                                                                           | Deprecated
  UCT                              | UTC    | UTC        | UTC        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Deprecated
  UTC                              | UTC    | UTC        | UTC        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Alias
  Universal                        | UTC    | UTC        | UTC        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Deprecated
- WET                              | WET    | WET        | WEST       |  00:00     |  00:00     |  01:00     | false  |              |                 |                                                                           | Deprecated
  Zulu                             | UTC    | UTC        | UTC        |  00:00     |  00:00     |  00:00     | false  |              |                 |                                                                           | Deprecated
  Africa/Algiers                   | CET    | CET        | CET        |  01:00     |  01:00     |  01:00     | false  | DZ           | +3647+00303     |                                                                           | Canonical
  Africa/Bangui                    | WAT    | WAT        | WAT        |  01:00     |  01:00     |  01:00     | false  | CF           | +0422+01835     |                                                                           | Alias
  Africa/Brazzaville               | WAT    | WAT        | WAT        |  01:00     |  01:00     |  01:00     | false  | CG           | -0416+01517     |                                                                           | Alias
- Africa/Ceuta                     | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | ES           | +3553-00519     | Ceuta, Melilla                                                            | Canonical
  Africa/Douala                    | WAT    | WAT        | WAT        |  01:00     |  01:00     |  01:00     | false  | CM           | +0403+00942     |                                                                           | Alias
  Africa/Kinshasa                  | WAT    | WAT        | WAT        |  01:00     |  01:00     |  01:00     | false  | CD           | -0418+01518     | Dem. Rep. of Congo (west)                                                 | Alias
  Africa/Lagos                     | WAT    | WAT        | WAT        |  01:00     |  01:00     |  01:00     | false  | NG           | +0627+00324     | West Africa Time                                                          | Canonical
@@ -1522,46 +1502,27 @@
  Africa/Niamey                    | WAT    | WAT        | WAT        |  01:00     |  01:00     |  01:00     | false  | NE           | +1331+00207     |                                                                           | Alias
  Africa/Porto-Novo                | WAT    | WAT        | WAT        |  01:00     |  01:00     |  01:00     | false  | BJ           | +0629+00237     |                                                                           | Alias
  Africa/Tunis                     | CET    | CET        | CET        |  01:00     |  01:00     |  01:00     | false  | TN           | +3648+01011     |                                                                           | Canonical
- Arctic/Longyearbyen              | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | SJ           | +7800+01600     |                                                                           | Alias
- Atlantic/Jan_Mayen               | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | SJ           |                 |                                                                           | Deprecated
- CET                              | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  |              |                 |                                                                           | Deprecated
+ Atlantic/Canary                  | WEST   | WET        | WEST       |  01:00     |  00:00     |  01:00     | true   | ES           | +2806-01524     | Canary Islands                                                            | Canonical
+ Atlantic/Faeroe                  | WEST   | WET        | WEST       |  01:00     |  00:00     |  01:00     | true   | FO           | +6201-00646     |                                                                           | Deprecated
+ Atlantic/Faroe                   | WEST   | WET        | WEST       |  01:00     |  00:00     |  01:00     | true   | FO           | +6201-00646     |                                                                           | Canonical
+ Atlantic/Madeira                 | WEST   | WET        | WEST       |  01:00     |  00:00     |  01:00     | true   | PT           | +3238-01654     | Madeira Islands                                                           | Canonical
+ Eire                             | IST    | GMT        | IST        |  01:00     |  00:00     |  01:00     | false  | IE           |                 |                                                                           | Deprecated
  Etc/GMT-1                        | +01    | +01        | +01        |  01:00     |  01:00     |  01:00     | false  |              |                 |                                                                           | Canonical
- Europe/Amsterdam                 | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | NL           | +5222+00454     |                                                                           | Canonical
- Europe/Andorra                   | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | AD           | +4230+00131     |                                                                           | Canonical
- Europe/Belgrade                  | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | RS           | +4450+02030     |                                                                           | Canonical
- Europe/Berlin                    | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | DE           | +5230+01322     | Germany (most areas)                                                      | Canonical
- Europe/Bratislava                | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | SK           | +4809+01707     |                                                                           | Alias
- Europe/Brussels                  | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | BE           | +5050+00420     |                                                                           | Canonical
- Europe/Budapest                  | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | HU           | +4730+01905     |                                                                           | Canonical
- Europe/Busingen                  | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | DE           | +4742+00841     | Busingen                                                                  | Alias
- Europe/Copenhagen                | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | DK           | +5540+01235     |                                                                           | Canonical
- Europe/Gibraltar                 | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | GI           | +3608-00521     |                                                                           | Canonical
- Europe/Ljubljana                 | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | SI           | +4603+01431     |                                                                           | Alias
- Europe/Luxembourg                | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | LU           | +4936+00609     |                                                                           | Canonical
- Europe/Madrid                    | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | ES           | +4024-00341     | Spain (mainland)                                                          | Canonical
- Europe/Malta                     | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | MT           | +3554+01431     |                                                                           | Canonical
- Europe/Monaco                    | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | MC           | +4342+00723     |                                                                           | Canonical
- Europe/Oslo                      | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | NO           | +5955+01045     |                                                                           | Canonical
- Europe/Paris                     | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | FR           | +4852+00220     |                                                                           | Canonical
- Europe/Podgorica                 | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | ME           | +4226+01916     |                                                                           | Alias
- Europe/Prague                    | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | CZ           | +5005+01426     |                                                                           | Canonical
- Europe/Rome                      | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | IT           | +4154+01229     |                                                                           | Canonical
- Europe/San_Marino                | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | SM           | +4355+01228     |                                                                           | Alias
- Europe/Sarajevo                  | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | BA           | +4352+01825     |                                                                           | Alias
- Europe/Skopje                    | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | MK           | +4159+02126     |                                                                           | Alias
- Europe/Stockholm                 | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | SE           | +5920+01803     |                                                                           | Canonical
- Europe/Tirane                    | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | AL           | +4120+01950     |                                                                           | Canonical
- Europe/Vaduz                     | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | LI           | +4709+00931     |                                                                           | Alias
- Europe/Vatican                   | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | VA           | +415408+0122711 |                                                                           | Alias
- Europe/Vienna                    | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | AT           | +4813+01620     |                                                                           | Canonical
- Europe/Warsaw                    | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | PL           | +5215+02100     |                                                                           | Canonical
- Europe/Zagreb                    | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | HR           | +4548+01558     |                                                                           | Alias
- Europe/Zurich                    | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | CH           | +4723+00832     | Swiss time                                                                | Canonical
- MET                              | MET    | MET        | MEST       |  01:00     |  01:00     |  02:00     | false  |              |                 |                                                                           | Deprecated
- Poland                           | CET    | CET        | CEST       |  01:00     |  01:00     |  02:00     | false  | PL           |                 |                                                                           | Deprecated
+ Europe/Belfast                   | BST    | GMT        | BST        |  01:00     |  00:00     |  01:00     | true   | GB           |                 |                                                                           | Deprecated
+ Europe/Dublin                    | IST    | GMT        | IST        |  01:00     |  00:00     |  01:00     | false  | IE           | +5320-00615     |                                                                           | Canonical
+ Europe/Guernsey                  | BST    | GMT        | BST        |  01:00     |  00:00     |  01:00     | true   | GG           | +492717-0023210 |                                                                           | Alias
+ Europe/Isle_of_Man               | BST    | GMT        | BST        |  01:00     |  00:00     |  01:00     | true   | IM           | +5409-00428     |                                                                           | Alias
+ Europe/Jersey                    | BST    | GMT        | BST        |  01:00     |  00:00     |  01:00     | true   | JE           | +491101-0020624 |                                                                           | Alias
+ Europe/Lisbon                    | WEST   | WET        | WEST       |  01:00     |  00:00     |  01:00     | true   | PT           | +3843-00908     | Portugal (mainland)                                                       | Canonical
+ Europe/London                    | BST    | GMT        | BST        |  01:00     |  00:00     |  01:00     | true   | GB           | +513030-0000731 |                                                                           | Canonical
+ GB                               | BST    | GMT        | BST        |  01:00     |  00:00     |  01:00     | true   | GB           |                 |                                                                           | Deprecated
+ GB-Eire                          | BST    | GMT        | BST        |  01:00     |  00:00     |  01:00     | true   | GB           |                 |                                                                           | Deprecated
+ Portugal                         | WEST   | WET        | WEST       |  01:00     |  00:00     |  01:00     | true   | PT           |                 |                                                                           | Deprecated
+ WET                              | WEST   | WET        | WEST       |  01:00     |  00:00     |  01:00     | true   |              |                 |                                                                           | Deprecated
  Africa/Blantyre                  | CAT    | CAT        | CAT        |  02:00     |  02:00     |  02:00     | false  | MW           | -1547+03500     |                                                                           | Alias
  Africa/Bujumbura                 | CAT    | CAT        | CAT        |  02:00     |  02:00     |  02:00     | false  | BI           | -0323+02922     |                                                                           | Alias
  Africa/Cairo                     | EET    | EET        | EET        |  02:00     |  02:00     |  02:00     | false  | EG           | +3003+03115     |                                                                           | Canonical
+ Africa/Ceuta                     | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | ES           | +3553-00519     | Ceuta, Melilla                                                            | Canonical
  Africa/Gaborone                  | CAT    | CAT        | CAT        |  02:00     |  02:00     |  02:00     | false  | BW           | -2439+02555     |                                                                           | Alias
  Africa/Harare                    | CAT    | CAT        | CAT        |  02:00     |  02:00     |  02:00     | false  | ZW           | -1750+03103     |                                                                           | Alias
  Africa/Johannesburg              | SAST   | SAST       | SAST       |  02:00     |  02:00     |  02:00     | false  | ZA           | -2615+02800     |                                                                           | Canonical
@@ -1574,33 +1535,47 @@
  Africa/Mbabane                   | SAST   | SAST       | SAST       |  02:00     |  02:00     |  02:00     | false  | SZ           | -2618+03106     |                                                                           | Alias
  Africa/Tripoli                   | EET    | EET        | EET        |  02:00     |  02:00     |  02:00     | false  | LY           | +3254+01311     |                                                                           | Canonical
  Africa/Windhoek                  | CAT    | CAT        | CAT        |  02:00     |  02:00     |  02:00     | false  | NA           | -2234+01706     |                                                                           | Canonical
- Asia/Beirut                      | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | LB           | +3353+03530     |                                                                           | Canonical
- Asia/Famagusta                   | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | CY           | +3507+03357     | Northern Cyprus                                                           | Canonical
- Asia/Gaza                        | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | PS           | +3130+03428     | Gaza Strip                                                                | Canonical
- Asia/Hebron                      | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | PS           | +313200+0350542 | West Bank                                                                 | Canonical
- Asia/Jerusalem                   | IST    | IST        | IDT        |  02:00     |  02:00     |  03:00     | false  | IL           | +314650+0351326 |                                                                           | Canonical
- Asia/Nicosia                     | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | CY           | +3510+03322     | Cyprus (most areas)                                                       | Canonical
- Asia/Tel_Aviv                    | IST    | IST        | IDT        |  02:00     |  02:00     |  03:00     | false  | IL           |                 |                                                                           | Deprecated
- EET                              | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  |              |                 |                                                                           | Deprecated
+ Antarctica/Troll                 | +02    | +00        | +02        |  02:00     |  00:00     |  02:00     | true   | AQ           | -720041+0023206 | Troll                                                                     | Canonical
+ Arctic/Longyearbyen              | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | SJ           | +7800+01600     |                                                                           | Alias
+ Atlantic/Jan_Mayen               | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | SJ           |                 |                                                                           | Deprecated
+ CET                              | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   |              |                 |                                                                           | Deprecated
  Egypt                            | EET    | EET        | EET        |  02:00     |  02:00     |  02:00     | false  | EG           |                 |                                                                           | Deprecated
  Etc/GMT-2                        | +02    | +02        | +02        |  02:00     |  02:00     |  02:00     | false  |              |                 |                                                                           | Canonical
- Europe/Athens                    | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | GR           | +3758+02343     |                                                                           | Canonical
- Europe/Bucharest                 | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | RO           | +4426+02606     |                                                                           | Canonical
- Europe/Chisinau                  | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | MD           | +4700+02850     |                                                                           | Canonical
- Europe/Helsinki                  | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | FI           | +6010+02458     |                                                                           | Canonical
+ Europe/Amsterdam                 | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | NL           | +5222+00454     |                                                                           | Canonical
+ Europe/Andorra                   | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | AD           | +4230+00131     |                                                                           | Canonical
+ Europe/Belgrade                  | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | RS           | +4450+02030     |                                                                           | Canonical
+ Europe/Berlin                    | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | DE           | +5230+01322     | Germany (most areas)                                                      | Canonical
+ Europe/Bratislava                | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | SK           | +4809+01707     |                                                                           | Alias
+ Europe/Brussels                  | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | BE           | +5050+00420     |                                                                           | Canonical
+ Europe/Budapest                  | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | HU           | +4730+01905     |                                                                           | Canonical
+ Europe/Busingen                  | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | DE           | +4742+00841     | Busingen                                                                  | Alias
+ Europe/Copenhagen                | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | DK           | +5540+01235     |                                                                           | Canonical
+ Europe/Gibraltar                 | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | GI           | +3608-00521     |                                                                           | Canonical
  Europe/Kaliningrad               | EET    | EET        | EET        |  02:00     |  02:00     |  02:00     | false  | RU           | +5443+02030     | MSK-01 - Kaliningrad                                                      | Canonical
- Europe/Kiev                      | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | UA           | +5026+03031     | Ukraine (most areas)                                                      | Canonical
- Europe/Mariehamn                 | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | AX           | +6006+01957     |                                                                           | Alias
- Europe/Nicosia                   | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | CY           | +3510+03322     |                                                                           | Alias
- Europe/Riga                      | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | LV           | +5657+02406     |                                                                           | Canonical
- Europe/Sofia                     | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | BG           | +4241+02319     |                                                                           | Canonical
- Europe/Tallinn                   | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | EE           | +5925+02445     |                                                                           | Canonical
- Europe/Tiraspol                  | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | MD           |                 |                                                                           | Deprecated
- Europe/Uzhgorod                  | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | UA           | +4837+02218     | Transcarpathia                                                            | Canonical
- Europe/Vilnius                   | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | LT           | +5441+02519     |                                                                           | Canonical
- Europe/Zaporozhye                | EET    | EET        | EEST       |  02:00     |  02:00     |  03:00     | false  | UA           | +4750+03510     | Zaporozhye and east Lugansk                                               | Canonical
- Israel                           | IST    | IST        | IDT        |  02:00     |  02:00     |  03:00     | false  | IL           |                 |                                                                           | Deprecated
+ Europe/Ljubljana                 | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | SI           | +4603+01431     |                                                                           | Alias
+ Europe/Luxembourg                | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | LU           | +4936+00609     |                                                                           | Canonical
+ Europe/Madrid                    | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | ES           | +4024-00341     | Spain (mainland)                                                          | Canonical
+ Europe/Malta                     | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | MT           | +3554+01431     |                                                                           | Canonical
+ Europe/Monaco                    | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | MC           | +4342+00723     |                                                                           | Canonical
+ Europe/Oslo                      | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | NO           | +5955+01045     |                                                                           | Canonical
+ Europe/Paris                     | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | FR           | +4852+00220     |                                                                           | Canonical
+ Europe/Podgorica                 | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | ME           | +4226+01916     |                                                                           | Alias
+ Europe/Prague                    | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | CZ           | +5005+01426     |                                                                           | Canonical
+ Europe/Rome                      | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | IT           | +4154+01229     |                                                                           | Canonical
+ Europe/San_Marino                | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | SM           | +4355+01228     |                                                                           | Alias
+ Europe/Sarajevo                  | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | BA           | +4352+01825     |                                                                           | Alias
+ Europe/Skopje                    | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | MK           | +4159+02126     |                                                                           | Alias
+ Europe/Stockholm                 | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | SE           | +5920+01803     |                                                                           | Canonical
+ Europe/Tirane                    | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | AL           | +4120+01950     |                                                                           | Canonical
+ Europe/Vaduz                     | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | LI           | +4709+00931     |                                                                           | Alias
+ Europe/Vatican                   | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | VA           | +415408+0122711 |                                                                           | Alias
+ Europe/Vienna                    | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | AT           | +4813+01620     |                                                                           | Canonical
+ Europe/Warsaw                    | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | PL           | +5215+02100     |                                                                           | Canonical
+ Europe/Zagreb                    | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | HR           | +4548+01558     |                                                                           | Alias
+ Europe/Zurich                    | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | CH           | +4723+00832     | Swiss time                                                                | Canonical
  Libya                            | EET    | EET        | EET        |  02:00     |  02:00     |  02:00     | false  | LY           |                 |                                                                           | Deprecated
+ MET                              | MEST   | MET        | MEST       |  02:00     |  01:00     |  02:00     | true   |              |                 |                                                                           | Deprecated
+ Poland                           | CEST   | CET        | CEST       |  02:00     |  01:00     |  02:00     | true   | PL           |                 |                                                                           | Deprecated
  Africa/Addis_Ababa               | EAT    | EAT        | EAT        |  03:00     |  03:00     |  03:00     | false  | ET           | +0902+03842     |                                                                           | Alias
  Africa/Asmara                    | EAT    | EAT        | EAT        |  03:00     |  03:00     |  03:00     | false  | ER           | +1520+03853     |                                                                           | Alias
  Africa/Asmera                    | EAT    | EAT        | EAT        |  03:00     |  03:00     |  03:00     | false  | ER           | +1520+03853     |                                                                           | Deprecated
@@ -1614,21 +1589,44 @@
  Asia/Amman                       | +03    | EET        | EEST       |  03:00     |  02:00     |  03:00     | false  | JO           | +3157+03556     |                                                                           | Canonical
  Asia/Baghdad                     | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  | IQ           | +3321+04425     |                                                                           | Canonical
  Asia/Bahrain                     | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  | BH           | +2623+05035     |                                                                           | Alias
+ Asia/Beirut                      | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | LB           | +3353+03530     |                                                                           | Canonical
  Asia/Damascus                    | +03    | EET        | EEST       |  03:00     |  02:00     |  03:00     | false  | SY           | +3330+03618     |                                                                           | Canonical
+ Asia/Famagusta                   | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | CY           | +3507+03357     | Northern Cyprus                                                           | Canonical
+ Asia/Gaza                        | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | PS           | +3130+03428     | Gaza Strip                                                                | Canonical
+ Asia/Hebron                      | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | PS           | +313200+0350542 | West Bank                                                                 | Canonical
  Asia/Istanbul                    | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  | TR           | +4101+02858     |                                                                           | Alias
+ Asia/Jerusalem                   | IDT    | IST        | IDT        |  03:00     |  02:00     |  03:00     | true   | IL           | +314650+0351326 |                                                                           | Canonical
  Asia/Kuwait                      | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  | KW           | +2920+04759     |                                                                           | Alias
+ Asia/Nicosia                     | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | CY           | +3510+03322     | Cyprus (most areas)                                                       | Canonical
  Asia/Qatar                       | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  | QA           | +2517+05132     |                                                                           | Canonical
  Asia/Riyadh                      | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  | SA           | +2438+04643     |                                                                           | Canonical
+ Asia/Tel_Aviv                    | IDT    | IST        | IDT        |  03:00     |  02:00     |  03:00     | true   | IL           |                 |                                                                           | Deprecated
+ EET                              | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   |              |                 |                                                                           | Deprecated
  Etc/GMT-3                        | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  |              |                 |                                                                           | Canonical
+ Europe/Athens                    | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | GR           | +3758+02343     |                                                                           | Canonical
+ Europe/Bucharest                 | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | RO           | +4426+02606     |                                                                           | Canonical
+ Europe/Chisinau                  | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | MD           | +4700+02850     |                                                                           | Canonical
+ Europe/Helsinki                  | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | FI           | +6010+02458     |                                                                           | Canonical
  Europe/Istanbul                  | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  | TR           | +4101+02858     |                                                                           | Canonical
+ Europe/Kiev                      | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | UA           | +5026+03031     | Ukraine (most areas)                                                      | Canonical
  Europe/Kirov                     | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  | RU           | +5836+04939     | MSK+00 - Kirov                                                            | Canonical
+ Europe/Mariehamn                 | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | AX           | +6006+01957     |                                                                           | Alias
  Europe/Minsk                     | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  | BY           | +5354+02734     |                                                                           | Canonical
  Europe/Moscow                    | MSK    | MSK        | MSK        |  03:00     |  03:00     |  03:00     | false  | RU           | +554521+0373704 | MSK+00 - Moscow area                                                      | Canonical
+ Europe/Nicosia                   | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | CY           | +3510+03322     |                                                                           | Alias
+ Europe/Riga                      | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | LV           | +5657+02406     |                                                                           | Canonical
  Europe/Simferopol                | MSK    | MSK        | MSK        |  03:00     |  03:00     |  03:00     | false  | UA           | +4457+03406     | Crimea                                                                    | Canonical
+ Europe/Sofia                     | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | BG           | +4241+02319     |                                                                           | Canonical
+ Europe/Tallinn                   | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | EE           | +5925+02445     |                                                                           | Canonical
+ Europe/Tiraspol                  | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | MD           |                 |                                                                           | Deprecated
+ Europe/Uzhgorod                  | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | UA           | +4837+02218     | Transcarpathia                                                            | Canonical
+ Europe/Vilnius                   | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | LT           | +5441+02519     |                                                                           | Canonical
  Europe/Volgograd                 | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  | RU           | +4844+04425     | MSK+00 - Volgograd                                                        | Canonical
+ Europe/Zaporozhye                | EEST   | EET        | EEST       |  03:00     |  02:00     |  03:00     | true   | UA           | +4750+03510     | Zaporozhye and east Lugansk                                               | Canonical
  Indian/Antananarivo              | EAT    | EAT        | EAT        |  03:00     |  03:00     |  03:00     | false  | MG           | -1855+04731     |                                                                           | Alias
  Indian/Comoro                    | EAT    | EAT        | EAT        |  03:00     |  03:00     |  03:00     | false  | KM           | -1141+04316     |                                                                           | Alias
  Indian/Mayotte                   | EAT    | EAT        | EAT        |  03:00     |  03:00     |  03:00     | false  | YT           | -1247+04514     |                                                                           | Alias
+ Israel                           | IDT    | IST        | IDT        |  03:00     |  02:00     |  03:00     | true   | IL           |                 |                                                                           | Deprecated
  Turkey                           | +03    | +03        | +03        |  03:00     |  03:00     |  03:00     | false  | TR           |                 |                                                                           | Deprecated
  W-SU                             | MSK    | MSK        | MSK        |  03:00     |  03:00     |  03:00     | false  | RU           |                 |                                                                           | Deprecated
  Asia/Tehran                      | +0330  | +0330      | +0430      |  03:30     |  03:30     |  04:30     | false  | IR           | +3540+05126     |                                                                           | Canonical
@@ -1739,14 +1737,28 @@
  Japan                            | JST    | JST        | JST        |  09:00     |  09:00     |  09:00     | false  | JP           |                 |                                                                           | Deprecated
  Pacific/Palau                    | +09    | +09        | +09        |  09:00     |  09:00     |  09:00     | false  | PW           | +0720+13429     |                                                                           | Canonical
  ROK                              | KST    | KST        | KST        |  09:00     |  09:00     |  09:00     | false  | KR           |                 |                                                                           | Deprecated
+ Australia/Adelaide               | ACST   | ACST       | ACDT       |  09:30     |  09:30     |  10:30     | false  | AU           | -3455+13835     | South Australia                                                           | Canonical
+ Australia/Broken_Hill            | ACST   | ACST       | ACDT       |  09:30     |  09:30     |  10:30     | false  | AU           | -3157+14127     | New South Wales (Yancowinna)                                              | Canonical
  Australia/Darwin                 | ACST   | ACST       | ACST       |  09:30     |  09:30     |  09:30     | false  | AU           | -1228+13050     | Northern Territory                                                        | Canonical
  Australia/North                  | ACST   | ACST       | ACST       |  09:30     |  09:30     |  09:30     | false  | AU           |                 |                                                                           | Deprecated
+ Australia/South                  | ACST   | ACST       | ACDT       |  09:30     |  09:30     |  10:30     | false  | AU           |                 |                                                                           | Deprecated
+ Australia/Yancowinna             | ACST   | ACST       | ACDT       |  09:30     |  09:30     |  10:30     | false  | AU           |                 |                                                                           | Deprecated
  Antarctica/DumontDUrville        | +10    | +10        | +10        |  10:00     |  10:00     |  10:00     | false  | AQ           | -6640+14001     | Dumont-d'Urville                                                          | Canonical
+ Antarctica/Macquarie             | AEST   | AEST       | AEDT       |  10:00     |  10:00     |  11:00     | false  | AU           | -5430+15857     | Macquarie Island                                                          | Canonical
  Asia/Ust-Nera                    | +10    | +10        | +10        |  10:00     |  10:00     |  10:00     | false  | RU           | +643337+1431336 | MSK+07 - Oymyakonsky                                                      | Canonical
  Asia/Vladivostok                 | +10    | +10        | +10        |  10:00     |  10:00     |  10:00     | false  | RU           | +4310+13156     | MSK+07 - Amur River                                                       | Canonical
+ Australia/ACT                    | AEST   | AEST       | AEDT       |  10:00     |  10:00     |  11:00     | false  | AU           |                 |                                                                           | Deprecated
  Australia/Brisbane               | AEST   | AEST       | AEST       |  10:00     |  10:00     |  10:00     | false  | AU           | -2728+15302     | Queensland (most areas)                                                   | Canonical
+ Australia/Canberra               | AEST   | AEST       | AEDT       |  10:00     |  10:00     |  11:00     | false  | AU           |                 |                                                                           | Deprecated
+ Australia/Currie                 | AEST   | AEST       | AEDT       |  10:00     |  10:00     |  11:00     | false  | AU           |                 |                                                                           | Deprecated
+ Australia/Hobart                 | AEST   | AEST       | AEDT       |  10:00     |  10:00     |  11:00     | false  | AU           | -4253+14719     | Tasmania                                                                  | Canonical
  Australia/Lindeman               | AEST   | AEST       | AEST       |  10:00     |  10:00     |  10:00     | false  | AU           | -2016+14900     | Queensland (Whitsunday Islands)                                           | Canonical
+ Australia/Melbourne              | AEST   | AEST       | AEDT       |  10:00     |  10:00     |  11:00     | false  | AU           | -3749+14458     | Victoria                                                                  | Canonical
+ Australia/NSW                    | AEST   | AEST       | AEDT       |  10:00     |  10:00     |  11:00     | false  | AU           |                 |                                                                           | Deprecated
  Australia/Queensland             | AEST   | AEST       | AEST       |  10:00     |  10:00     |  10:00     | false  | AU           |                 |                                                                           | Deprecated
+ Australia/Sydney                 | AEST   | AEST       | AEDT       |  10:00     |  10:00     |  11:00     | false  | AU           | -3352+15113     | New South Wales (most areas)                                              | Canonical
+ Australia/Tasmania               | AEST   | AEST       | AEDT       |  10:00     |  10:00     |  11:00     | false  | AU           |                 |                                                                           | Deprecated
+ Australia/Victoria               | AEST   | AEST       | AEDT       |  10:00     |  10:00     |  11:00     | false  | AU           |                 |                                                                           | Deprecated
  Etc/GMT-10                       | +10    | +10        | +10        |  10:00     |  10:00     |  10:00     | false  |              |                 |                                                                           | Canonical
  Pacific/Chuuk                    | +10    | +10        | +10        |  10:00     |  10:00     |  10:00     | false  | FM           | +0725+15147     | Chuuk/Truk, Yap                                                           | Canonical
  Pacific/Guam                     | ChST   | ChST       | ChST       |  10:00     |  10:00     |  10:00     | false  | GU           | +1328+14445     |                                                                           | Canonical
@@ -1754,58 +1766,44 @@
  Pacific/Saipan                   | ChST   | ChST       | ChST       |  10:00     |  10:00     |  10:00     | false  | MP           | +1512+14545     |                                                                           | Alias
  Pacific/Truk                     | +10    | +10        | +10        |  10:00     |  10:00     |  10:00     | false  | FM           |                 |                                                                           | Deprecated
  Pacific/Yap                      | +10    | +10        | +10        |  10:00     |  10:00     |  10:00     | false  | FM           |                 |                                                                           | Deprecated
- Australia/Adelaide               | ACDT   | ACST       | ACDT       |  10:30     |  09:30     |  10:30     | true   | AU           | -3455+13835     | South Australia                                                           | Canonical
- Australia/Broken_Hill            | ACDT   | ACST       | ACDT       |  10:30     |  09:30     |  10:30     | true   | AU           | -3157+14127     | New South Wales (Yancowinna)                                              | Canonical
- Australia/South                  | ACDT   | ACST       | ACDT       |  10:30     |  09:30     |  10:30     | true   | AU           |                 |                                                                           | Deprecated
- Australia/Yancowinna             | ACDT   | ACST       | ACDT       |  10:30     |  09:30     |  10:30     | true   | AU           |                 |                                                                           | Deprecated
+ Australia/LHI                    | +1030  | +1030      | +11        |  10:30     |  10:30     |  11:00     | false  | AU           |                 |                                                                           | Deprecated
+ Australia/Lord_Howe              | +1030  | +1030      | +11        |  10:30     |  10:30     |  11:00     | false  | AU           | -3133+15905     | Lord Howe Island                                                          | Canonical
  Antarctica/Casey                 | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  | AQ           | -6617+11031     | Casey                                                                     | Canonical
- Antarctica/Macquarie             | AEDT   | AEST       | AEDT       |  11:00     |  10:00     |  11:00     | true   | AU           | -5430+15857     | Macquarie Island                                                          | Canonical
  Asia/Magadan                     | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  | RU           | +5934+15048     | MSK+08 - Magadan                                                          | Canonical
  Asia/Sakhalin                    | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  | RU           | +4658+14242     | MSK+08 - Sakhalin Island                                                  | Canonical
  Asia/Srednekolymsk               | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  | RU           | +6728+15343     | MSK+08 - Sakha (E); North Kuril Is                                        | Canonical
- Australia/ACT                    | AEDT   | AEST       | AEDT       |  11:00     |  10:00     |  11:00     | true   | AU           |                 |                                                                           | Deprecated
- Australia/Canberra               | AEDT   | AEST       | AEDT       |  11:00     |  10:00     |  11:00     | true   | AU           |                 |                                                                           | Deprecated
- Australia/Currie                 | AEDT   | AEST       | AEDT       |  11:00     |  10:00     |  11:00     | true   | AU           |                 |                                                                           | Deprecated
- Australia/Hobart                 | AEDT   | AEST       | AEDT       |  11:00     |  10:00     |  11:00     | true   | AU           | -4253+14719     | Tasmania                                                                  | Canonical
- Australia/LHI                    | +11    | +1030      | +11        |  11:00     |  10:30     |  11:00     | true   | AU           |                 |                                                                           | Deprecated
- Australia/Lord_Howe              | +11    | +1030      | +11        |  11:00     |  10:30     |  11:00     | true   | AU           | -3133+15905     | Lord Howe Island                                                          | Canonical
- Australia/Melbourne              | AEDT   | AEST       | AEDT       |  11:00     |  10:00     |  11:00     | true   | AU           | -3749+14458     | Victoria                                                                  | Canonical
- Australia/NSW                    | AEDT   | AEST       | AEDT       |  11:00     |  10:00     |  11:00     | true   | AU           |                 |                                                                           | Deprecated
- Australia/Sydney                 | AEDT   | AEST       | AEDT       |  11:00     |  10:00     |  11:00     | true   | AU           | -3352+15113     | New South Wales (most areas)                                              | Canonical
- Australia/Tasmania               | AEDT   | AEST       | AEDT       |  11:00     |  10:00     |  11:00     | true   | AU           |                 |                                                                           | Deprecated
- Australia/Victoria               | AEDT   | AEST       | AEDT       |  11:00     |  10:00     |  11:00     | true   | AU           |                 |                                                                           | Deprecated
  Etc/GMT-11                       | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  |              |                 |                                                                           | Canonical
  Pacific/Bougainville             | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  | PG           | -0613+15534     | Bougainville                                                              | Canonical
  Pacific/Efate                    | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  | VU           | -1740+16825     |                                                                           | Canonical
  Pacific/Guadalcanal              | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  | SB           | -0932+16012     |                                                                           | Canonical
  Pacific/Kosrae                   | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  | FM           | +0519+16259     | Kosrae                                                                    | Canonical
+ Pacific/Norfolk                  | +11    | +11        | +12        |  11:00     |  11:00     |  12:00     | false  | NF           | -2903+16758     |                                                                           | Canonical
  Pacific/Noumea                   | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  | NC           | -2216+16627     |                                                                           | Canonical
  Pacific/Pohnpei                  | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  | FM           | +0658+15813     | Pohnpei/Ponape                                                            | Canonical
  Pacific/Ponape                   | +11    | +11        | +11        |  11:00     |  11:00     |  11:00     | false  | FM           |                 |                                                                           | Deprecated
+ Antarctica/McMurdo               | NZST   | NZST       | NZDT       |  12:00     |  12:00     |  13:00     | false  | AQ           | -7750+16636     | New Zealand time - McMurdo, South Pole                                    | Alias
+ Antarctica/South_Pole            | NZST   | NZST       | NZDT       |  12:00     |  12:00     |  13:00     | false  | AQ           |                 |                                                                           | Deprecated
  Asia/Anadyr                      | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | RU           | +6445+17729     | MSK+09 - Bering Sea                                                       | Canonical
  Asia/Kamchatka                   | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | RU           | +5301+15839     | MSK+09 - Kamchatka                                                        | Canonical
  Etc/GMT-12                       | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  |              |                 |                                                                           | Canonical
  Kwajalein                        | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | MH           | +0905+16720     |                                                                           | Deprecated
+ NZ                               | NZST   | NZST       | NZDT       |  12:00     |  12:00     |  13:00     | false  | NZ           |                 |                                                                           | Deprecated
+ Pacific/Auckland                 | NZST   | NZST       | NZDT       |  12:00     |  12:00     |  13:00     | false  | NZ           | -3652+17446     | New Zealand time                                                          | Canonical
  Pacific/Fiji                     | +12    | +12        | +13        |  12:00     |  12:00     |  13:00     | false  | FJ           | -1808+17825     |                                                                           | Canonical
  Pacific/Funafuti                 | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | TV           | -0831+17913     |                                                                           | Canonical
  Pacific/Kwajalein                | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | MH           | +0905+16720     | Kwajalein                                                                 | Canonical
  Pacific/Majuro                   | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | MH           | +0709+17112     | Marshall Islands (most areas)                                             | Canonical
  Pacific/Nauru                    | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | NR           | -0031+16655     |                                                                           | Canonical
- Pacific/Norfolk                  | +12    | +11        | +12        |  12:00     |  11:00     |  12:00     | true   | NF           | -2903+16758     |                                                                           | Canonical
  Pacific/Tarawa                   | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | KI           | +0125+17300     | Gilbert Islands                                                           | Canonical
  Pacific/Wake                     | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | UM           | +1917+16637     | Wake Island                                                               | Canonical
  Pacific/Wallis                   | +12    | +12        | +12        |  12:00     |  12:00     |  12:00     | false  | WF           | -1318-17610     |                                                                           | Canonical
- Antarctica/McMurdo               | NZDT   | NZST       | NZDT       |  13:00     |  12:00     |  13:00     | true   | AQ           | -7750+16636     | New Zealand time - McMurdo, South Pole                                    | Alias
- Antarctica/South_Pole            | NZDT   | NZST       | NZDT       |  13:00     |  12:00     |  13:00     | true   | AQ           |                 |                                                                           | Deprecated
+ NZ-CHAT                          | +1245  | +1245      | +1345      |  12:45     |  12:45     |  13:45     | false  | NZ           |                 |                                                                           | Deprecated
+ Pacific/Chatham                  | +1245  | +1245      | +1345      |  12:45     |  12:45     |  13:45     | false  | NZ           | -4357-17633     | Chatham Islands                                                           | Canonical
  Etc/GMT-13                       | +13    | +13        | +13        |  13:00     |  13:00     |  13:00     | false  |              |                 |                                                                           | Canonical
- NZ                               | NZDT   | NZST       | NZDT       |  13:00     |  12:00     |  13:00     | true   | NZ           |                 |                                                                           | Deprecated
  Pacific/Apia                     | +13    | +13        | +14        |  13:00     |  13:00     |  14:00     | false  | WS           | -1350-17144     |                                                                           | Canonical
- Pacific/Auckland                 | NZDT   | NZST       | NZDT       |  13:00     |  12:00     |  13:00     | true   | NZ           | -3652+17446     | New Zealand time                                                          | Canonical
  Pacific/Enderbury                | +13    | +13        | +13        |  13:00     |  13:00     |  13:00     | false  | KI           | -0308-17105     | Phoenix Islands                                                           | Canonical
  Pacific/Fakaofo                  | +13    | +13        | +13        |  13:00     |  13:00     |  13:00     | false  | TK           | -0922-17114     |                                                                           | Canonical
  Pacific/Tongatapu                | +13    | +13        | +13        |  13:00     |  13:00     |  13:00     | false  | TO           | -2110-17510     |                                                                           | Canonical
- NZ-CHAT                          | +1345  | +1245      | +1345      |  13:45     |  12:45     |  13:45     | true   | NZ           |                 |                                                                           | Deprecated
- Pacific/Chatham                  | +1345  | +1245      | +1345      |  13:45     |  12:45     |  13:45     | true   | NZ           | -4357-17633     | Chatham Islands                                                           | Canonical
  Etc/GMT-14                       | +14    | +14        | +14        |  14:00     |  14:00     |  14:00     | false  |              |                 |                                                                           | Canonical
  Pacific/Kiritimati               | +14    | +14        | +14        |  14:00     |  14:00     |  14:00     | false  | KI           | +0152-15720     | Line Islands                                                              | Canonical
 
@@ -1883,7 +1881,7 @@
 
  - - The "occurrences()" function - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- (f,f,f)
+ (f,t,f)
 
  (t,f,f)
 
@@ -1893,7 +1891,7 @@
 
  - - The "legal_scopes_for_syntax_context()" function - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- WEST:               names_name: false / names_abbrev: false / abbrevs_abbrev: false
+ WEST:               names_name: false / names_abbrev: true / abbrevs_abbrev: false
  ------------------------------------------------------------------------------------------
  set timezone = 'WEST';                                       > invalid_parameter_value
  select timezone('WEST', '2021-06-07 12:00:00');              > invalid_parameter_value
@@ -1917,7 +1915,7 @@
  select timezone('MST', '2021-06-07 12:00:00');               > OK
  select '2021-06-07 12:00:00 MST'::timestamptz;               > OK
 
- date-time-utilities: 3100 ms
+ date-time-utilities: 3186 ms
 
  ==================================================================================================================================
  json-relational-equivalence
@@ -2111,14 +2109,12 @@
  2007 | Eat, Pray, Love
  2007 | Lyrics
 
-                           QUERY PLAN                           
-----------------------------------------------------------------
- Sort  (cost=1.37..1.38 rows=1 width=36)
-   Sort Key: c.year, c.title
-   CTE c
-     ->  Seq Scan on j_books  (cost=0.00..1.16 rows=8 width=36)
-   ->  CTE Scan on c  (cost=0.00..0.20 rows=1 width=36)
-         Filter: ((year >= 2000) AND (year <= 2010))
+                                                        QUERY PLAN                                                         
+---------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=1.26..1.26 rows=1 width=36)
+   Sort Key: (((j_books.book_info ->> 'year'::text))::integer), ((j_books.book_info ->> 'title'::text))
+   ->  Seq Scan on j_books  (cost=0.00..1.25 rows=1 width=36)
+         Filter: ((((book_info ->> 'year'::text))::integer >= 2000) AND (((book_info ->> 'year'::text))::integer <= 2010))
 
           title          
 -------------------------
@@ -2193,16 +2189,14 @@
  5 | Broken Music |   1 | <NULL>     | Sting
  6 | Lyrics       |   1 | <NULL>     | Sting
 
-                                             QUERY PLAN                                             
-----------------------------------------------------------------------------------------------------
- Sort  (cost=39.18..39.19 rows=4 width=108)
-   Sort Key: c1.k, c1.pos
-   ->  CTE Scan on c1  (cost=19.08..39.10 rows=4 width=108)
-         Filter: ((obj ->> 'family name'::text) = 'Sting'::text)
-         CTE c1
-           ->  Nested Loop  (cost=0.01..19.08 rows=800 width=76)
-                 ->  Seq Scan on j_books  (cost=0.00..1.08 rows=8 width=36)
-                 ->  Function Scan on jsonb_array_elements arr  (cost=0.01..1.00 rows=100 width=40)
+                                        QUERY PLAN                                        
+------------------------------------------------------------------------------------------
+ Sort  (cost=13.43..13.45 rows=8 width=108)
+   Sort Key: j_books.k, arr.pos
+   ->  Nested Loop  (cost=0.01..13.23 rows=8 width=108)
+         ->  Seq Scan on j_books  (cost=0.00..1.08 rows=8 width=36)
+         ->  Function Scan on jsonb_array_elements arr  (cost=0.01..1.50 rows=1 width=40)
+               Filter: ((obj ->> 'family name'::text) = 'Sting'::text)
 
  - - 09-cr-j-books-r-view-and-populate-r-books - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -2390,7 +2384,7 @@
 
  - - 15-assert-j-books-r-books-j-view-identical - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- json-relational-equivalence: 104 ms
+ json-relational-equivalence: 113 ms
 
  ==================================================================================================================================
  hard-shell
@@ -2573,8 +2567,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (313e78ae-dd7c-4ff5-92c5-6ff7ada2d9ef,                                     +
-                         1c8a3c03-1c57-4431-a70c-ea6c730ca8b1, small portable workbench).
+ pg_exception_detail:  Failing row contains (54e995b9-7f84-427c-b453-69b78f0b5887,                                     +
+                         8e7c2445-c8bc-4c66-9856-b68b54abba94, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
@@ -2587,9 +2581,9 @@
                select (c.v).mk, arr.d                                                                                  +
                from c cross join lateral unnest((c.v).ds) as arr(d)"                                                   +
  PL/pgSQL function code.insert_master_and_details(code.m_and_ds,json_utils.outcome_codes,text) line 45 at SQL statement+
- SQL statement "CALL code.insert_master_and_details(m_and_ds, outcome_code, outcome_msg)"                              +
+ SQL statement "call code.insert_master_and_details(m_and_ds, outcome_code, outcome_msg)"                              +
  PL/pgSQL function json_shim.insert_master_and_details(text,text) line 12 at CALL                                      +
- SQL statement "CALL json_shim.insert_master_and_details(j, j_outcome)"                                                +
+ SQL statement "call json_shim.insert_master_and_details(j, j_outcome)"                                                +
  PL/pgSQL function api.insert_master_and_details(text,text) line 3 at CALL
  
  _______________
@@ -2955,8 +2949,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (5f2e3c02-2e30-45aa-a116-368244a2a7d9,                                     +
-                         ca8f5dd4-7d06-4b90-8085-d53f9f75da71, small portable workbench).
+ pg_exception_detail:  Failing row contains (6e754455-039a-4790-85a6-553b02acb45c,                                     +
+                         9d89ae08-dcff-4753-983c-8374bb5068c5, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
@@ -2969,16 +2963,16 @@
                select (c.v).mk, arr.d                                                                                  +
                from c cross join lateral unnest((c.v).ds) as arr(d)"                                                   +
  PL/pgSQL function code.insert_master_and_details(code.m_and_ds,json_utils.outcome_codes,text) line 45 at SQL statement+
- SQL statement "CALL code.insert_master_and_details(m_and_ds, outcome_code, outcome_msg)"                              +
+ SQL statement "call code.insert_master_and_details(m_and_ds, outcome_code, outcome_msg)"                              +
  PL/pgSQL function json_shim.insert_master_and_details(text,text) line 12 at CALL                                      +
- SQL statement "CALL json_shim.insert_master_and_details(j, j_outcome)"                                                +
+ SQL statement "call json_shim.insert_master_and_details(j, j_outcome)"                                                +
  PL/pgSQL function api.insert_master_and_details(text,text) line 3 at CALL                                             +
- SQL statement "CALL api.insert_master_and_details(j_input, j_outcome)"                                                +
+ SQL statement "call api.insert_master_and_details(j_input, j_outcome)"                                                +
  PL/pgSQL function qa_ui_simulation.ui_simulation_insert(text,text[]) line 33 at CALL
  
  _______________
 
- hard-shell: 240 ms
+ hard-shell: 282 ms
 
  ==================================================================================================================================
  triggers/trigger-firing-order
@@ -3076,20 +3070,20 @@
  after  update on details    for each statement  >           
 
 -[ RECORD 1 ]-----------------------------------------------------------
-name     | RI_ConstraintTrigger_a_20709
+name     | RI_ConstraintTrigger_a_20686
 tab_name | masters
-def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_20709" A...
+def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_20686" A...
 
--[ RECORD 1 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER DELETE ON trg_firing_order.masters FROM trg_firing_order.details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_cascade_del"()
--[ RECORD 2 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER INSERT ON trg_firing_order.details FROM trg_firing_order.masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_ins"()
--[ RECORD 3 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER UPDATE ON trg_firing_order.details FROM trg_firing_order.masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_upd"()
--[ RECORD 4 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
-definition |  AFTER UPDATE ON trg_firing_order.masters FROM trg_firing_order.details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_noaction_upd"()
+-[ RECORD 1 ]--------------------------------------------------------------------------------------------------------
+definition |  AFTER DELETE ON trg_firing_order.masters FROM trg_firing_order.details execute "RI_FKey_cascade_del"()
+-[ RECORD 2 ]--------------------------------------------------------------------------------------------------------
+definition |  AFTER INSERT ON trg_firing_order.details FROM trg_firing_order.masters execute "RI_FKey_check_ins"()
+-[ RECORD 3 ]--------------------------------------------------------------------------------------------------------
+definition |  AFTER UPDATE ON trg_firing_order.details FROM trg_firing_order.masters execute "RI_FKey_check_upd"()
+-[ RECORD 4 ]--------------------------------------------------------------------------------------------------------
+definition |  AFTER UPDATE ON trg_firing_order.masters FROM trg_firing_order.details execute "RI_FKey_noaction_upd"()
 
- triggers/trigger-firing-order: 63 ms
+ triggers/trigger-firing-order: 75 ms
 
  ==================================================================================================================================
  Tenant databases and tenant roles in tenant database "d1"
@@ -3130,5 +3124,5 @@ definition |  AFTER UPDATE ON trg_firing_order.masters FROM trg_firing_order.det
  End-to-end time
  ==================================================================================================================================
 
- 7.46 ss
+ 5.94 ss
 
