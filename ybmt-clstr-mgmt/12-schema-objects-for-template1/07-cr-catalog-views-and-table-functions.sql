@@ -1067,67 +1067,84 @@ declare
   rol_pad constant int not null := greatest((select max(length(name)) from mgr.roles), length('clstr$developer')) + 2;
   tr mgr.rolname_and_comment not null := (''::name, ''::text)::mgr.rolname_and_comment;
   db constant text not null := current_database()::text||'$';
-  excluded_local_roles constant name[] := array[mgr.tenant_role_name('mgr')::name, mgr.tenant_role_name('client')::name];
-
-  local_roles constant mgr.rolname_and_comment[] :=
-    case exclude_mgr_developer_client_and_global_roles
-      when false then
-        (
-          select array_agg((r.name, r.comment)::mgr.rolname_and_comment order by r.name)
-          from mgr.tenant_roles r
-        )
-      when true then
-        (
-          select array_agg((r.name, r.comment)::mgr.rolname_and_comment order by r.name)
-          from mgr.tenant_roles r
-          where r.name <> all(excluded_local_roles)
-        )
-    end;
-
-  global_roles constant mgr.rolname_and_comment[] := (
-    select array_agg((r.rolname, c.description)::mgr.rolname_and_comment order by r.rolname)
-    from
-      pg_roles as r
-      inner join
-      pg_shdescription as c
-      on r.oid = c.objoid
-    where c.classoid = 1260
-    and r.rolname in ('yugabyte', 'clstr$mgr', 'clstr$developer'));
-
-  c_lines text[] not null := '{}'::text[];
+  excluded_local_roles name[];
 begin
-  if local_roles is not null and cardinality(local_roles) > 0 then
-    foreach tr in array local_roles loop
-      c_lines := string_to_array(tr.r_comment, e'\n');
+  /*
+    Handle the case that you're connected to the one-and-only special database
+    (i.e. NOT a tenant database) specially. Else, invoking mgr.tenant_role_name() causes
+    "Bad tenent database name yugabyte" by design.
 
-      for j in array_lower(c_lines, 1)..array_upper(c_lines, 1) loop
-        case j
-          when 1 then
-            z := rpad(tr.r_name, rol_pad)||c_lines[j];                        return next;
-          else
-            z := rpad('',        rol_pad)||c_lines[j];                        return next;
-        end case;
-      end loop;
-    end loop;
+    Can't do this using a case expression for "excluded_local_roles" in the declaration section
+    because (while short-circuit evaluation CAN happen for a simple test, it doesn't happen
+    for the test here.
+  */
+  if db = 'yugabyte$' then
+    excluded_local_roles := null;
+  else
+    excluded_local_roles := array[mgr.tenant_role_name('mgr')::name, mgr.tenant_role_name('client')::name];
   end if;
 
-  case exclude_mgr_developer_client_and_global_roles
-    when false then
-      foreach tr in array global_roles loop
+  declare
+    local_roles constant mgr.rolname_and_comment[] :=
+      case exclude_mgr_developer_client_and_global_roles
+        when false then
+          (
+            select array_agg((r.name, r.comment)::mgr.rolname_and_comment order by r.name)
+            from mgr.tenant_roles r
+          )
+        when true then
+          (
+            select array_agg((r.name, r.comment)::mgr.rolname_and_comment order by r.name)
+            from mgr.tenant_roles r
+            where r.name <> all(excluded_local_roles)
+          )
+      end;
+
+    global_roles constant mgr.rolname_and_comment[] := (
+      select array_agg((r.rolname, c.description)::mgr.rolname_and_comment order by r.rolname)
+      from
+        pg_roles as r
+        inner join
+        pg_shdescription as c
+        on r.oid = c.objoid
+      where c.classoid = 1260
+      and r.rolname in ('yugabyte', 'clstr$mgr', 'clstr$developer'));
+
+    c_lines text[] not null := '{}'::text[];
+  begin
+    if local_roles is not null and cardinality(local_roles) > 0 then
+      foreach tr in array local_roles loop
         c_lines := string_to_array(tr.r_comment, e'\n');
 
         for j in array_lower(c_lines, 1)..array_upper(c_lines, 1) loop
           case j
             when 1 then
-              z := rpad(tr.r_name, rol_pad)||c_lines[j];                      return next;
+              z := rpad(tr.r_name, rol_pad)||c_lines[j];                        return next;
             else
-              z := rpad('',        rol_pad)||c_lines[j];                      return next;
+              z := rpad('',        rol_pad)||c_lines[j];                        return next;
           end case;
         end loop;
       end loop;
-    when true then
-      null;
-  end case;
+    end if;
+
+    case exclude_mgr_developer_client_and_global_roles
+      when false then
+        foreach tr in array global_roles loop
+          c_lines := string_to_array(tr.r_comment, e'\n');
+
+          for j in array_lower(c_lines, 1)..array_upper(c_lines, 1) loop
+            case j
+              when 1 then
+                z := rpad(tr.r_name, rol_pad)||c_lines[j];                      return next;
+              else
+                z := rpad('',        rol_pad)||c_lines[j];                      return next;
+            end case;
+          end loop;
+        end loop;
+      when true then
+        null;
+    end case;
+  end;
 end;
 $body$;
 
