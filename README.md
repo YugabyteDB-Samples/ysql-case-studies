@@ -83,4 +83,4 @@ end;
 $body$;
 ```
 
-The function _mgr.password()_ can use your favorite reliable method to generate a strong password. And you can use a follow-up reliable method to show the generated password _text_ value to whomever needs to see it. 
+The function _mgr.password()_ can use your favorite reliable method to generate a strong password. And you can use a follow-up reliable method to show the generated password _text_ value to whomever needs to see it.

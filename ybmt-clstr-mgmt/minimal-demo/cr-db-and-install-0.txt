@@ -1,0 +1,70 @@
+ ==================================================================================================================================
+ After re-configuring and installing "d9".
+ ==================================================================================================================================
+
+ d9         clstr$mgr  Tenant database for SV2023-conference demo
+                       
+ yugabyte   postgres   "Home base" for the "yugabyte" superuser and for 
+                       the "clstr$mgr" databases and roles manager. 
+                       
+ template0  postgres   Shipped standard minimal template. 
+                       See the chapter "Template Databases" in the PG Doc. 
+                       Intended as a fall-back. So MUST NOT MODIFY it. 
+                       
+ template1  postgres   Identical to "template0" immediately following "initdb". Used by 
+                       "create database" as its default template. Customized here to be 
+                       the definition of the so-called "tenant database"
+                       that supports YBMT multinenancy by convention. 
+                       
+
+ d9$client        Tenant role. Client-side code will authorize as this to connect to 
+                  the "d9" database. Owns no objects. Is the grantee for the 
+                  designed set of object privileges that expose the client-facing API. 
+                  
+ d9$code          Owns the code that encapsulates the intended access to the data.
+                  
+ d9$data          Owns the tables and supporting objects
+                  
+ d9$mgr           Tenant role for the "d9" database for managing tenant roles there. 
+                  Owns no schema. Could own extra objects in the "mgr" schema  
+                  than "template1" brings. Has "execute" on these procedures:  
+                  "cr_role()", "drop_role". "mgr.set_role_password()".  
+                  
+ clstr$developer  Pure role (cannot log in). Will be granted to the non-client roles in 
+                  each tenant database to bring "select" access to the views and tables 
+                  in the "pg_catalog" and "information_schema" schemas and to all objects 
+                  in the "mgr", "dt_utils", and "extensions" schemas. 
+                  
+ clstr$mgr        The "cluster manager". Non-superuser with "createdb" and "createrole". 
+                  Owns the "security definer" subprograms in the "mgr" schema for  
+                  provisioning tenant databases and their local roles. 
+                  
+ yugabyte         The "ordinary" superuser for occasional tasks that need this power. 
+                  
+
+ owner    schema  kind       name                 security  volatility  settings
+ -------  ------  ---------  -------------------  --------  ----------  ------------------------------------
+ d9$code  code    function   lockdown_example               stable      search_path=pg_catalog, pg_temp
+ d9$code  code    function   t_rows               definer   stable      search_path=pg_catalog, pg_temp
+ d9$code  code    procedure  insert_t             definer               search_path=pg_catalog, pg_temp
+ 
+ d9$data  data    function   coerce_v_lower_case  definer               search_path=pg_catalog, pg_temp
+ d9$data  data    table      t                                          
+
+ tab_owner  tab_schema  tab_name  name                 definition
+ ---------  ----------  --------  -------------------  ------------------------------
+ d9$data    data        t         coerce_v_lower_case  before insert or update 
+                                                       for each row
+                                                       execute function coerce_v_lower_case()
+ 
+
+ ==================================================================================================================================
+ Testing the app.
+ ==================================================================================================================================
+
+  1 | dog
+  2 | cat
+  3 | frog
+
+ "insufficient_privilege" handled for "10/2".
+

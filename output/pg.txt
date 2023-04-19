@@ -2,13 +2,13 @@
  Create 6 tenant databases
  ==================================================================================================================================
 
- 490 ms
+ 1379 ms
 
  ==================================================================================================================================
  Drop and re-create those 6 tenant databases
  ==================================================================================================================================
 
- 840 ms
+ 2007 ms
 
  ==================================================================================================================================
  analyzing-covid-data-with-aggregate-functions
@@ -250,7 +250,7 @@
  95,12
  96,12
 
- analyzing-covid-data-with-aggregate-functions: 190 ms
+ analyzing-covid-data-with-aggregate-functions: 237 ms
 
  ==================================================================================================================================
  recursive-cte/basics/procedural-implementation-of-recursive-cte-algorithm
@@ -346,7 +346,7 @@
  11 |     89
  12 |    144
 
- recursive-cte/basics/fibonacci: 38 ms
+ recursive-cte/basics/fibonacci: 40 ms
 
  ==================================================================================================================================
  recursive-cte/employee-hierarchy
@@ -457,7 +457,7 @@
 
  doris > fred > mary
 
- recursive-cte/employee-hierarchy: 48 ms
+ recursive-cte/employee-hierarchy: 53 ms
 
  ==================================================================================================================================
  recursive-cte/bacon-numbers
@@ -825,7 +825,7 @@
 
  Nothing survives. So the (so-called) recursion stops.
 
- recursive-cte/bacon-numbers: 464 ms
+ recursive-cte/bacon-numbers: 659 ms
 
  ==================================================================================================================================
  date-time-utilities
@@ -1915,7 +1915,7 @@
  select timezone('MST', '2021-06-07 12:00:00');               > OK
  select '2021-06-07 12:00:00 MST'::timestamptz;               > OK
 
- date-time-utilities: 3186 ms
+ date-time-utilities: 3438 ms
 
  ==================================================================================================================================
  json-relational-equivalence
@@ -2109,12 +2109,14 @@
  2007 | Eat, Pray, Love
  2007 | Lyrics
 
-                                                        QUERY PLAN                                                         
----------------------------------------------------------------------------------------------------------------------------
- Sort  (cost=1.26..1.26 rows=1 width=36)
-   Sort Key: (((j_books.book_info ->> 'year'::text))::integer), ((j_books.book_info ->> 'title'::text))
-   ->  Seq Scan on j_books  (cost=0.00..1.25 rows=1 width=36)
-         Filter: ((((book_info ->> 'year'::text))::integer >= 2000) AND (((book_info ->> 'year'::text))::integer <= 2010))
+                           QUERY PLAN                           
+----------------------------------------------------------------
+ Sort  (cost=1.37..1.38 rows=1 width=36)
+   Sort Key: c.year, c.title
+   CTE c
+     ->  Seq Scan on j_books  (cost=0.00..1.16 rows=8 width=36)
+   ->  CTE Scan on c  (cost=0.00..0.20 rows=1 width=36)
+         Filter: ((year >= 2000) AND (year <= 2010))
 
           title          
 -------------------------
@@ -2189,14 +2191,16 @@
  5 | Broken Music |   1 | <NULL>     | Sting
  6 | Lyrics       |   1 | <NULL>     | Sting
 
-                                        QUERY PLAN                                        
-------------------------------------------------------------------------------------------
- Sort  (cost=13.43..13.45 rows=8 width=108)
-   Sort Key: j_books.k, arr.pos
-   ->  Nested Loop  (cost=0.01..13.23 rows=8 width=108)
-         ->  Seq Scan on j_books  (cost=0.00..1.08 rows=8 width=36)
-         ->  Function Scan on jsonb_array_elements arr  (cost=0.01..1.50 rows=1 width=40)
-               Filter: ((obj ->> 'family name'::text) = 'Sting'::text)
+                                             QUERY PLAN                                             
+----------------------------------------------------------------------------------------------------
+ Sort  (cost=39.18..39.19 rows=4 width=108)
+   Sort Key: c1.k, c1.pos
+   ->  CTE Scan on c1  (cost=19.08..39.10 rows=4 width=108)
+         Filter: ((obj ->> 'family name'::text) = 'Sting'::text)
+         CTE c1
+           ->  Nested Loop  (cost=0.01..19.08 rows=800 width=76)
+                 ->  Seq Scan on j_books  (cost=0.00..1.08 rows=8 width=36)
+                 ->  Function Scan on jsonb_array_elements arr  (cost=0.01..1.00 rows=100 width=40)
 
  - - 09-cr-j-books-r-view-and-populate-r-books - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -2384,7 +2388,7 @@
 
  - - 15-assert-j-books-r-books-j-view-identical - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- json-relational-equivalence: 113 ms
+ json-relational-equivalence: 130 ms
 
  ==================================================================================================================================
  hard-shell
@@ -2567,8 +2571,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (54e995b9-7f84-427c-b453-69b78f0b5887,                                     +
-                         8e7c2445-c8bc-4c66-9856-b68b54abba94, small portable workbench).
+ pg_exception_detail:  Failing row contains (6e2d7e48-c5e3-4c07-aa5b-2c7ca2b598bf,                                     +
+                         8e8f1cb8-ed85-4d89-b15e-ba83c2594f7b, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
@@ -2581,9 +2585,9 @@
                select (c.v).mk, arr.d                                                                                  +
                from c cross join lateral unnest((c.v).ds) as arr(d)"                                                   +
  PL/pgSQL function code.insert_master_and_details(code.m_and_ds,json_utils.outcome_codes,text) line 45 at SQL statement+
- SQL statement "call code.insert_master_and_details(m_and_ds, outcome_code, outcome_msg)"                              +
+ SQL statement "CALL code.insert_master_and_details(m_and_ds, outcome_code, outcome_msg)"                              +
  PL/pgSQL function json_shim.insert_master_and_details(text,text) line 12 at CALL                                      +
- SQL statement "call json_shim.insert_master_and_details(j, j_outcome)"                                                +
+ SQL statement "CALL json_shim.insert_master_and_details(j, j_outcome)"                                                +
  PL/pgSQL function api.insert_master_and_details(text,text) line 3 at CALL
  
  _______________
@@ -2949,8 +2953,8 @@
  unit:                 procedure api.insert_master_and_details(text, text)
  returned_sqlstate:    23514
  message_text:         new row for relation "details" violates check constraint "details_v_chk"
- pg_exception_detail:  Failing row contains (6e754455-039a-4790-85a6-553b02acb45c,                                     +
-                         9d89ae08-dcff-4753-983c-8374bb5068c5, small portable workbench).
+ pg_exception_detail:  Failing row contains (c984c8ab-beaa-4d88-9b86-1a18abcf94d9,                                     +
+                         2005deef-46cf-464f-a819-681052d7a269, small portable workbench).
  constraint_name:      details_v_chk
  table_name:           details
  schema_name:          data
@@ -2963,16 +2967,16 @@
                select (c.v).mk, arr.d                                                                                  +
                from c cross join lateral unnest((c.v).ds) as arr(d)"                                                   +
  PL/pgSQL function code.insert_master_and_details(code.m_and_ds,json_utils.outcome_codes,text) line 45 at SQL statement+
- SQL statement "call code.insert_master_and_details(m_and_ds, outcome_code, outcome_msg)"                              +
+ SQL statement "CALL code.insert_master_and_details(m_and_ds, outcome_code, outcome_msg)"                              +
  PL/pgSQL function json_shim.insert_master_and_details(text,text) line 12 at CALL                                      +
- SQL statement "call json_shim.insert_master_and_details(j, j_outcome)"                                                +
+ SQL statement "CALL json_shim.insert_master_and_details(j, j_outcome)"                                                +
  PL/pgSQL function api.insert_master_and_details(text,text) line 3 at CALL                                             +
- SQL statement "call api.insert_master_and_details(j_input, j_outcome)"                                                +
+ SQL statement "CALL api.insert_master_and_details(j_input, j_outcome)"                                                +
  PL/pgSQL function qa_ui_simulation.ui_simulation_insert(text,text[]) line 33 at CALL
  
  _______________
 
- hard-shell: 282 ms
+ hard-shell: 289 ms
 
  ==================================================================================================================================
  triggers/trigger-firing-order
@@ -3070,20 +3074,20 @@
  after  update on details    for each statement  >           
 
 -[ RECORD 1 ]-----------------------------------------------------------
-name     | RI_ConstraintTrigger_a_20686
+name     | RI_ConstraintTrigger_a_41139
 tab_name | masters
-def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_20686" A...
+def      | CREATE CONSTRAINT TRIGGER "RI_ConstraintTrigger_a_41139" A...
 
--[ RECORD 1 ]--------------------------------------------------------------------------------------------------------
-definition |  AFTER DELETE ON trg_firing_order.masters FROM trg_firing_order.details execute "RI_FKey_cascade_del"()
--[ RECORD 2 ]--------------------------------------------------------------------------------------------------------
-definition |  AFTER INSERT ON trg_firing_order.details FROM trg_firing_order.masters execute "RI_FKey_check_ins"()
--[ RECORD 3 ]--------------------------------------------------------------------------------------------------------
-definition |  AFTER UPDATE ON trg_firing_order.details FROM trg_firing_order.masters execute "RI_FKey_check_upd"()
--[ RECORD 4 ]--------------------------------------------------------------------------------------------------------
-definition |  AFTER UPDATE ON trg_firing_order.masters FROM trg_firing_order.details execute "RI_FKey_noaction_upd"()
+-[ RECORD 1 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER DELETE ON trg_firing_order.masters FROM trg_firing_order.details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_cascade_del"()
+-[ RECORD 2 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER INSERT ON trg_firing_order.details FROM trg_firing_order.masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_ins"()
+-[ RECORD 3 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER UPDATE ON trg_firing_order.details FROM trg_firing_order.masters NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_check_upd"()
+-[ RECORD 4 ]------------------------------------------------------------------------------------------------------------------------------------------------------------------
+definition |  AFTER UPDATE ON trg_firing_order.masters FROM trg_firing_order.details NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE PROCEDURE "RI_FKey_noaction_upd"()
 
- triggers/trigger-firing-order: 75 ms
+ triggers/trigger-firing-order: 80 ms
 
  ==================================================================================================================================
  Tenant databases and tenant roles in tenant database "d1"
@@ -3124,5 +3128,5 @@ definition |  AFTER UPDATE ON trg_firing_order.masters FROM trg_firing_order.det
  End-to-end time
  ==================================================================================================================================
 
- 5.94 ss
+ 8.52 ss
 

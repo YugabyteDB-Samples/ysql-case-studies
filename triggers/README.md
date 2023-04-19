@@ -13,4 +13,3 @@ The premise of the talk is that there are most definitely use cases where using 
 ## Current status
 
 So far, only one study is included: _"trigger-firing-order"_. This uses the classic _masters_ and _details_ table pair and creates a trigger at each of the four possible timing points on each of the two tables. The function for each table reports its table and timing point. This allows you to see, operationally, how they firings interleave. You have to know this when you create triggers on tables that are connected by FK constraints.
-
