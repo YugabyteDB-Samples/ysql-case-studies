@@ -7,7 +7,7 @@
 \c yugabyte yugabyte
 \t on
 
-\o re-conf-clstr.txt
+\o re-config-clstr.txt
 select client_safe.rule_off('Immediately after re-configuring for YBMT');
 select mgr.dbs_with_comments();
 select mgr.roles_with_comments();
@@ -24,7 +24,7 @@ select mgr.roles_with_comments();
 \set cln d9$client
 \ir ../02-drop-and-re-create-tenant-databases.sql
 
-\o cr-db-and-install.txt
+\o cr-tenant-db-and-install-app.txt
 \c :db :mgr
 \t on
 call mgr.comment_on_current_db('Tenant database for SV2023-conference demo');
