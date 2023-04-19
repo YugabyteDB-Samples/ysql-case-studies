@@ -1,0 +1,29 @@
+ ==================================================================================================================================
+ Immediately after re-configuring for YBMT
+ ==================================================================================================================================
+
+ yugabyte   postgres  "Home base" for the "yugabyte" superuser and for 
+                      the "clstr$mgr" databases and roles manager. 
+                      
+ template0  postgres  Shipped standard minimal template. 
+                      See the chapter "Template Databases" in the PG Doc. 
+                      Intended as a fall-back. So MUST NOT MODIFY it. 
+                      
+ template1  postgres  Identical to "template0" immediately following "initdb". Used by 
+                      "create database" as its default template. Customized here to be 
+                      the definition of the so-called "tenant database"
+                      that supports YBMT multinenancy by convention. 
+                      
+
+ clstr$developer  Pure role (cannot log in). Will be granted to the non-client roles in 
+                  each tenant database to bring "select" access to the views and tables 
+                  in the "pg_catalog" and "information_schema" schemas and to all objects 
+                  in the "mgr", "dt_utils", and "extensions" schemas. 
+                  
+ clstr$mgr        The "cluster manager". Non-superuser with "createdb" and "createrole". 
+                  Owns the "security definer" subprograms in the "mgr" schema for  
+                  provisioning tenant databases and their local roles. 
+                  
+ yugabyte         The "ordinary" superuser for occasional tasks that need this power. 
+                  
+

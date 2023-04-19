@@ -1,0 +1,105 @@
+-- This is the default. Set it explicitly as self-doc
+\set AUTOCOMMIT on
+
+\set ECHO None
+\set QUIET On
+\set VERBOSITY Default
+\pset footer Off
+\t off
+\set PROMPT1 'pg> '
+\set PROMPT2 '    '
+----------------------------------------------------------------------------------------------------
+-- Shortcuts
+
+-- Make ":q" have the same effect as "\q"
+-- else too much annoyance from typing ":q" (as in "vi") by mistake.
+\set q '\\q'
+
+\set eh   '\\set ECHO_HIDDEN on'
+\set noeh '\\set ECHO_HIDDEN off'
+
+\set w  '\\t on \\\\ select z from mgr.where_am_i(); \\t off'
+\set wx '\\t on \\\\ select z from client_safe.where_am_i_simple(); \\t off'
+
+\set lk  '\\t on \\\\ select \'\'; select name from mgr.catalog_views_and_tfs order by kind, name; \\t off'
+\set ld  '\\t on \\\\ select \'\'; select z from mgr.dbs_with_comments(); \\t off'
+\set ldx '\\t on \\\\ select \'\'; select z from mgr.dbs_with_comments(true); \\t off'
+\set lr  '\\t on \\\\ select \'\'; select z from mgr.roles_with_comments(); \\t off'
+\set lrx '\\t on \\\\ select \'\'; select z from mgr.roles_with_comments(true); \\t off'
+\set ls  '\\t on \\\\ select \'\'; select z from mgr.roles_and_schemas(); \\t off'
+\set co  '\\t on \\\\ select \'\'; select z from mgr.schema_objects(false); \\t off'
+\set lo  '\\t on \\\\ select \'\'; select z from mgr.schema_objects(true);  \\t off'
+\set lt  '\\t on \\\\ select \'\'; select z from mgr.triggers(); \\t off'
+\set lc  '\\t on \\\\ select \'\'; select z from mgr.constraints(); \\t off'
+\set cc  '\\t on \\\\ select \'\'; select z from mgr.constraints(false); \\t off'
+\set li  '\\t on \\\\ select \'\'; select z from mgr.improper_ybmt_roles(); \\t off'
+
+\set start_stopwatch 'select extract(epoch from clock_timestamp())::text as s0 \\gset stopwatch_'
+\set stopwatch_reading 'select client_safe.stopwatch_reading(:stopwatch_s0);'
+
+----------------------------------------------------------------------------------------------------
+-- Upper case 'cos need password for "postgres" or "clstr$mgr" to execute these scripts.
+
+\set RC '\\i <your-path>/ybmt-clstr-mgmt/01-re-initialize-ybmt-clstr.sql'
+\set RT '\\i <your-path>/ybmt-clstr-mgmt/03-drop-and-re-create-tenant-databases-driver.sql'
+\set DT '\\i <your-path>/ybmt-clstr-mgmt/05-drop-tenant-databases-driver.sql'
+
+\set rt 'call mgr.set_role(\'mgr\'); call mgr.drop_all_regular_local_roles();'
+
+\set cy  '\\c yugabyte yugabyte'
+\set cm  '\\c yugabyte clstr$mgr'
+
+\set cm0  '\\c d0 d0$mgr'
+\set cc0  '\\c d0 d0$client'
+
+\set cm1  '\\c d1 d1$mgr'
+\set cc1  '\\c d1 d1$client'
+
+\set cm2  '\\c d2 d2$mgr'
+\set cc2  '\\c d2 d2$client'
+
+\set cm3  '\\c d3 d3$mgr'
+\set cc3  '\\c d3 d3$client'
+
+\set cm4  '\\c d4 d4$mgr'
+\set cc4  '\\c d4 d4$client'
+
+\set cm5  '\\c d5 d5$mgr'
+\set cc5  '\\c d5 d5$client'
+
+\set cm6  '\\c d6 d6$mgr'
+\set cc6  '\\c d6 d6$client'
+
+\set cm7  '\\c d7 d7$mgr'
+\set cc7  '\\c d7 d7$client'
+
+\set cm8  '\\c d8 d8$mgr'
+\set cc8  '\\c d8 d8$client'
+
+\set cm9  '\\c d9 d9$mgr'
+\set cc9  '\\c d9 d9$client'
+
+\set cm789  '\\c d789 d789$mgr'
+\set cc789  '\\c d789 d789$client'
+
+\set cr_u0  '\\c d0 d0$mgr \\\\ call mgr.cr_role(\'u0\', with_temp_on_db=>true); call mgr.set_role_password(\'u0\', \'p\'); call mgr.set_role_search_path(\'u0\', \'pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp\'); \\c d0 d0$u0'
+\set cr_u1  '\\c d0 d0$mgr \\\\ call mgr.cr_role(\'u1\', with_temp_on_db=>true); call mgr.set_role_password(\'u1\', \'p\'); call mgr.set_role_search_path(\'u1\', \'pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp\'); \\c d0 d0$u1'
+\set cr_u2  '\\c d0 d0$mgr \\\\ call mgr.cr_role(\'u2\', with_temp_on_db=>true); call mgr.set_role_password(\'u2\', \'p\'); call mgr.set_role_search_path(\'u2\', \'pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp\'); \\c d0 d0$u2'
+\set cr_u3  '\\c d0 d0$mgr \\\\ call mgr.cr_role(\'u3\', with_temp_on_db=>true); call mgr.set_role_password(\'u3\', \'p\'); call mgr.set_role_search_path(\'u3\', \'pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp\'); \\c d0 d0$u3'
+\set cr_u4  '\\c d0 d0$mgr \\\\ call mgr.cr_role(\'u4\', with_temp_on_db=>true); call mgr.set_role_password(\'u4\', \'p\'); call mgr.set_role_search_path(\'u4\', \'pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp\'); \\c d0 d0$u4'
+\set cr_u5  '\\c d0 d0$mgr \\\\ call mgr.cr_role(\'u5\', with_temp_on_db=>true); call mgr.set_role_password(\'u5\', \'p\'); call mgr.set_role_search_path(\'u5\', \'pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp\'); \\c d0 d0$u5'
+\set cr_u6  '\\c d0 d0$mgr \\\\ call mgr.cr_role(\'u6\', with_temp_on_db=>true); call mgr.set_role_password(\'u6\', \'p\'); call mgr.set_role_search_path(\'u6\', \'pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp\'); \\c d0 d0$u6'
+\set cr_u7  '\\c d0 d0$mgr \\\\ call mgr.cr_role(\'u7\', with_temp_on_db=>true); call mgr.set_role_password(\'u7\', \'p\'); call mgr.set_role_search_path(\'u7\', \'pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp\'); \\c d0 d0$u7'
+\set cr_u8  '\\c d0 d0$mgr \\\\ call mgr.cr_role(\'u8\', with_temp_on_db=>true); call mgr.set_role_password(\'u8\', \'p\'); call mgr.set_role_search_path(\'u8\', \'pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp\'); \\c d0 d0$u8'
+\set cr_u9  '\\c d0 d0$mgr \\\\ call mgr.cr_role(\'u9\', with_temp_on_db=>true); call mgr.set_role_password(\'u9\', \'p\'); call mgr.set_role_search_path(\'u9\', \'pg_catalog, client_safe, dt_utils, mgr, extensions, pg_temp\'); \\c d0 d0$u9'
+
+\set u0   '\\c d0 d0$u0'
+\set u1   '\\c d0 d0$u1'
+\set u2   '\\c d0 d0$u2'
+\set u3   '\\c d0 d0$u3'
+\set u4   '\\c d0 d0$u4'
+\set u5   '\\c d0 d0$u5'
+\set u6   '\\c d0 d0$u6'
+\set u7   '\\c d0 d0$u7'
+\set u8   '\\c d0 d0$u8'
+\set u9   '\\c d0 d0$u9'
