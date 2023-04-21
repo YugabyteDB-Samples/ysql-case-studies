@@ -37,3 +37,22 @@ cr-db-and-install-0.txt
 You can _diff_ your spool files with these. They'll be identical.
 
 The _ybmt-clstr-mgmt/minimal-demo/_ directory also contains the file _example-psqlrc.txt_. It defines _psql_ variables to be used as shortcuts for common YBMT operations and reporting queries. You might like to include its content in your own _psqlrc_ file.
+
+## Bonus: the clstr$mgr proof-of-concept demo
+
+Search for the text *"The clstr$mgr role (allows login)"* in this file:
+
+```
+ysql-case-studies/ybmt-clstr-mgmt/README.md
+```
+
+The *clstr$mgr-PoC.sql* script demonstrates what you have to do, when you authorize as a role that has *createdb* but not *superuser*, in order to drop a *local* role that:
+
+- is the grantee of privileges on objects owner by other *local* roles;
+- owns schema-objects;
+
+It shows that "drop owned by... cascade" fails without some preparatory steps:
+
+- You must first grant every *local* role in the current *tenant* database (apart from the roles with the nicknames *mgr* and *client*) to *clstr$mgr*.
+
+The procedure *mgr.drop_role()* encapsulates all of this.

@@ -79,6 +79,9 @@ A freshly (re)configured, but otherwise empty, YBMT cluster will have two extra 
   
   The _clstr$mgr_ role is therefore created _"... with nosuperuser createdb createrole login..."_.
   
+  
+  **NOTE:** This tip was removed around the end of 2022 from the Version 11 docs through the current docs. I asked why on the *pgsql-general* email list [HERE](https://www.postgresql.org/message-id/DEFDC682-5BE8-4406-843A-E294C917D6BC@yugabyte.com). A reply led to [this long thread](https://www.postgresql.org/message-id/CA%2BTgmobGds7oefDjZUY%2Bk_J7p1sS%3DpTq3sZ060qdb%3DoKei1Dkw%40mail.gmail.com) on the *pgsql-hackers* email list. The main point is that a role that has *createrole* but not *superuser* is still dangerously powerful because it can grant itself built-in roles like *pg_execute_server_program*, *pg_read_server_files*, and *pg_write_server_files*. Some people think that you my just as well use a role with *superuser* and treat it with the full respect that this deserves.
+  
 - **The _clstr$developer_ role ("pure" role—doesn't allow login)**
   
   This role is a user-created equivalent to the system roles like _pg_read_all_settings_, _pg_read_all_stats_, and so on in that it is listed by this query:
