@@ -22,7 +22,8 @@ begin
     from pg_roles
     where rolname != 'postgres'
     and   rolname != 'yugabyte'
-    and   rolname !~ '^clstr\$'
+    and   rolname != 'clstr$mgr'
+    and   rolname != 'clstr$developer'
     and   rolname !~ '^pg_'
     and   rolname !~ '^yb_')
   loop
